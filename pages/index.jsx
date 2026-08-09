@@ -1,37 +1,10 @@
 import React from 'react';
+import './index.css';
 
 export default function Home() {
-  const categories = [
-    { id: 1, name: 'Calçados', icon: '👟', color: '#1E40AF' },
-    { id: 2, name: 'Moda Feminina', icon: '👗', color: '#EC4899' },
-    { id: 3, name: 'Moda Masculina', icon: '👔', color: '#3B82F6' },
-    { id: 4, name: 'Infantil', icon: '🧸', color: '#F59E0B' },
-    { id: 5, name: 'Esporte', icon: '⚽', color: '#10B981' },
-    { id: 6, name: 'Eco', icon: '🌱', color: '#8B5CF6' },
-    { id: 7, name: 'Religião', icon: '✝️', color: '#EF4444' },
-  ];
-
-  const benefits = [
-    {
-      title: 'Entrega Rápida',
-      description: 'Enviamos em até 24h para sua região',
-      icon: '🚚'
-    },
-    {
-      title: 'Melhores Preços',
-      description: 'Direto da fábrica, sem intermediários',
-      icon: '💰'
-    },
-    {
-      title: 'Atendimento 24/7',
-      description: 'Suporte via WhatsApp sempre disponível',
-      icon: '💬'
-    }
-  ];
-
   return (
     <div className="home-container">
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section className="hero">
         <div className="hero-content">
           <div className="hero-text">
@@ -41,47 +14,70 @@ export default function Home() {
             <button className="hero-btn">Entrar na Loja →</button>
           </div>
           <div className="hero-image">
-            <div className="hero-box">🛍️</div>
+            <div className="hero-box">👟</div>
           </div>
         </div>
       </section>
 
-      {/* CATEGORIAS DESTACADAS */}
+      {/* CATEGORIAS */}
       <section className="categories-section">
         <h2>7 Nichos Disponíveis:</h2>
         <div className="categories-grid">
-          {categories.map(cat => (
-            <div 
-              key={cat.id} 
-              className="category-card"
-              style={{ borderTopColor: cat.color }}
-            >
-              <div className="category-icon">{cat.icon}</div>
-              <h3>{cat.name}</h3>
-              <p>Explorar</p>
-            </div>
-          ))}
+          <div className="category-card">
+            <div className="category-icon">👟</div>
+            <h3>Calçados</h3>
+            <p>Calçados Premium</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">👗</div>
+            <h3>Moda Feminina</h3>
+            <p>Moda Feminina Elegante</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">👔</div>
+            <h3>Moda Masculina</h3>
+            <p>Moda Masculina Sofisticada</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">👧</div>
+            <h3>Infantil</h3>
+            <p>Roupas Infantis</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">⛹️</div>
+            <h3>Esporte</h3>
+            <p>Esporte & Fitness</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">🌱</div>
+            <h3>Eco</h3>
+            <p>Sustentável</p>
+          </div>
+          <div className="category-card">
+            <div className="category-icon">✝️</div>
+            <h3>Religião</h3>
+            <p>Comunidade Cristã</p>
+          </div>
         </div>
       </section>
 
-      {/* COTAÇÃO AUTOMÁTICA */}
+      {/* QUOTAÇÃO */}
       <section className="quotation-section">
-        <h2>💡 Cotação Online Automática</h2>
+        <h2>Cotação Automática</h2>
         <div className="quotation-content">
           <div className="quotation-text">
-            <p>Receba cotações em tempo real para seus produtos. Nossa IA analisa preços de mercado e oferece as melhores oportunidades.</p>
+            <p>Sistema automático de cotação integrado com seu carrinho.</p>
             <ul>
-              <li>✅ Análise automática de preços</li>
-              <li>✅ Cotações em tempo real</li>
-              <li>✅ Relatórios detalhados</li>
-              <li>✅ Integração com fornecedores</li>
+              <li>✅ Cálculo automático de fretes</li>
+              <li>✅ Integração com transportadoras</li>
+              <li>✅ Cotação em tempo real</li>
             </ul>
           </div>
           <div className="quotation-form">
-            <h3>Solicitar Cotação</h3>
-            <input type="text" placeholder="Seu email" />
-            <input type="text" placeholder="Produto desejado" />
-            <textarea placeholder="Descrição (opcional)"></textarea>
+            <h3>Solicite uma Cotação</h3>
+            <input type="text" placeholder="Seu nome" />
+            <input type="email" placeholder="Seu email" />
+            <textarea placeholder="Detalhes do pedido"></textarea>
             <button className="quote-btn">Solicitar Cotação</button>
           </div>
         </div>
@@ -89,45 +85,53 @@ export default function Home() {
 
       {/* BENEFÍCIOS */}
       <section className="benefits-section">
-        <h2>Por que escolher Franca Shoes?</h2>
+        <h2>3 Benefícios Destacados</h2>
         <div className="benefits-grid">
-          {benefits.map((benefit, idx) => (
-            <div key={idx} className="benefit-card">
-              <div className="benefit-icon">{benefit.icon}</div>
-              <h3>{benefit.title}</h3>
-              <p>{benefit.description}</p>
-            </div>
-          ))}
+          <div className="benefit-card">
+            <div className="benefit-icon">🚚</div>
+            <h3>Frete Grátis</h3>
+            <p>Frete grátis em todas as compras acima de R$ 100.</p>
+          </div>
+          <div className="benefit-card">
+            <div className="benefit-icon">💳</div>
+            <h3>Parcelamento</h3>
+            <p>Parcele em até 12x sem juros no cartão de crédito.</p>
+          </div>
+          <div className="benefit-card">
+            <div className="benefit-icon">🔒</div>
+            <h3>Segurança</h3>
+            <p>Compra 100% segura com criptografia SSL.</p>
+          </div>
         </div>
       </section>
 
-      {/* STATUS CHECKER */}
+      {/* STATUS */}
       <section className="status-section">
         <h2>Status do Sistema</h2>
         <div className="status-checks">
           <div className="status-item">
-            <span className="status-dot green"></span>
-            <p>✅ Frontend rodando em http://localhost:3000</p>
+            <div className="status-dot green"></div>
+            <p>Frontend rodando em http://localhost:3000</p>
           </div>
           <div className="status-item">
-            <span className="status-dot green"></span>
-            <p>✅ Backend rodando em http://localhost:5000</p>
+            <div className="status-dot green"></div>
+            <p>Backend rodando em http://localhost:5000</p>
           </div>
           <div className="status-item">
-            <span className="status-dot green"></span>
-            <p>✅ Banco de dados PostgreSQL pronto!</p>
+            <div className="status-dot green"></div>
+            <p>Banco de dados PostgreSQL pronto!</p>
           </div>
           <div className="status-item">
-            <span className="status-dot green"></span>
+            <div className="status-dot green"></div>
             <p>🎉 Franca Shoes está PRONTO!</p>
           </div>
         </div>
       </section>
 
-      {/* CTA SECTION */}
+      {/* CTA */}
       <section className="cta-section">
-        <h2>Pronto para Começar?</h2>
-        <p>Explore nossos 7 nichos e encontre os melhores produtos!</p>
+        <h2>Comece a Vender Agora!</h2>
+        <p>Sua loja online está pronta para receber clientes</p>
         <a href="/loja" className="cta-btn">Ir para Loja →</a>
       </section>
 
@@ -137,39 +141,39 @@ export default function Home() {
           <div className="footer-section">
             <h4>Sobre</h4>
             <ul>
-              <li><a href="#about">Sobre Franca Shoes</a></li>
-              <li><a href="#team">Nosso Time</a></li>
-              <li><a href="#blog">Blog</a></li>
+              <li><a href="#">Sobre Nós</a></li>
+              <li><a href="#">Missão</a></li>
+              <li><a href="#">Visão</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h4>Produtos</h4>
             <ul>
-              <li><a href="/loja">Loja</a></li>
-              <li><a href="#categories">Categorias</a></li>
-              <li><a href="#promos">Promoções</a></li>
+              <li><a href="#">Calçados</a></li>
+              <li><a href="#">Moda</a></li>
+              <li><a href="#">Esporte</a></li>
             </ul>
           </div>
           <div className="footer-section">
-            <h4>Suporte</h4>
+            <h4>Contato</h4>
             <ul>
-              <li><a href="#faq">FAQ</a></li>
-              <li><a href="#contact">Contato</a></li>
-              <li><a href="#help">Central de Ajuda</a></li>
+              <li><a href="#">Email: contato@franca-shoes.com</a></li>
+              <li><a href="#">WhatsApp: (16) 99999-9999</a></li>
+              <li><a href="#">Telefone: (16) 3333-3333</a></li>
             </ul>
           </div>
           <div className="footer-section">
-            <h4>Legal</h4>
+            <h4>Redes Sociais</h4>
             <ul>
-              <li><a href="#privacy">Privacidade</a></li>
-              <li><a href="#terms">Termos</a></li>
-              <li><a href="#cookies">Cookies</a></li>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">TikTok</a></li>
+              <li><a href="#">Facebook</a></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 Franca Shoes Empire. Todos os direitos reservados.</p>
-          <p>Desenvolvido com ❤️ para empreendedores</p>
+          <p>&copy; 2026 Franca Shoes. Todos os direitos reservados.</p>
+          <p>Desenvolvido com ❤️ por Ricardo Belo</p>
         </div>
       </footer>
     </div>

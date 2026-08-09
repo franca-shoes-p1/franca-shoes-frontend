@@ -1,6 +1,0 @@
-import './index.css'
-import './loja.css'
-
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
