@@ -1,34 +1,139 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 
 export default function Loja() {
-  // Produtos mock (será substituído por dados reais do backend em P2)
+  // Produtos mock (serÃ¡ substituÃ­do por dados reais do backend em P2)
   const allProducts = [
-    { id: 1, name: 'Tênis Casual Premium', category: 'Calçados', price: 129.90, size: 'P', color: 'Preto', image: '👟' },
-    { id: 2, name: 'Sneaker Branco', category: 'Calçados', price: 119.90, size: 'M', color: 'Branco', image: '👟' },
-    { id: 3, name: 'Vestido Florido', category: 'Moda Feminina', price: 89.90, size: 'P', color: 'Rosa', image: '👗' },
-    { id: 4, name: 'Blusa Social', category: 'Moda Feminina', price: 79.90, size: 'M', color: 'Azul', image: '👗' },
-    { id: 5, name: 'Camisa Polo', category: 'Moda Masculina', price: 99.90, size: 'M', color: 'Azul', image: '👔' },
-    { id: 6, name: 'Calça Jeans', category: 'Moda Masculina', price: 109.90, size: 'G', color: 'Azul', image: '👔' },
-    { id: 7, name: 'Macacão Infantil', category: 'Infantil', price: 59.90, size: 'P', color: 'Amarelo', image: '🧸' },
-    { id: 8, name: 'Vestido Infantil', category: 'Infantil', price: 64.90, size: 'M', color: 'Rosa', image: '🧸' },
-    { id: 9, name: 'Camiseta Esporte', category: 'Esporte', price: 69.90, size: 'M', color: 'Preto', image: '⚽' },
-    { id: 10, name: 'Calção Esportivo', category: 'Esporte', price: 79.90, size: 'G', color: 'Vermelho', image: '⚽' },
-    { id: 11, name: 'Camiseta Eco', category: 'Eco', price: 59.90, size: 'M', color: 'Verde', image: '🌱' },
-    { id: 12, name: 'Calça Sustentável', category: 'Eco', price: 99.90, size: 'G', color: 'Marrom', image: '🌱' },
-    { id: 13, name: 'Vestido Religioso', category: 'Religião', price: 74.90, size: 'M', color: 'Branco', image: '✝️' },
-    { id: 14, name: 'Camisa Religiosa', category: 'Religião', price: 59.90, size: 'G', color: 'Azul', image: '✝️' },
+    { id: 1, name: 'TÃªnis Casual Premium', category: 'CalÃ§ados', price: 129.90, size: 'P', color: 'Preto', image: 'ðŸ‘Ÿ' },
+    { id: 2, name: 'Sneaker Branco', category: 'CalÃ§ados', price: 119.90, size: 'M', color: 'Branco', image: 'ðŸ‘Ÿ' },
+    { id: 3, name: 'Vestido Florido', category: 'Moda Feminina', price: 89.90, size: 'P', color: 'Rosa', image: 'ðŸ‘—' },
+    { id: 4, name: 'Blusa Social', category: 'Moda Feminina', price: 79.90, size: 'M', color: 'Azul', image: 'ðŸ‘—' },
+    { id: 5, name: 'Camisa Polo', category: 'Moda Masculina', price: 99.90, size: 'M', color: 'Azul', image: 'ðŸ‘”' },
+    { id: 6, name: 'CalÃ§a Jeans', category: 'Moda Masculina', price: 109.90, size: 'G', color: 'Azul', image: 'ðŸ‘”' },
+    { id: 7, name: 'MacacÃ£o Infantil', category: 'Infantil', price: 59.90, size: 'P', color: 'Amarelo', image: 'ðŸ§¸' },
+    { id: 8, name: 'Vestido Infantil', category: 'Infantil', price: 64.90, size: 'M', color: 'Rosa', image: 'ðŸ§¸' },
+    { id: 9, name: 'Camiseta Esporte', category: 'Esporte', price: 69.90, size: 'M', color: 'Preto', image: 'âš½' },
+    { id: 10, name: 'CalÃ§Ã£o Esportivo', category: 'Esporte', price: 79.90, size: 'G', color: 'Vermelho', image: 'âš½' },
+    { id: 11, name: 'Camiseta Eco', category: 'Eco', price: 59.90, size: 'M', color: 'Verde', image: 'ðŸŒ±' },
+    { id: 12, name: 'CalÃ§a SustentÃ¡vel', category: 'Eco', price: 99.90, size: 'G', color: 'Marrom', image: 'ðŸŒ±' },
+    { id: 13, name: 'Vestido Religioso', category: 'ReligiÃ£o', price: 74.90, size: 'M', color: 'Branco', image: 'âœï¸' },
+    { id: 14, name: 'Camisa Religiosa', category: 'ReligiÃ£o', price: 59.90, size: 'G', color: 'Azul', image: 'âœï¸' },
   ];
 
-  const categories = ['Calçados', 'Moda Feminina', 'Moda Masculina', 'Infantil', 'Esporte', 'Eco', 'Religião'];
+  const categories = ['CalÃ§ados', 'Moda Feminina', 'Moda Masculina', 'Infantil', 'Esporte', 'Eco', 'ReligiÃ£o'];
   const sizes = ['P', 'M', 'G', 'GG'];
   const colors = ['Preto', 'Branco', 'Azul', 'Rosa', 'Amarelo', 'Verde', 'Vermelho', 'Marrom'];
 
   // Estados dos filtros
   const [searchText, setSearchText] = useState('');
+  const router = useRouter();
+
+  const handleAdicionarCarrinho = (produto) => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+      const itemExistente = carrinho.find((item) => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`✅ ${produto.nome} adicionado ao carrinho!`);
+      router.push("/carrinho");
+    } catch (erro) {
+      alert("❌ Erro ao adicionar!");
+      console.error(erro);
+    }
+  };
   const [selectedCategory, setSelectedCategory] = useState('');
+  const router = useRouter();
+
+  const handleAdicionarCarrinho = (produto) => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+      const itemExistente = carrinho.find((item) => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`✅ ${produto.nome} adicionado ao carrinho!`);
+      router.push("/carrinho");
+    } catch (erro) {
+      alert("❌ Erro ao adicionar!");
+      console.error(erro);
+    }
+  };
   const [maxPrice, setMaxPrice] = useState(200);
+  const router = useRouter();
+
+  const handleAdicionarCarrinho = (produto) => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+      const itemExistente = carrinho.find((item) => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`✅ ${produto.nome} adicionado ao carrinho!`);
+      router.push("/carrinho");
+    } catch (erro) {
+      alert("❌ Erro ao adicionar!");
+      console.error(erro);
+    }
+  };
   const [selectedSize, setSelectedSize] = useState('');
+  const router = useRouter();
+
+  const handleAdicionarCarrinho = (produto) => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+      const itemExistente = carrinho.find((item) => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`✅ ${produto.nome} adicionado ao carrinho!`);
+      router.push("/carrinho");
+    } catch (erro) {
+      alert("❌ Erro ao adicionar!");
+      console.error(erro);
+    }
+  };
   const [selectedColor, setSelectedColor] = useState('');
+  const router = useRouter();
+
+  const handleAdicionarCarrinho = (produto) => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+      const itemExistente = carrinho.find((item) => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({ ...produto, quantidade: 1 });
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      alert(`✅ ${produto.nome} adicionado ao carrinho!`);
+      router.push("/carrinho");
+    } catch (erro) {
+      alert("❌ Erro ao adicionar!");
+      console.error(erro);
+    }
+  };
 
   // Filtrar produtos
   const filteredProducts = useMemo(() => {
@@ -55,7 +160,7 @@ export default function Loja() {
     <div className="loja-container">
       {/* HEADER */}
       <div className="loja-header">
-        <h1>🛒 Loja Franca Shoes</h1>
+        <h1>ðŸ›’ Loja Franca Shoes</h1>
         <p>Explore nossos 7 nichos e encontre os melhores produtos!</p>
       </div>
 
@@ -71,7 +176,7 @@ export default function Loja() {
 
           {/* BUSCA */}
           <div className="filter-group">
-            <label>🔍 Buscar Produto</label>
+            <label>ðŸ” Buscar Produto</label>
             <input
               type="text"
               placeholder="Digite o nome ou marca..."
@@ -83,7 +188,7 @@ export default function Loja() {
 
           {/* CATEGORIA */}
           <div className="filter-group">
-            <label>📦 Categoria</label>
+            <label>ðŸ“¦ Categoria</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -96,9 +201,9 @@ export default function Loja() {
             </select>
           </div>
 
-          {/* PREÇO */}
+          {/* PREÃ‡O */}
           <div className="filter-group">
-            <label>💰 Preço Máximo</label>
+            <label>ðŸ’° PreÃ§o MÃ¡ximo</label>
             <input
               type="range"
               min="0"
@@ -114,7 +219,7 @@ export default function Loja() {
 
           {/* TAMANHO */}
           <div className="filter-group">
-            <label>📐 Tamanho</label>
+            <label>ðŸ“ Tamanho</label>
             <select
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
@@ -129,7 +234,7 @@ export default function Loja() {
 
           {/* COR */}
           <div className="filter-group">
-            <label>🎨 Cor</label>
+            <label>ðŸŽ¨ Cor</label>
             <select
               value={selectedColor}
               onChange={(e) => setSelectedColor(e.target.value)}
@@ -163,12 +268,12 @@ export default function Loja() {
                     <h3>{product.name}</h3>
                     <p className="product-category">{product.category}</p>
                     <div className="product-specs">
-                      <span className="spec">📏 {product.size}</span>
-                      <span className="spec">🎨 {product.color}</span>
+                      <span className="spec">ðŸ“ {product.size}</span>
+                      <span className="spec">ðŸŽ¨ {product.color}</span>
                     </div>
                     <div className="product-footer">
                       <span className="price">R$ {product.price.toFixed(2)}</span>
-                      <button className="add-btn">Adicionar</button>
+                      <button className="add-btn">🛒 Adicionar ao Carrinho</button>
                     </div>
                   </div>
                 </div>
@@ -176,7 +281,7 @@ export default function Loja() {
             </div>
           ) : (
             <div className="no-products">
-              <p>😢 Nenhum produto encontrado com os filtros selecionados.</p>
+              <p>ðŸ˜¢ Nenhum produto encontrado com os filtros selecionados.</p>
               <p>Tente ajustar os filtros!</p>
               <button className="reset-btn" onClick={handleClearFilters}>
                 Limpar Filtros
@@ -188,3 +293,4 @@ export default function Loja() {
     </div>
   );
 }
+

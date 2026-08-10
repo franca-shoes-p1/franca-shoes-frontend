@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 export default function Home() {
   return (
@@ -140,33 +140,33 @@ export default function Home() {
           <div className="footer-section">
             <h4>Sobre</h4>
             <ul>
-              <li><a href="#">Sobre Nós</a></li>
-              <li><a href="#">Missão</a></li>
-              <li><a href="#">Visão</a></li>
+              <li><a href="/loja">Sobre Nós</a></li>
+              <li><a href="/loja">Missão</a></li>
+              <li><a href="/loja">Visão</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h4>Produtos</h4>
             <ul>
-              <li><a href="#">Calçados</a></li>
-              <li><a href="#">Moda</a></li>
-              <li><a href="#">Esporte</a></li>
+              <li><a href="/loja">Calçados</a></li>
+              <li><a href="/loja">Moda</a></li>
+              <li><a href="/loja">Esporte</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h4>Contato</h4>
             <ul>
-              <li><a href="#">Email: contato@franca-shoes.com</a></li>
-              <li><a href="#">WhatsApp: (16) 99999-9999</a></li>
-              <li><a href="#">Telefone: (16) 3333-3333</a></li>
+              <li><a href="/loja">Email: contato@franca-shoes.com</a></li>
+              <li><a href="/loja">WhatsApp: (16) 99999-9999</a></li>
+              <li><a href="/loja">Telefone: (16) 3333-3333</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h4>Redes Sociais</h4>
             <ul>
-              <li><a href="#">Instagram</a></li>
-              <li><a href="#">TikTok</a></li>
-              <li><a href="#">Facebook</a></li>
+              <li><a href="/loja">Instagram</a></li>
+              <li><a href="/loja">TikTok</a></li>
+              <li><a href="/loja">Facebook</a></li>
             </ul>
           </div>
         </div>
