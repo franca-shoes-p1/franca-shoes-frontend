@@ -1,0 +1,147 @@
+﻿.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 80px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.conteudo h1 {
+  font-size: 3em;
+  margin: 0 0 20px 0;
+  font-weight: 700;
+}
+
+.subtitulo {
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+}
+
+.descricao {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.botao {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.botao:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.imagem {
+  text-align: center;
+}
+
+.imagem img {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+}
+
+.nichos {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.nichos h2 {
+  text-align: center;
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.gridNichos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.nicho {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.nicho:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.nicho h3 {
+  font-size: 1.3em;
+  color: #667eea;
+  margin: 0 0 10px 0;
+}
+
+.nicho p {
+  color: #666;
+  margin: 0;
+  font-size: 0.95em;
+}
+
+.cta {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.botaoPrincipal {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 18px 40px;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.botaoPrincipal:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 40px 20px;
+  }
+
+  .conteudo h1 {
+    font-size: 2em;
+  }
+
+  .nichos h2 {
+    font-size: 1.5em;
+  }
+
+  .gridNichos {
+    grid-template-columns: 1fr;
+  }
+}
