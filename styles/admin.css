@@ -1,0 +1,284 @@
+﻿/* ========== ADMIN PANEL CSS ========== */
+
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #1E40AF;
+}
+
+.admin-header h1 {
+  color: #1E40AF;
+  margin: 0;
+  font-size: 28px;
+}
+
+.admin-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-link {
+  padding: 10px 15px;
+  background: #10B981;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-link:hover {
+  background: #059669;
+}
+
+.admin-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+/* ========== FORMULÁRIO ========== */
+
+.admin-form {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-form h2 {
+  color: #1E40AF;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.admin-input,
+.admin-textarea,
+.admin-select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.admin-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+  outline: none;
+  border-color: #1E40AF;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.admin-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.btn-adicionar {
+  width: 100%;
+  padding: 12px;
+  background: #10B981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 10px;
+}
+
+.btn-adicionar:hover {
+  background: #059669;
+}
+
+.btn-cancelar {
+  width: 100%;
+  padding: 12px;
+  background: #EF4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cancelar:hover {
+  background: #DC2626;
+}
+
+/* ========== LISTA DE PRODUTOS ========== */
+
+.admin-lista {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-lista h2 {
+  color: #1E40AF;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.vazio {
+  color: #999;
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 16px;
+}
+
+.produtos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.produto-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #1E40AF;
+  transition: 0.3s;
+}
+
+.produto-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #f0f4ff;
+}
+
+.produto-info {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+.produto-emoji {
+  font-size: 32px;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.produto-dados {
+  flex: 1;
+}
+
+.produto-dados h3 {
+  margin: 0 0 5px 0;
+  color: #1E40AF;
+  font-size: 16px;
+}
+
+.categoria {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.descricao {
+  margin: 5px 0;
+  color: #555;
+  font-size: 13px;
+}
+
+.preco {
+  margin: 8px 0 0 0;
+  color: #10B981;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.detalhe {
+  margin: 5px 0 0 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.produto-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-editar,
+.btn-deletar {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-editar {
+  background: #3B82F6;
+  color: white;
+}
+
+.btn-editar:hover {
+  background: #1E40AF;
+}
+
+.btn-deletar {
+  background: #EF4444;
+  color: white;
+}
+
+.btn-deletar:hover {
+  background: #DC2626;
+}
+
+/* ========== RESPONSIVO ========== */
+
+@media (max-width: 1024px) {
+  .admin-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
+  .produto-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .produto-acoes {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-editar,
+  .btn-deletar {
+    flex: 1;
+  }
+}
