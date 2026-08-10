@@ -2,7 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/loja": "pages/loja.js",
+  "/carrinho": "pages/carrinho.js",
   "/checkout": "pages/checkout.js",
   "/api/pix/gerar": "pages/api/pix/gerar.js",
-  "/confirmacao": "pages/confirmacao.js"
+  "/confirmacao": "pages/confirmacao.js",
+  "/": "pages/index.js"
 }
