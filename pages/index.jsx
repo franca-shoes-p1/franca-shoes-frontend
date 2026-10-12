@@ -12,8 +12,8 @@ import styles from '../styles/portal.module.css';
 const CONFIG = {
   nome: 'Igreja Eco',
   slogan: 'Conhecimento, tecnologia e comércio em um só lugar',
-  whatsapp: '',
-  email: '',
+  whatsapp: '5516991543663',
+  email: 'ricardobelo1973@gmail.com',
 };
 
 const RAMOS = [
