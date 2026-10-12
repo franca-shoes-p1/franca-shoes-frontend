@@ -1,178 +1,307 @@
-﻿import React from 'react';
+import React, { useState } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import styles from '../styles/portal.module.css';
+
+/* ------------------------------------------------------------------
+   CONFIGURAÇÃO DO PORTAL
+   Para adicionar um novo ramo de negócio, basta incluir um item em RAMOS.
+   Contato: preencha whatsapp (só números, com DDD, ex: '5516912345678') e
+   email. Enquanto estiverem vazios, a seção de contato fica escondida.
+------------------------------------------------------------------- */
+const CONFIG = {
+  nome: 'Igreja Eco',
+  slogan: 'Conhecimento, tecnologia e comércio em um só lugar',
+  whatsapp: '',
+  email: '',
+};
+
+const RAMOS = [
+  {
+    id: 'ovinocultura',
+    icone: '🐑',
+    titulo: 'Escola de Ovinocultura',
+    texto:
+      'Cursos para quem está começando e para o produtor rural: raças e cruzamentos, manejo, nutrição, sanidade e gestão.',
+    status: 'Em breve',
+    destaque: true,
+    link: '#escola',
+    chamada: 'Conhecer a escola',
+  },
+  {
+    id: 'servicos-ia',
+    icone: '🤖',
+    titulo: 'Serviços de IA e Automação',
+    texto:
+      'Atendimento automático, conteúdo para redes sociais, sites e painéis de gestão para produtores e comércios de todo o Brasil.',
+    status: 'Sob consulta',
+    destaque: true,
+    link: '#servicos',
+    chamada: 'Ver serviços',
+  },
+  {
+    id: 'loja',
+    icone: '🛍️',
+    titulo: 'Loja Franca Shoes',
+    texto:
+      'Calçados e acessórios de Franca. Escolha os produtos, monte o carrinho e pague com Pix.',
+    status: 'Disponível',
+    destaque: true,
+    link: '/loja',
+    chamada: 'Ir para a loja',
+    interno: true,
+  },
+  {
+    id: 'amazonia',
+    icone: '🌿',
+    titulo: 'Alimentos da Amazônia',
+    texto: 'Produtos naturais da floresta, vindos de comunidades parceiras.',
+    status: 'Em breve',
+  },
+  {
+    id: 'ebooks',
+    icone: '📚',
+    titulo: 'E-books e Materiais Digitais',
+    texto: 'Guias práticos de “como fazer” para baixar e usar no dia a dia.',
+    status: 'Em breve',
+  },
+  {
+    id: 'novos',
+    icone: '✨',
+    titulo: 'Novos ramos',
+    texto: 'O portal cresce com novas áreas. Fique de olho.',
+    status: 'Em breve',
+  },
+];
+
+const TRILHAS = [
+  'Fundamentos da criação',
+  'Raças e cruzamentos',
+  'Manejo e pastagem',
+  'Nutrição e suplementação',
+  'Sanidade e prevenção',
+  'Reprodução e melhoramento',
+  'Instalações e equipamentos',
+  'Gestão e comercialização',
+];
+
+const SERVICOS = [
+  { icone: '💬', titulo: 'Atendimento automático', texto: 'Respostas e agendamentos no WhatsApp e no email, com IA.' },
+  { icone: '📣', titulo: 'Conteúdo automático', texto: 'Posts para Instagram, Facebook, TikTok e Telegram, com a sua aprovação.' },
+  { icone: '🌐', titulo: 'Site ou portal', texto: 'Página institucional ou loja digital pronta para vender.' },
+  { icone: '📊', titulo: 'Painel de gestão', texto: 'Cadastro e acompanhamento de clientes, pedidos ou rebanho.' },
+  { icone: '⚙️', titulo: 'Instalação personalizada', texto: 'Montagem do sistema sob medida para o seu negócio.' },
+];
+
+const PASSOS = [
+  { n: '1', titulo: 'Escolha', texto: 'Navegue pelos ramos e encontre o que você precisa.' },
+  { n: '2', titulo: 'Peça ou compre', texto: 'Compre na loja com Pix ou peça um serviço.' },
+  { n: '3', titulo: 'Receba', texto: 'Acompanhe o pedido e conte com o nosso atendimento.' },
+];
+
+function Icone({ children }) {
+  return <span className={styles.icone} aria-hidden="true">{children}</span>;
+}
 
 export default function Home() {
+  const [menuAberto, setMenuAberto] = useState(false);
+  const fechar = () => setMenuAberto(false);
+  const temContato = Boolean(CONFIG.whatsapp || CONFIG.email);
+  const linkWhats = CONFIG.whatsapp
+    ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site e gostaria de mais informações.')}`
+    : null;
+
   return (
-    <div className="home-container">
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-content">
-          <div className="hero-text">
-            <h1>🚀 Franca Shoes - v5.1</h1>
-            <p>Bem-vindo ao Franca Shoes Empire!</p>
-            <p className="hero-subtitle">7 Nichos, 1 Plataforma, Infinitas Possibilidades</p>
-            <button className="hero-btn">Entrar na Loja →</button>
+    <div className={styles.pagina}>
+      <Head>
+        <title>{CONFIG.nome} | Ovinocultura, IA e Loja</title>
+        <meta
+          name="description"
+          content="Escola de Ovinocultura, serviços de IA e automação e loja virtual de calçados de Franca, reunidos em um só portal."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+
+      {/* CABEÇALHO */}
+      <header className={styles.cabecalho}>
+        <div className={styles.contido + ' ' + styles.barra}>
+          <a href="#topo" className={styles.marca} onClick={fechar}>
+            <span className={styles.marcaSelo}>IE</span>
+            <span>{CONFIG.nome}</span>
+          </a>
+          <button
+            className={styles.botaoMenu}
+            aria-label="Abrir menu"
+            aria-expanded={menuAberto}
+            onClick={() => setMenuAberto(!menuAberto)}
+          >
+            <span /><span /><span />
+          </button>
+          <nav className={`${styles.menu} ${menuAberto ? styles.menuAberto : ''}`}>
+            <a href="#ramos" onClick={fechar}>Ramos</a>
+            <a href="#escola" onClick={fechar}>Escola</a>
+            <a href="#servicos" onClick={fechar}>Serviços</a>
+            {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
+            <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
+            <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
+          </nav>
+        </div>
+      </header>
+
+      <main id="topo">
+        {/* HERO */}
+        <section className={styles.hero}>
+          <div className={styles.contido + ' ' + styles.heroGrade}>
+            <div>
+              <p className={styles.sobretitulo}>Portal institucional</p>
+              <h1 className={styles.heroTitulo}>{CONFIG.slogan}</h1>
+              <p className={styles.heroTexto}>
+                Aprenda ovinocultura, automatize o seu negócio com inteligência artificial e compre na loja
+                virtual. Tudo reunido em um só endereço.
+              </p>
+              <div className={styles.heroAcoes}>
+                <a href="#ramos" className={styles.botaoPrincipal}>Explorar o portal</a>
+                <Link href="/loja" className={styles.botaoSecundario}>Ir para a loja →</Link>
+              </div>
+            </div>
+            <div className={styles.heroPainel} aria-hidden="true">
+              <div className={styles.heroCartao}><Icone>🐑</Icone><strong>Escola</strong><small>Cursos de ovinocultura</small></div>
+              <div className={styles.heroCartao}><Icone>🤖</Icone><strong>IA e automação</strong><small>Serviços sob medida</small></div>
+              <div className={styles.heroCartao}><Icone>🛍️</Icone><strong>Loja</strong><small>Compre com Pix</small></div>
+            </div>
           </div>
-          <div className="hero-image">
-            <div className="hero-box">👟</div>
+        </section>
+
+        {/* RAMOS */}
+        <section id="ramos" className={styles.secao}>
+          <div className={styles.contido}>
+            <p className={styles.sobretituloEscuro}>Nossos ramos</p>
+            <h2 className={styles.titulo}>Tudo o que você encontra aqui</h2>
+            <p className={styles.subtitulo}>Cada ramo funciona como uma área do portal. Novas áreas entram aos poucos.</p>
+            <div className={styles.gradeRamos}>
+              {RAMOS.map((r) => (
+                <article key={r.id} className={`${styles.ramo} ${r.destaque ? styles.ramoDestaque : ''}`}>
+                  <div className={styles.ramoTopo}>
+                    <Icone>{r.icone}</Icone>
+                    <span className={`${styles.etiqueta} ${r.status === 'Disponível' ? styles.etiquetaOk : ''}`}>{r.status}</span>
+                  </div>
+                  <h3>{r.titulo}</h3>
+                  <p>{r.texto}</p>
+                  {r.link && (r.interno
+                    ? <Link href={r.link} className={styles.ramoLink}>{r.chamada} →</Link>
+                    : <a href={r.link} className={styles.ramoLink}>{r.chamada} →</a>)}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ESCOLA */}
+        <section id="escola" className={`${styles.secao} ${styles.secaoClara}`}>
+          <div className={styles.contido + ' ' + styles.duasColunas}>
+            <div>
+              <p className={styles.sobretituloEscuro}>Escola de Ovinocultura</p>
+              <h2 className={styles.titulo}>Aprenda a criar ovinos com método</h2>
+              <p className={styles.subtitulo}>
+                Um pacote com mais de 15 cursos em vídeo, feito para iniciantes e produtores rurais. O primeiro
+                curso, <strong>Raças e Cruzamentos</strong>, ensina a escolher a raça certa, o primeiro passo
+                de uma criação de sucesso.
+              </p>
+              <ul className={styles.lista}>
+                <li>Aulas em vídeo no seu ritmo</li>
+                <li>Área do aluno com seus cursos</li>
+                <li>Material de apoio e quiz ao final de cada módulo</li>
+              </ul>
+              <p className={styles.aviso}>As primeiras turmas abrem em breve.</p>
+            </div>
+            <div className={styles.trilhas}>
+              <h3>Trilhas de estudo</h3>
+              <ol>
+                {TRILHAS.map((t) => <li key={t}>{t}</li>)}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* SERVIÇOS */}
+        <section id="servicos" className={styles.secao}>
+          <div className={styles.contido}>
+            <p className={styles.sobretituloEscuro}>Serviços de IA e Automação</p>
+            <h2 className={styles.titulo}>Tecnologia que trabalha por você</h2>
+            <p className={styles.subtitulo}>Soluções para produtores rurais e comércios, em qualquer lugar do Brasil.</p>
+            <div className={styles.gradeServicos}>
+              {SERVICOS.map((s) => (
+                <div key={s.titulo} className={styles.servico}>
+                  <Icone>{s.icone}</Icone>
+                  <h3>{s.titulo}</h3>
+                  <p>{s.texto}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* LOJA */}
+        <section id="loja" className={styles.lojaFaixa}>
+          <div className={styles.contido + ' ' + styles.lojaGrade}>
+            <div>
+              <p className={styles.sobretitulo}>Loja virtual</p>
+              <h2 className={styles.tituloClaro}>Franca Shoes</h2>
+              <p className={styles.lojaTexto}>
+                Calçados e acessórios de Franca. Escolha, monte o carrinho e finalize com pagamento por Pix.
+              </p>
+              <Link href="/loja" className={styles.botaoPrincipal}>Entrar na loja</Link>
+            </div>
+            <ol className={styles.passos}>
+              {PASSOS.map((p) => (
+                <li key={p.n}>
+                  <span className={styles.passoNumero}>{p.n}</span>
+                  <div><strong>{p.titulo}</strong><p>{p.texto}</p></div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* CONTATO (só aparece quando WhatsApp ou email estiverem preenchidos) */}
+        {temContato && (
+          <section id="contato" className={styles.secao}>
+            <div className={styles.contido + ' ' + styles.contatoCaixa}>
+              <h2 className={styles.titulo}>Fale com a gente</h2>
+              <p className={styles.subtitulo}>Tire dúvidas sobre cursos, serviços ou pedidos.</p>
+              <div className={styles.heroAcoes}>
+                {linkWhats && <a href={linkWhats} className={styles.botaoPrincipal} target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>}
+                {CONFIG.email && <a href={`mailto:${CONFIG.email}`} className={styles.botaoContorno}>{CONFIG.email}</a>}
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
+
+      {/* RODAPÉ */}
+      <footer className={styles.rodape}>
+        <div className={styles.contido + ' ' + styles.rodapeGrade}>
+          <div>
+            <a href="#topo" className={styles.marca}>
+              <span className={styles.marcaSelo}>IE</span>
+              <span>{CONFIG.nome}</span>
+            </a>
+            <p>{CONFIG.slogan}.</p>
+          </div>
+          <div>
+            <h4>Navegação</h4>
+            <a href="#ramos">Ramos</a>
+            <a href="#escola">Escola de Ovinocultura</a>
+            <a href="#servicos">Serviços de IA</a>
+          </div>
+          <div>
+            <h4>Loja</h4>
+            <Link href="/loja">Produtos</Link>
+            <Link href="/carrinho">Carrinho</Link>
           </div>
         </div>
-      </section>
-
-      {/* CATEGORIAS */}
-      <section className="categories-section">
-        <h2>7 Nichos Disponíveis:</h2>
-        <div className="categories-grid">
-          <div className="category-card">
-            <div className="category-icon">👟</div>
-            <h3>Calçados</h3>
-            <p>Calçados Premium</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">👗</div>
-            <h3>Moda Feminina</h3>
-            <p>Moda Feminina Elegante</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">👔</div>
-            <h3>Moda Masculina</h3>
-            <p>Moda Masculina Sofisticada</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">👧</div>
-            <h3>Infantil</h3>
-            <p>Roupas Infantis</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">⛹️</div>
-            <h3>Esporte</h3>
-            <p>Esporte & Fitness</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">🌱</div>
-            <h3>Eco</h3>
-            <p>Sustentável</p>
-          </div>
-          <div className="category-card">
-            <div className="category-icon">✝️</div>
-            <h3>Religião</h3>
-            <p>Comunidade Cristã</p>
-          </div>
-        </div>
-      </section>
-
-      {/* QUOTAÇÃO */}
-      <section className="quotation-section">
-        <h2>Cotação Automática</h2>
-        <div className="quotation-content">
-          <div className="quotation-text">
-            <p>Sistema automático de cotação integrado com seu carrinho.</p>
-            <ul>
-              <li>✅ Cálculo automático de fretes</li>
-              <li>✅ Integração com transportadoras</li>
-              <li>✅ Cotação em tempo real</li>
-            </ul>
-          </div>
-          <div className="quotation-form">
-            <h3>Solicite uma Cotação</h3>
-            <input type="text" placeholder="Seu nome" />
-            <input type="email" placeholder="Seu email" />
-            <textarea placeholder="Detalhes do pedido"></textarea>
-            <button className="quote-btn">Solicitar Cotação</button>
-          </div>
-        </div>
-      </section>
-
-      {/* BENEFÍCIOS */}
-      <section className="benefits-section">
-        <h2>3 Benefícios Destacados</h2>
-        <div className="benefits-grid">
-          <div className="benefit-card">
-            <div className="benefit-icon">🚚</div>
-            <h3>Frete Grátis</h3>
-            <p>Frete grátis em todas as compras acima de R$ 100.</p>
-          </div>
-          <div className="benefit-card">
-            <div className="benefit-icon">💳</div>
-            <h3>Parcelamento</h3>
-            <p>Parcele em até 12x sem juros no cartão de crédito.</p>
-          </div>
-          <div className="benefit-card">
-            <div className="benefit-icon">🔒</div>
-            <h3>Segurança</h3>
-            <p>Compra 100% segura com criptografia SSL.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* STATUS */}
-      <section className="status-section">
-        <h2>Status do Sistema</h2>
-        <div className="status-checks">
-          <div className="status-item">
-            <div className="status-dot green"></div>
-            <p>Frontend rodando em http://localhost:3000</p>
-          </div>
-          <div className="status-item">
-            <div className="status-dot green"></div>
-            <p>Backend rodando em http://localhost:5000</p>
-          </div>
-          <div className="status-item">
-            <div className="status-dot green"></div>
-            <p>Banco de dados PostgreSQL pronto!</p>
-          </div>
-          <div className="status-item">
-            <div className="status-dot green"></div>
-            <p>🎉 Franca Shoes está PRONTO!</p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="cta-section">
-        <h2>Comece a Vender Agora!</h2>
-        <p>Sua loja online está pronta para receber clientes</p>
-        <a href="/loja" className="cta-btn">Ir para Loja →</a>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>Sobre</h4>
-            <ul>
-              <li><a href="/loja">Sobre Nós</a></li>
-              <li><a href="/loja">Missão</a></li>
-              <li><a href="/loja">Visão</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Produtos</h4>
-            <ul>
-              <li><a href="/loja">Calçados</a></li>
-              <li><a href="/loja">Moda</a></li>
-              <li><a href="/loja">Esporte</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Contato</h4>
-            <ul>
-              <li><a href="/loja">Email: contato@franca-shoes.com</a></li>
-              <li><a href="/loja">WhatsApp: (16) 99999-9999</a></li>
-              <li><a href="/loja">Telefone: (16) 3333-3333</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Redes Sociais</h4>
-            <ul>
-              <li><a href="/loja">Instagram</a></li>
-              <li><a href="/loja">TikTok</a></li>
-              <li><a href="/loja">Facebook</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>&copy; 2026 Franca Shoes. Todos os direitos reservados.</p>
-          <p>Desenvolvido com ❤️ por Ricardo Belo</p>
+        <div className={styles.rodapeFim}>
+          <p>© 2026 {CONFIG.nome}. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
