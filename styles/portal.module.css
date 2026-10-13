@@ -111,6 +111,11 @@
 .servico h3 { margin: 14px 0 6px; font-size: 1.05rem; }
 .servico p { color: var(--cinza); font-size: 0.97rem; }
 
+.servico { display: flex; flex-direction: column; }
+.servico p { flex: 1; }
+.servicoLink { display: inline-block; margin-top: 12px; font-weight: 700; color: var(--verde) !important; }
+.servicosAcao { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 32px; color: var(--cinza); }
+
 /* ---------- LOJA ---------- */
 .lojaFaixa { background: var(--verde-escuro); color: #fff; padding: 76px 0; }
 .lojaGrade { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
@@ -157,3 +162,17 @@
 @media (max-width: 560px) {
   .gradeServicos { grid-template-columns: 1fr; }
 }
+
+/* ---------- VITRINE DE PACOTES (home) ---------- */
+.vitrine { background: linear-gradient(120deg, #e2a72b, #f0c25a); color: #1f1700; padding: 64px 0; }
+.vitrineGrade { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+.vitrineTitulo { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.8rem, 4vw, 2.7rem); line-height: 1.15; margin: 6px 0 14px; }
+.vitrineTexto { font-size: 1.1rem; max-width: 560px; margin-bottom: 14px; }
+.vitrinePreco { display: inline-block; background: #0d3b2c; color: #fff; font-weight: 700; border-radius: 999px; padding: 8px 18px; margin-bottom: 22px; }
+.vitrineSegmentos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vitrineSeg { background: #fff; border-radius: 16px; padding: 16px; font-weight: 700; display: flex; flex-direction: column; gap: 6px; font-size: 1rem; box-shadow: 0 8px 22px rgba(0,0,0,.12); }
+.vitrineSeg span { font-size: 1.8rem; }
+.vitrineNiveis { grid-column: 1 / -1; display: flex; gap: 8px; }
+.vitrineNiveis span { flex: 1; text-align: center; background: #0d3b2c; color: #fff; border-radius: 12px; padding: 10px; font-weight: 700; }
+@media (max-width: 860px) { .vitrineGrade { grid-template-columns: 1fr; } .vitrine { padding: 48px 0; } }
+.vitrine .sobretitulo { color: #0d3b2c; }

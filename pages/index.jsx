@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { PACOTES, SEGMENTOS } from '../data/pacotes';
 import styles from '../styles/portal.module.css';
 
 /* ------------------------------------------------------------------
@@ -141,6 +142,7 @@ export default function Home() {
             <a href="#ramos" onClick={fechar}>Ramos</a>
             <a href="#escola" onClick={fechar}>Escola</a>
             <a href="#servicos" onClick={fechar}>Serviços</a>
+            <Link href="/pacotes" onClick={fechar}>Pacotes</Link>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
             <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
             <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
@@ -168,6 +170,30 @@ export default function Home() {
               <div className={styles.heroCartao}><Icone>🐑</Icone><strong>Escola</strong><small>Cursos de ovinocultura</small></div>
               <div className={styles.heroCartao}><Icone>🤖</Icone><strong>IA e automação</strong><small>Serviços sob medida</small></div>
               <div className={styles.heroCartao}><Icone>🛍️</Icone><strong>Loja</strong><small>Compre com Pix</small></div>
+            </div>
+          </div>
+        </section>
+
+        {/* VITRINE DE PACOTES */}
+        <section className={styles.vitrine}>
+          <div className={styles.contido + ' ' + styles.vitrineGrade}>
+            <div>
+              <p className={styles.sobretitulo}>Novo · Pacotes para o seu comércio</p>
+              <h2 className={styles.vitrineTitulo}>Site, atendimento e divulgação prontos para o seu negócio</h2>
+              <p className={styles.vitrineTexto}>
+                Para salões, mercadinhos, academias, oficinas e lojas. Você escolhe o pacote, eu monto, instalo e cuido da manutenção.
+              </p>
+              <p className={styles.vitrinePreco}>A partir de R$ {PACOTES[0].implantacao.toLocaleString('pt-BR')}{PACOTES[0].parcelas > 0 ? ` ou ${PACOTES[0].parcelas}x de R$ ${Math.ceil(PACOTES[0].implantacao / PACOTES[0].parcelas)}` : ''}</p>
+              <div className={styles.heroAcoes}>
+                <Link href="/pacotes" className={styles.botaoPrincipal}>Ver os pacotes</Link>
+                <Link href="/pedido?servico=Pacote%20pronto%20para%20com%C3%A9rcio" className={styles.botaoSecundario}>Pedir o meu →</Link>
+              </div>
+            </div>
+            <div className={styles.vitrineSegmentos}>
+              {SEGMENTOS.filter((s) => s.id !== 'outros').map((s) => (
+                <Link key={s.id} href="/pacotes" className={styles.vitrineSeg}><span aria-hidden="true">{s.icone}</span>{s.nome}</Link>
+              ))}
+              <div className={styles.vitrineNiveis}>{PACOTES.map((p) => <span key={p.id}>{p.nome}</span>)}</div>
             </div>
           </div>
         </section>
@@ -235,8 +261,14 @@ export default function Home() {
                   <Icone>{s.icone}</Icone>
                   <h3>{s.titulo}</h3>
                   <p>{s.texto}</p>
+                  <Link href={`/pedido?servico=${encodeURIComponent(s.titulo)}`} className={styles.servicoLink}>Pedir este serviço →</Link>
                 </div>
               ))}
+            </div>
+            <div className={styles.servicosAcao}>
+              <Link href="/pedido" className={styles.botaoPrincipal}>Pedir um serviço</Link>
+              <Link href="/pacotes" className={styles.botaoContorno}>Ver pacotes para comércios</Link>
+              <span>Resposta pelo WhatsApp, sem compromisso.</span>
             </div>
           </div>
         </section>
