@@ -52,6 +52,18 @@ const RAMOS = [
     interno: true,
   },
   {
+    id: 'revenda',
+    icone: '🚚',
+    titulo: 'Calçados de Franca para quem mora longe',
+    texto:
+      'Você compra direto da fábrica e eu retiro, confiro e envio. A margem é calculada antes do pedido.',
+    status: 'Em teste',
+    destaque: true,
+    link: '/projeto-fornecedores',
+    chamada: 'Ver como funciona',
+    interno: true,
+  },
+  {
     id: 'amazonia',
     icone: '🌿',
     titulo: 'Alimentos da Amazônia',
@@ -99,6 +111,13 @@ const PASSOS = [
   { n: '3', titulo: 'Receba', texto: 'Acompanhe o pedido e conte com o nosso atendimento.' },
 ];
 
+const PASSOS_REVENDA = [
+  'Você escolhe modelos de um catálogo com margem calculada',
+  'Você compra direto da fábrica, no seu nome',
+  'Eu retiro em Franca, confiro os pares e fotografo o lote',
+  'Eu envio para a sua cidade, com frete a custo real',
+];
+
 function Icone({ children }) {
   return <span className={styles.icone} aria-hidden="true">{children}</span>;
 }
@@ -141,6 +160,7 @@ export default function Home() {
             <a href="#ramos" onClick={fechar}>Ramos</a>
             <a href="#escola" onClick={fechar}>Escola</a>
             <a href="#servicos" onClick={fechar}>Serviços</a>
+            <a href="#revenda" onClick={fechar}>Revenda</a>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
             <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
             <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
@@ -263,6 +283,33 @@ export default function Home() {
           </div>
         </section>
 
+        {/* REVENDA DE CALÇADOS DE FRANCA */}
+        <section id="revenda" className={`${styles.secao} ${styles.secaoClara}`}>
+          <div className={styles.contido + ' ' + styles.duasColunas}>
+            <div>
+              <p className={styles.sobretituloEscuro}>Revenda de calçados</p>
+              <h2 className={styles.titulo}>Calçados de Franca, mesmo que você more longe</h2>
+              <p className={styles.subtitulo}>
+                Para quem quer vender calçados e não mora perto das fábricas. Você compra direto da fábrica e eu
+                cuido da retirada, da conferência e do envio.
+              </p>
+              <ul className={styles.lista}>
+                <li>Margem calculada antes de você comprar</li>
+                <li>Sem promessa de lucro: se o modelo não compensa, eu aviso</li>
+                <li>Cobro só o serviço de retirada, conferência e envio</li>
+              </ul>
+              <Link href="/projeto-fornecedores" className={styles.ramoLink}>Ver como funciona →</Link>
+              <p className={styles.aviso}>Em fase de teste com os primeiros revendedores.</p>
+            </div>
+            <div className={styles.trilhas}>
+              <h3>Como funciona</h3>
+              <ol>
+                {PASSOS_REVENDA.map((t) => <li key={t}>{t}</li>)}
+              </ol>
+            </div>
+          </div>
+        </section>
+
         {/* CONTATO (só aparece quando WhatsApp ou email estiverem preenchidos) */}
         {temContato && (
           <section id="contato" className={styles.secao}>
@@ -293,6 +340,7 @@ export default function Home() {
             <a href="#ramos">Ramos</a>
             <a href="#escola">Escola de Ovinocultura</a>
             <a href="#servicos">Serviços de IA</a>
+            <a href="#revenda">Revenda de Franca</a>
           </div>
           <div>
             <h4>Loja</h4>
