@@ -26,8 +26,36 @@ const fases = [
 ];
 
 const pacotes = [
-  ['Parceiro', 'Para quem já tem site ou loja: catálogo curado, calculadora de margem, atendimento por WhatsApp com IA, montagem do pedido e retirada em Franca.'],
-  ['Iniciante', 'Para quem está começando: tudo do Parceiro, mais loja pronta, políticas prontas, posts semanais com IA, treinamento e revisão do primeiro pedido.'],
+  {
+    nome: 'Parceiro',
+    para: 'Para quem já tem site ou loja.',
+    instalacao: 'R$ 697',
+    mensal: 'R$ 147',
+    par: 'R$ 6',
+    minimo: 'R$ 90',
+    itens: [
+      'Catálogo curado, só com modelos que deixam margem',
+      'Calculadora de margem por modelo',
+      'Atendimento por WhatsApp com IA',
+      'Montagem do pedido para você enviar à fábrica',
+      'Retirada, conferência e fotos do lote em Franca',
+    ],
+  },
+  {
+    nome: 'Iniciante',
+    para: 'Para quem está começando do zero.',
+    instalacao: 'R$ 1.497',
+    mensal: 'R$ 247',
+    par: 'R$ 8',
+    minimo: 'R$ 120',
+    itens: [
+      'Tudo do pacote Parceiro',
+      'Loja pronta para você começar a vender',
+      'Políticas de troca e entrega prontas',
+      'Posts semanais criados com IA',
+      'Treinamento e revisão do seu primeiro pedido',
+    ],
+  },
 ];
 
 export default function ProjetoFornecedores() {
@@ -86,17 +114,21 @@ export default function ProjetoFornecedores() {
         </section>
 
         <section className="pf-sec">
-          <h2>Dois pacotes, em fase de teste</h2>
+          <h2>Dois pacotes, valores de lançamento</h2>
           <div className="pf-grid">
-            {pacotes.map(([t, d]) => (
-              <div className="pf-card" key={t}>
-                <b>{t}</b>
-                <span className="pf-mu">{d}</span>
+            {pacotes.map((p) => (
+              <div className="pf-card" key={p.nome}>
+                <b style={{ fontSize: 18 }}>{p.nome}</b>
+                <span className="pf-mu">{p.para}</span>
+                <p style={{ margin: '12px 0 4px' }}><b style={{ display: 'inline' }}>{p.instalacao}</b> de instalação (uma vez)</p>
+                <p style={{ margin: '0 0 4px' }}><b style={{ display: 'inline' }}>{p.mensal}</b> por mês</p>
+                <p style={{ margin: '0 0 12px' }}><b style={{ display: 'inline' }}>{p.par}</b> por par retirado (mínimo de {p.minimo} por retirada)</p>
+                <ul>{p.itens.map((i) => <li key={i}>{i}</li>)}</ul>
               </div>
             ))}
           </div>
           <p className="pf-mu" style={{ marginTop: 12 }}>
-            Os valores são combinados na conversa durante os pilotos. Os primeiros clientes recebem condição especial e sem fidelidade.
+            Os pares são comprados por você, direto da fábrica, e pagos à fábrica. Os valores acima são só do meu serviço e podem ser ajustados para os primeiros clientes, sem fidelidade. O frete é cobrado pelo custo real. Não prometo lucro: a margem é calculada antes de cada compra.
           </p>
         </section>
 
