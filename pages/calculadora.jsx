@@ -127,11 +127,37 @@ export default function Calculadora() {
         .cm-chip{display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:999px;padding:6px 10px;font-size:14px}
         .cm-chip button{background:none;border:0;color:var(--tx);cursor:pointer;font-size:14px}
         .cm details summary{cursor:pointer;font-weight:600}
+        .cm-guia ol,.cm-guia ul{padding-left:20px;margin:10px 0}
+        .cm-guia li{margin-bottom:6px;font-size:14px}
+        .cm-guia p{margin:8px 0}
         .cm-foot{font-size:12px;color:var(--mu);margin:16px 0 32px}
       `}</style>
       <div className="cm-in">
         <h1>Calculadora de margem</h1>
         <p className="cm-mu">Digite o custo na fábrica e o preço de venda. O resultado aparece na hora.</p>
+
+        <div className="cm-card cm-guia">
+          <details>
+            <summary>Como usar (passo a passo)</summary>
+            <ol>
+              <li><b>Custo na fábrica:</b> o valor que a fábrica cobra por um par. Exemplo: 45.</li>
+              <li><b>Preço de venda:</b> o valor pelo qual você vai vender o par. Exemplo: 100.</li>
+              <li><b>Resultado:</b> aparece sozinho. Verde "Passa" significa que a margem atinge a meta (30% como padrão). Vermelho "Não passa" significa que não atinge.</li>
+              <li><b>Lote:</b> troque o 12 pela quantidade de pares do pedido para ver o lucro do lote inteiro.</li>
+              <li><b>Regras da margem:</b> abra a faixa e ajuste taxa da plataforma, reserva de devolução, imposto, embalagem, frete e meta com os seus números reais.</li>
+              <li><b>Meus cenários:</b> dê um nome às suas regras e toque em Salvar. Depois é só tocar no nome para usar de novo.</li>
+              <li><b>Copiar resumo:</b> copia o cálculo pronto para colar no WhatsApp.</li>
+            </ol>
+            <p className="cm-mu"><b>O que significa cada linha:</b></p>
+            <ul>
+              <li><b>Preço mínimo para a meta:</b> o menor preço de venda que ainda atinge a margem desejada.</li>
+              <li><b>Custo máximo na fábrica:</b> o máximo que a fábrica pode cobrar para você atingir a meta vendendo pelo preço digitado.</li>
+              <li><b>Preço de equilíbrio:</b> abaixo dele você perde dinheiro (lucro zero).</li>
+            </ul>
+            <p className="cm-mu"><b>Exemplo:</b> custo R$ 45 e venda R$ 100, com taxa 5%, reserva 8% e embalagem R$ 3, dá lucro de R$ 39 por par (39%). Passa.</p>
+            <p className="cm-mu"><b>Privacidade:</b> os números ficam no seu aparelho. Nada do que você digita é enviado para o site. Seus cenários salvos ficam só neste navegador.</p>
+          </details>
+        </div>
 
         <div className="cm-card cm-big">
           <div className="cm-g">
