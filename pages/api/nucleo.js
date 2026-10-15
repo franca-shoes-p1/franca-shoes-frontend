@@ -8,6 +8,7 @@ const REAL = {
   produtos: 'rf_produtos',
   interacoes: 'rf_interacoes',
   tarefas: 'rf_tarefas',
+  pedidos: 'rf_pedidos',
 };
 const TABELAS = Object.keys(REAL);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -31,7 +32,8 @@ async function sb(caminho, init = {}) {
     cache: 'no-store',
     headers: {
       apikey: chave,
-      Authorization: `Bearer ${chave}`,
+      // Chave nova (sb_secret_...) vai só em apikey; chave antiga (eyJ...) também vai em Authorization.
+      ...(chave.startsWith('eyJ') ? { Authorization: `Bearer ${chave}` } : {}),
       'Content-Type': 'application/json',
       Prefer: 'return=representation',
       ...(init.headers || {}),

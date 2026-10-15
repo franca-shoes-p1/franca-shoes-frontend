@@ -1,266 +1,155 @@
-﻿import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import styles from '../styles/checkout.module.css';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Head from "next/head";
+import styles from "../styles/checkout.module.css";
+
+const CHAVE = "carrinho_fr";
+const WHATS = "5516991543663";
+const brl = (n) => "R$ " + Number(n || 0).toFixed(2).replace(".", ",");
 
 export default function Checkout() {
-  const router = useRouter();
   const [carrinho, setCarrinho] = useState([]);
-  const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    endereco: '',
-    numero: '',
-    complemento: '',
-    cidade: '',
-    estado: '',
-    cep: '',
-  });
+  const [f, setF] = useState({ nome: "", whatsapp: "", email: "", cidade: "", estado: "", observacao: "", site: "" });
   const [loading, setLoading] = useState(false);
-  const [erro, setErro] = useState('');
-  const [sucesso, setSucesso] = useState('');
+  const [erro, setErro] = useState("");
+  const [feito, setFeito] = useState(null);
 
   useEffect(() => {
-    const carrinhoSalvo = localStorage.getItem('carrinho');
-    if (carrinhoSalvo) {
-      setCarrinho(JSON.parse(carrinhoSalvo));
-    } else {
-      setErro('Carrinho vazio!');
-    }
+    try {
+      setCarrinho(JSON.parse(localStorage.getItem(CHAVE) || "[]"));
+    } catch {}
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const mudar = (e) => setF((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const total = carrinho.reduce((s, i) => s + i.preco * i.quantidade, 0);
 
-  const calcularTotal = () => {
-    return carrinho.reduce((total, item) => total + (item.preco * item.quantidade), 0).toFixed(2);
-  };
-
-  const handleConfirmarCompra = async (e) => {
+  async function enviar(e) {
     e.preventDefault();
     setLoading(true);
-    setErro('');
-    setSucesso('');
-
+    setErro("");
     try {
-      // Validação básica
-      if (!formData.nome || !formData.email || !formData.telefone || !formData.endereco) {
-        throw new Error('Preencha todos os campos obrigatórios');
-      }
-
-      const total = calcularTotal();
-
-      // Simular chamada ao backend para gerar PIX
-      const response = await fetch('/api/pix/gerar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cliente: formData,
-          carrinho: carrinho,
-          total: parseFloat(total),
-        }),
+      const r = await fetch("/api/pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...f, itens: carrinho.map((i) => ({ id: i.id, quantidade: i.quantidade })) }),
       });
-
-      if (!response.ok) {
-        throw new Error('Erro ao processar pagamento');
-      }
-
-      const data = await response.json();
-      
-      // Salvar pedido no localStorage
-      localStorage.setItem('ultimoPedido', JSON.stringify({
-        id: data.pedidoId || Date.now(),
-        cliente: formData,
-        carrinho: carrinho,
-        total: total,
-        pix: data.pix,
-        qrCode: data.qrCode,
-        dataPedido: new Date().toISOString(),
-      }));
-
-      setSucesso('Pedido criado com sucesso! Redirecionando...');
-      
-      setTimeout(() => {
-        router.push('/confirmacao');
-      }, 1500);
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.erro || "Erro ao enviar o pedido.");
+      const linhas = j.itens.map((i) => `• ${i.quantidade} par(es) — ${i.titulo} (${brl(i.preco_fabrica)}/par)`).join("\n");
+      const msg =
+        `Olá! Fiz o pedido nº ${j.numero} no site.\n\n${linhas}\n\n` +
+        `Total estimado na fábrica: ${brl(j.total)} (${j.pares} pares)\n` +
+        `Nome: ${f.nome}\nCidade: ${f.cidade}${f.estado ? "/" + f.estado : ""}\n` +
+        (f.observacao ? `Obs.: ${f.observacao}\n` : "") +
+        `\nPode confirmar preço, estoque e prazo?`;
+      try {
+        localStorage.removeItem(CHAVE);
+      } catch {}
+      setCarrinho([]);
+      setFeito({ numero: j.numero, link: `https://wa.me/${WHATS}?text=${encodeURIComponent(msg)}` });
     } catch (err) {
       setErro(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const total = calcularTotal();
+  if (feito) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.conteudo}>
+          <h1>Pedido nº {feito.numero} registrado ✅</h1>
+          <p>
+            Falta um passo: toque no botão abaixo para me enviar o pedido pelo WhatsApp. Eu confirmo preço, estoque e prazo com a
+            fábrica e te respondo. Nada foi cobrado.
+          </p>
+          <p>
+            <a href={feito.link} target="_blank" rel="noopener noreferrer">
+              <button className={styles.botao}>Enviar pelo WhatsApp</button>
+            </a>
+          </p>
+          <p>
+            <Link href="/loja">← Voltar para a loja</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Enviar pedido</title>
+      </Head>
       <div className={styles.conteudo}>
-        <h1>Checkout</h1>
-
+        <h1>Enviar pedido</h1>
         {erro && <div className={styles.erro}>{erro}</div>}
-        {sucesso && <div className={styles.sucesso}>{sucesso}</div>}
-
         <div className={styles.grid}>
-          {/* Formulário */}
           <div className={styles.formulario}>
-            <h2>Dados de Entrega</h2>
-            <form onSubmit={handleConfirmarCompra}>
+            <h2>Seus dados</h2>
+            <form onSubmit={enviar}>
               <div className={styles.grupo}>
-                <label>Nome Completo *</label>
-                <input
-                  type="text"
-                  name="nome"
-                  value={formData.nome}
-                  onChange={handleInputChange}
-                  placeholder="Seu nome"
-                  required
-                />
+                <label>Nome completo *</label>
+                <input name="nome" value={f.nome} onChange={mudar} required placeholder="Seu nome" />
               </div>
-
               <div className={styles.grupo}>
-                <label>Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="seu@email.com"
-                  required
-                />
+                <label>WhatsApp com DDD *</label>
+                <input name="whatsapp" type="tel" value={f.whatsapp} onChange={mudar} required placeholder="(11) 99999-9999" />
               </div>
-
               <div className={styles.grupo}>
-                <label>Telefone/WhatsApp *</label>
-                <input
-                  type="tel"
-                  name="telefone"
-                  value={formData.telefone}
-                  onChange={handleInputChange}
-                  placeholder="(11) 99999-9999"
-                  required
-                />
+                <label>E-mail</label>
+                <input name="email" type="email" value={f.email} onChange={mudar} placeholder="seu@email.com" />
               </div>
-
-              <div className={styles.grupo}>
-                <label>CEP</label>
-                <input
-                  type="text"
-                  name="cep"
-                  value={formData.cep}
-                  onChange={handleInputChange}
-                  placeholder="12345-678"
-                />
-              </div>
-
-              <div className={styles.grupo}>
-                <label>Endereço *</label>
-                <input
-                  type="text"
-                  name="endereco"
-                  value={formData.endereco}
-                  onChange={handleInputChange}
-                  placeholder="Rua, avenida, etc"
-                  required
-                />
-              </div>
-
-              <div className={styles.grupo}>
-                <label>Número *</label>
-                <input
-                  type="text"
-                  name="numero"
-                  value={formData.numero}
-                  onChange={handleInputChange}
-                  placeholder="123"
-                  required
-                />
-              </div>
-
-              <div className={styles.grupo}>
-                <label>Complemento</label>
-                <input
-                  type="text"
-                  name="complemento"
-                  value={formData.complemento}
-                  onChange={handleInputChange}
-                  placeholder="Apto, sala, etc"
-                />
-              </div>
-
               <div className={styles.grupo}>
                 <label>Cidade *</label>
-                <input
-                  type="text"
-                  name="cidade"
-                  value={formData.cidade}
-                  onChange={handleInputChange}
-                  placeholder="São Paulo"
-                  required
-                />
+                <input name="cidade" value={f.cidade} onChange={mudar} required placeholder="Sua cidade" />
               </div>
-
               <div className={styles.grupo}>
-                <label>Estado *</label>
-                <input
-                  type="text"
-                  name="estado"
-                  value={formData.estado}
-                  onChange={handleInputChange}
-                  placeholder="SP"
-                  required
-                />
+                <label>Estado</label>
+                <input name="estado" value={f.estado} onChange={mudar} maxLength={2} placeholder="SP" />
               </div>
-
-              <button type="submit" disabled={loading} className={styles.botao}>
-                {loading ? 'Processando...' : 'Confirmar Compra'}
+              <div className={styles.grupo}>
+                <label>Observação</label>
+                <input name="observacao" value={f.observacao} onChange={mudar} placeholder="Numerações, cores, prazo..." />
+              </div>
+              <input name="site" value={f.site} onChange={mudar} tabIndex={-1} autoComplete="off" style={{ display: "none" }} />
+              <button type="submit" disabled={loading || carrinho.length === 0} className={styles.botao}>
+                {loading ? "Enviando..." : "Registrar pedido"}
               </button>
             </form>
           </div>
 
-          {/* Resumo do Pedido */}
           <div className={styles.resumo}>
-            <h2>Resumo do Pedido</h2>
-            
+            <h2>Resumo</h2>
             <div className={styles.itens}>
               {carrinho.length === 0 ? (
-                <p>Carrinho vazio</p>
+                <p>
+                  Pedido vazio. <Link href="/loja">Ver a loja</Link>
+                </p>
               ) : (
-                carrinho.map((item, idx) => (
-                  <div key={idx} className={styles.item}>
+                carrinho.map((i) => (
+                  <div key={i.id} className={styles.item}>
                     <div className={styles.info}>
-                      <p className={styles.nome}>{item.nome}</p>
-                      <p className={styles.detalhe}>{item.quantidade}x R$ {parseFloat(item.preco).toFixed(2)}</p>
+                      <p className={styles.nome}>{i.nome}</p>
+                      <p className={styles.detalhe}>
+                        {i.quantidade} x {brl(i.preco)}
+                      </p>
                     </div>
-                    <p className={styles.preco}>R$ {(item.preco * item.quantidade).toFixed(2)}</p>
+                    <p className={styles.preco}>{brl(i.preco * i.quantidade)}</p>
                   </div>
                 ))
               )}
             </div>
-
             <div className={styles.totalizacao}>
-              <div className={styles.linha}>
-                <span>Subtotal:</span>
-                <span>R$ {total}</span>
-              </div>
-              <div className={styles.linha}>
-                <span>Frete:</span>
-                <span>GRÁTIS</span>
-              </div>
               <div className={styles.total}>
-                <span>Total:</span>
-                <span>R$ {total}</span>
+                <span>Total estimado na fábrica:</span>
+                <span>{brl(total)}</span>
               </div>
             </div>
-
             <div className={styles.info}>
-              <p>✓ Frete grátis em toda assinatura Franca+</p>
-              <p>✓ Prazo de 5 a 10 dias úteis</p>
-              <p>✓ PIX com QR code</p>
+              <p>✓ Sem pagamento no site</p>
+              <p>✓ Eu confirmo preço, estoque e prazo com a fábrica</p>
+              <p>✓ Frete e serviço combinados no WhatsApp</p>
             </div>
           </div>
         </div>

@@ -75,15 +75,18 @@ export default function Nucleo() {
   const [forn, setForn] = useState([]);
   const [prod, setProd] = useState([]);
   const [tarefas, setTarefas] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
   const [par, setPar] = useState(PARAMS_PADRAO);
   const [aviso, setAviso] = useState('');
 
   const carregar = useCallback(async (s) => {
-    const [f, p, t] = await Promise.all([
+    const [f, p, t, pe] = await Promise.all([
       api(s, { acao: 'listar', tabela: 'fornecedores', ordem: 'nome.asc' }),
       api(s, { acao: 'listar', tabela: 'produtos', ordem: 'criado_em.desc' }),
       api(s, { acao: 'listar', tabela: 'tarefas', ordem: 'semana.asc' }),
+      api(s, { acao: 'listar', tabela: 'pedidos', ordem: 'criado_em.desc' }).catch(() => []),
     ]);
+    setPedidos(pe);
     setForn(f);
     setProd(p);
     setTarefas(t);
@@ -151,6 +154,7 @@ export default function Nucleo() {
     ['geral', 'Visão geral'],
     ['fornecedores', 'Fornecedores'],
     ['catalogo', 'Catálogo e margem'],
+    ['pedidos', `Pedidos (${pedidos.filter((x) => x.status === 'novo').length})`],
     ['plano', 'Plano de 30 dias'],
   ];
 
@@ -191,6 +195,7 @@ export default function Nucleo() {
       {aba === 'catalogo' && (
         <Catalogo forn={forn} prod={prod} par={par} setPar={setPar} chamar={chamar} recarregar={() => carregar(senha)} />
       )}
+      {aba === 'pedidos' && <Pedidos pedidos={pedidos} chamar={chamar} recarregar={() => carregar(senha)} />}
       {aba === 'plano' && <Plano tarefas={tarefas} chamar={chamar} recarregar={() => carregar(senha)} />}
     </main>
   );
@@ -580,6 +585,68 @@ function Catalogo({ forn, prod, par, setPar, chamar, recarregar }) {
           )}
         </div>
       ))}
+    </section>
+  );
+}
+
+function Pedidos({ pedidos, chamar, recarregar }) {
+  const brlp = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
+  async function mudar(p, dados) {
+    await chamar({ acao: 'atualizar', tabela: 'pedidos', id: p.id, dados });
+    recarregar();
+  }
+  if (!pedidos.length) {
+    return (
+      <section className="nu-card">
+        <p>Nenhum pedido ainda. Eles aparecem aqui quando alguém envia pelo carrinho da loja. (Se der erro, rode o SQL 004 no Supabase.)</p>
+      </section>
+    );
+  }
+  return (
+    <section>
+      {pedidos.map((p) => {
+        const tel = String(p.whatsapp || '').replace(/\D/g, '');
+        const fone = tel.length <= 11 ? '55' + tel : tel;
+        return (
+          <div className="nu-card" key={p.id}>
+            <div className="nu-cab">
+              <h2>
+                Pedido nº {p.numero} · {p.cliente_nome}
+              </h2>
+              <span className={'nu-tag ' + (p.status === 'confirmado' ? 'aprovado' : p.status === 'cancelado' ? 'reprovado' : 'contatado')}>{p.status}</span>
+            </div>
+            <p className="nu-mudo">
+              {new Date(p.criado_em).toLocaleString('pt-BR')} · {p.cidade || '—'}
+              {p.estado ? '/' + p.estado : ''} · {p.whatsapp}
+              {p.email ? ' · ' + p.email : ''}
+            </p>
+            <ul>
+              {(p.itens || []).map((i, k) => (
+                <li key={k}>
+                  {i.quantidade} par(es) · {i.titulo} · {brlp(i.preco_fabrica)}/par
+                </li>
+              ))}
+            </ul>
+            <p>
+              <strong>
+                {p.pares} pares · {brlp(p.total_fabrica)} na fábrica
+              </strong>
+            </p>
+            {p.observacao && <p className="nu-mudo">Obs.: {p.observacao}</p>}
+            <div className="nu-linha">
+              <select value={p.status} onChange={(e) => mudar(p, { status: e.target.value })}>
+                <option value="novo">novo</option>
+                <option value="conferindo">conferindo com a fábrica</option>
+                <option value="confirmado">confirmado</option>
+                <option value="cancelado">cancelado</option>
+              </select>
+              <a className="nu-btn" href={`https://wa.me/${fone}`} target="_blank" rel="noopener noreferrer">
+                Chamar no WhatsApp
+              </a>
+            </div>
+          </div>
+        );
+      })}
     </section>
   );
 }
