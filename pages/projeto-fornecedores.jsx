@@ -93,6 +93,8 @@ export default function ProjetoFornecedores() {
             Eu moro em Franca. Retiro, confiro e envio os pares que você compra direto da fábrica, com a margem calculada antes do pedido.
           </p>
           <a className="pf-btn" href={WHATSAPP}>Falar pelo WhatsApp</a>
+          {' '}
+          <a className="pf-btn" style={{ background: 'transparent', color: 'var(--ac)', border: '1px solid var(--ac)' }} href="/calculadora">Calcular minha margem</a>
         </section>
 
         <section className="pf-sec">
