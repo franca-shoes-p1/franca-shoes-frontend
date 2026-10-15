@@ -166,7 +166,8 @@ export default function ProjetoFornecedores() {
             ))}
           </div>
           <p style={{ marginTop: 16 }}>
-            <a className="pf-btn" href="/calculadora">Abrir a calculadora</a>
+            <a className="pf-btn" href="/calculadora">Abrir a calculadora</a>{' '}
+            <a className="pf-btn" style={{ background: 'transparent', color: 'var(--ac)', border: '1px solid var(--ac)' }} href="/catalogo">Ver o catálogo de modelos</a>
           </p>
         </section>
 

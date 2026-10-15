@@ -491,6 +491,14 @@ function Catalogo({ forn, prod, par, setPar, chamar, recarregar }) {
     await chamar({ acao: 'atualizar', tabela: 'produtos', id: p.id, dados: { [k]: num(v) } });
     recarregar();
   }
+  async function editarTexto(p, k, v) {
+    await chamar({ acao: 'atualizar', tabela: 'produtos', id: p.id, dados: { [k]: String(v).trim() || null } });
+    recarregar();
+  }
+  async function publicar(p, valor) {
+    await chamar({ acao: 'atualizar', tabela: 'produtos', id: p.id, dados: { publicado: valor } });
+    recarregar();
+  }
 
   const linhas = prod
     .map((p) => ({ p, a: analise(p, par) }))
@@ -539,6 +547,32 @@ function Catalogo({ forn, prod, par, setPar, chamar, recarregar }) {
             <label>Preço mín.<input defaultValue={p.preco_mercado_min ?? ''} onBlur={(e) => editar(p, 'preco_mercado_min', e.target.value)} /></label>
             <label>Preço máx.<input defaultValue={p.preco_mercado_max ?? ''} onBlur={(e) => editar(p, 'preco_mercado_max', e.target.value)} /></label>
           </div>
+          <div className="nu-pub">
+            <b>Publicar no catálogo do site</b>
+            {(() => {
+              const pode = (num(p.custo) || 0) > 0 && (num(p.preco_venda_sugerido) || 0) > 0 && !!p.preco_confirmado_em;
+              return (
+                <>
+                  <div className="nu-form">
+                    <label>Título público<input defaultValue={p.titulo_publico ?? ''} onBlur={(e) => editarTexto(p, 'titulo_publico', e.target.value)} placeholder="Como aparece para o cliente" /></label>
+                    <label>Link da foto (https)<input defaultValue={p.foto_url ?? ''} onBlur={(e) => editarTexto(p, 'foto_url', e.target.value)} /></label>
+                    <label>Tamanhos<input defaultValue={p.tamanhos ?? ''} onBlur={(e) => editarTexto(p, 'tamanhos', e.target.value)} placeholder="34 ao 40" /></label>
+                    <label>Material<input defaultValue={p.material ?? ''} onBlur={(e) => editarTexto(p, 'material', e.target.value)} /></label>
+                    <label>Venda sugerida (R$)<input defaultValue={p.preco_venda_sugerido ?? ''} onBlur={(e) => editar(p, 'preco_venda_sugerido', e.target.value)} /></label>
+                    <label>Preço confirmado com a fábrica em<input type="date" defaultValue={p.preco_confirmado_em ?? ''} onBlur={(e) => editarTexto(p, 'preco_confirmado_em', e.target.value)} /></label>
+                  </div>
+                  <label className="nu-check">
+                    <input type="checkbox" checked={!!p.publicado} disabled={!p.publicado && !pode} onChange={(e) => publicar(p, e.target.checked)} />
+                    {' '}Publicar no catálogo do site
+                  </label>
+                  {!p.publicado && !pode && (
+                    <p className="nu-mudo">Para publicar, preencha o custo, a venda sugerida e a data em que você confirmou o preço com a fábrica.</p>
+                  )}
+                  {p.publicado && <p className="nu-mudo">Publicado em /catalogo. O nome da fábrica não aparece.</p>}
+                </>
+              );
+            })()}
+          </div>
           {a && (
             <p>
               No menor preço: lucro {brl(a.a?.lucro)} ({a.a ? (a.a.margem * 100).toFixed(0) + '%' : '—'}) · Preço mínimo para a margem-alvo: {brl(a.precoMin)}
@@ -584,6 +618,7 @@ function Estilos() {
       .nu-abas{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
       .nu-abas button{background:var(--cd);color:var(--mu);border:1px solid var(--bd);padding:9px 14px;border-radius:8px;cursor:pointer;font-size:14px}
       .nu-abas button.on{color:var(--tx);border-color:var(--ac)}
+      .nu-pub{border-top:1px dashed var(--bd);margin-top:12px;padding-top:10px}
       .nu-card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
       .nu-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:12px}
       .nu-num{text-align:center;margin:0}.nu-num strong{display:block;font-size:26px}.nu-num span{color:var(--mu);font-size:12px}
