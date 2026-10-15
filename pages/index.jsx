@@ -161,6 +161,7 @@ export default function Home() {
             <a href="#escola" onClick={fechar}>Escola</a>
             <a href="#servicos" onClick={fechar}>Serviços</a>
             <a href="#revenda" onClick={fechar}>Revenda</a>
+            <Link href="/calculadora" onClick={fechar}>Calculadora</Link>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
             <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
             <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
@@ -190,6 +191,44 @@ export default function Home() {
               <div className={styles.heroCartao}><Icone>🛍️</Icone><strong>Loja</strong><small>Compre com Pix</small></div>
             </div>
           </div>
+        </section>
+
+        {/* BANNER: CALCULADORA DE MARGEM */}
+        <section
+          id="calculadora"
+          style={{ background: 'linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde) 100%)', color: '#fff', padding: '44px 0' }}
+        >
+          <div className={styles.contido} style={{ display: 'flex', flexWrap: 'wrap', gap: 28, alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+              <p style={{ display: 'inline-block', background: 'var(--dourado)', color: '#1f1700', fontWeight: 800, fontSize: '0.75rem', letterSpacing: 1.2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 999, margin: '0 0 12px' }}>
+                Ferramenta gratuita
+              </p>
+              <h2 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.3rem)', lineHeight: 1.15, margin: '0 0 10px', color: '#fff' }}>
+                Calculadora de margem de calçados
+              </h2>
+              <p style={{ margin: '0 0 16px', maxWidth: 560, opacity: 0.92 }}>
+                Vai revender calçados? Descubra em segundos quanto sobra de lucro por par, qual o preço mínimo para vender
+                e até quanto a fábrica pode cobrar. Sem cadastro, direto no celular ou no computador.
+              </p>
+              <Link href="/calculadora" className={styles.botaoPrincipal}>Abrir a calculadora →</Link>
+            </div>
+            <ol style={{ flex: '1 1 300px', margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 10, maxWidth: 440 }}>
+              {[
+                ['1', 'Digite o custo do par na fábrica'],
+                ['2', 'Digite o preço pelo qual vai vender'],
+                ['3', 'Veja se passa: lucro, margem e preço mínimo'],
+                ['4', 'Copie o resumo e mande no WhatsApp'],
+              ].map(([n, t]) => (
+                <li key={n} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 14, padding: '10px 14px' }}>
+                  <span style={{ flex: 'none', width: 28, height: 28, borderRadius: '50%', background: 'var(--dourado)', color: '#1f1700', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{n}</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <p className={styles.contido} style={{ margin: '14px auto 0', fontSize: '0.8rem', opacity: 0.75 }}>
+            Estimativa para ajudar a decidir, não promessa de lucro.
+          </p>
         </section>
 
         {/* RAMOS */}
@@ -341,6 +380,7 @@ export default function Home() {
             <a href="#escola">Escola de Ovinocultura</a>
             <a href="#servicos">Serviços de IA</a>
             <a href="#revenda">Revenda de Franca</a>
+            <Link href="/calculadora">Calculadora de margem</Link>
           </div>
           <div>
             <h4>Loja</h4>

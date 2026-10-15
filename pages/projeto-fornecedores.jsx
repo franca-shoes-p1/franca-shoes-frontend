@@ -147,6 +147,30 @@ export default function ProjetoFornecedores() {
         </section>
 
         <section className="pf-sec">
+          <h2>Calculadora de margem gratuita</h2>
+          <p className="pf-mu">
+            Antes de pedir qualquer lote, teste se o modelo compensa. Funciona no celular e no computador, sem cadastro.
+          </p>
+          <div className="pf-grid">
+            {[
+              ['1', 'Digite', 'O custo do par na fábrica e o preço pelo qual você vai vender.'],
+              ['2', 'Veja o resultado', 'Passa ou não passa, lucro por par, margem, preço mínimo e custo máximo.'],
+              ['3', 'Ajuste as regras', 'Troque taxa, reserva, embalagem e retirada, e salve cenários com nome.'],
+              ['4', 'Copie e envie', 'O resumo vai pronto para colar no WhatsApp.'],
+            ].map(([n, t, d]) => (
+              <div className="pf-card" key={n}>
+                <span className="pf-n">{n}</span>
+                <b>{t}</b>
+                <span className="pf-mu">{d}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ marginTop: 16 }}>
+            <a className="pf-btn" href="/calculadora">Abrir a calculadora</a>
+          </p>
+        </section>
+
+        <section className="pf-sec">
           <h2>Quer ser um dos primeiros?</h2>
           <p className="pf-mu">Mande uma mensagem e peça a análise de margem de 3 modelos, sem custo.</p>
           <a className="pf-btn" href={WHATSAPP}>Pedir minha análise</a>
