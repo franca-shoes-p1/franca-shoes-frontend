@@ -18,6 +18,18 @@ const CONFIG = {
 
 const RAMOS = [
   {
+    id: 'rural',
+    icone: '🏡',
+    titulo: 'Planejamento de Propriedades Rurais',
+    texto:
+      'Plano de ocupação para chácaras, sítios e fazendas, com rede de profissionais habilitados para as etapas técnicas.',
+    status: 'Novo',
+    destaque: true,
+    link: '/rural',
+    chamada: 'Conhecer o projeto',
+    interno: true,
+  },
+  {
     id: 'ovinocultura',
     icone: '🐑',
     titulo: 'Escola de Ovinocultura',
@@ -136,7 +148,7 @@ export default function Home() {
         <title>{CONFIG.nome} | Ovinocultura, IA e Loja</title>
         <meta
           name="description"
-          content="Escola de Ovinocultura, serviços de IA e automação e loja virtual de calçados de Franca, reunidos em um só portal."
+          content="Escola de Ovinocultura, planejamento de propriedades rurais, serviços de IA e automação e loja virtual de calçados de Franca, reunidos em um só portal."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -161,6 +173,7 @@ export default function Home() {
             <a href="#escola" onClick={fechar}>Escola</a>
             <a href="#servicos" onClick={fechar}>Serviços</a>
             <a href="#revenda" onClick={fechar}>Revenda</a>
+            <Link href="/rural" onClick={fechar}>Rural</Link>
             <Link href="/calculadora" onClick={fechar}>Calculadora</Link>
             <Link href="/catalogo" onClick={fechar}>Catálogo</Link>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
@@ -190,8 +203,55 @@ export default function Home() {
               <div className={styles.heroCartao}><Icone>🐑</Icone><strong>Escola</strong><small>Cursos de ovinocultura</small></div>
               <div className={styles.heroCartao}><Icone>🤖</Icone><strong>IA e automação</strong><small>Serviços sob medida</small></div>
               <div className={styles.heroCartao}><Icone>🛍️</Icone><strong>Loja</strong><small>Compre com Pix</small></div>
+              <div className={styles.heroCartao}><Icone>🏡</Icone><strong>Planejamento rural</strong><small>Chácaras, sítios e fazendas</small></div>
             </div>
           </div>
+        </section>
+
+        {/* BANNER: PLANEJAMENTO DE PROPRIEDADES RURAIS */}
+        <section
+          id="rural"
+          style={{
+            background:
+              'radial-gradient(700px 320px at 92% 0%, rgba(226,167,43,0.35), transparent 60%), radial-gradient(520px 300px at 0% 100%, rgba(138,90,43,0.45), transparent 60%), linear-gradient(135deg, #0a2b20 0%, #1b6e48 100%)',
+            color: '#fff',
+            padding: '56px 0',
+          }}
+        >
+          <div className={styles.contido} style={{ display: 'flex', flexWrap: 'wrap', gap: 32, alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: '1 1 420px', minWidth: 0 }}>
+              <p style={{ display: 'inline-block', background: 'var(--dourado)', color: '#1f1700', fontWeight: 800, fontSize: '0.75rem', letterSpacing: 1.2, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 999, margin: '0 0 14px' }}>
+                Novo no portal
+              </p>
+              <h2 style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 'clamp(1.8rem, 4.4vw, 2.7rem)', lineHeight: 1.15, margin: '0 0 12px', color: '#fff' }}>
+                Planeje sua chácara, sítio ou fazenda antes de gastar
+              </h2>
+              <p style={{ margin: '0 0 22px', maxWidth: 580, color: '#d7ebdf', fontSize: '1.08rem' }}>
+                Receba um plano de ocupação com mapa, lista do que construir e ordem de execução. Quando o serviço
+                exige assinatura, um profissional habilitado da nossa rede cuida da parte técnica.
+              </p>
+              <div className={styles.heroAcoes}>
+                <Link href="/rural" className={styles.botaoPrincipal}>Conhecer o planejamento rural →</Link>
+                <Link href="/profissionais" className={styles.botaoSecundario}>Sou profissional</Link>
+              </div>
+            </div>
+            <ul style={{ flex: '1 1 300px', margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 10, maxWidth: 440 }}>
+              {[
+                ['🗺️', 'Plano de ocupação com imagem de satélite'],
+                ['📋', 'Lista do que construir e em que ordem'],
+                ['🤝', 'Rede de agrônomos, engenheiros, topógrafos e advogados'],
+                ['🌱', 'Foco em agroecologia'],
+              ].map(([i, t]) => (
+                <li key={t} style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 14, padding: '10px 14px' }}>
+                  <span aria-hidden="true" style={{ fontSize: '1.4rem' }}>{i}</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className={styles.contido} style={{ margin: '16px auto 0', fontSize: '0.8rem', opacity: 0.75 }}>
+            O plano de ocupação é um estudo preliminar e não substitui projeto técnico nem laudo.
+          </p>
         </section>
 
         {/* BANNER: CALCULADORA DE MARGEM */}
@@ -381,6 +441,9 @@ export default function Home() {
             <a href="#escola">Escola de Ovinocultura</a>
             <a href="#servicos">Serviços de IA</a>
             <a href="#revenda">Revenda de Franca</a>
+            <Link href="/rural">Planejamento rural</Link>
+            <Link href="/plano-de-ocupacao">Plano de ocupação</Link>
+            <Link href="/profissionais">Cadastro de profissionais</Link>
             <Link href="/calculadora">Calculadora de margem</Link>
             <Link href="/catalogo">Catálogo de calçados</Link>
           </div>
