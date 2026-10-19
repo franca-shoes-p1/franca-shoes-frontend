@@ -315,7 +315,7 @@ export default function Home() {
               <p className={styles.lojaTexto}>
                 Calçados e acessórios de Franca. Escolha, monte o carrinho e finalize com pagamento por Pix.
               </p>
-              <a href="https://franca-shoes-digital.vercel.app" className={styles.botaoPrincipal}>Entrar na loja</a>
+              <a href="https://loja.igreja.eco.br" className={styles.botaoPrincipal}>Entrar na loja</a>
             </div>
             <ol className={styles.passos}>
               {PASSOS.map((p) => (
