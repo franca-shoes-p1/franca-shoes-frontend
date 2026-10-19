@@ -74,8 +74,12 @@ const RAMOS = [
     id: 'ebooks',
     icone: '📚',
     titulo: 'E-books e Materiais Digitais',
-    texto: 'Guias práticos de “como fazer” para baixar e usar no dia a dia.',
-    status: 'Em breve',
+    texto: 'Guias práticos de “como fazer”, com passo a passo e lista de conferência para usar no dia a dia.',
+    status: 'Disponível',
+    destaque: true,
+    link: '/ebooks',
+    chamada: 'Ver os e-books',
+    interno: true,
   },
   {
     id: 'novos',
@@ -163,6 +167,7 @@ export default function Home() {
             <a href="#revenda" onClick={fechar}>Revenda</a>
             <Link href="/calculadora" onClick={fechar}>Calculadora</Link>
             <Link href="/catalogo" onClick={fechar}>Catálogo</Link>
+            <Link href="/ebooks" onClick={fechar}>E-books</Link>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
             <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
             <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
@@ -383,6 +388,7 @@ export default function Home() {
             <a href="#revenda">Revenda de Franca</a>
             <Link href="/calculadora">Calculadora de margem</Link>
             <Link href="/catalogo">Catálogo de calçados</Link>
+            <Link href="/ebooks">E-books práticos</Link>
           </div>
           <div>
             <h4>Loja</h4>
