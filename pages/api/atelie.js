@@ -10,6 +10,7 @@ const SERVICOS = [
   'Consultoria de escopo',
   'Mentoria',
   'Ainda não sei, preciso de ajuda para definir',
+  'Loja de Calçados Pronta',
 ];
 const SETORES = [
   'Briefing e atendimento',
@@ -88,7 +89,7 @@ export default async function handler(req, res) {
 
   try {
     if (c.tipo === 'pedido') {
-      const servico = SERVICOS.includes(c.servico) ? c.servico : SERVICOS[SERVICOS.length - 1];
+      const servico = SERVICOS.includes(c.servico) ? c.servico : 'Ainda não sei, preciso de ajuda para definir';
       const [r] = await sb('op_atelie_pedidos', {
         method: 'POST',
         body: JSON.stringify({

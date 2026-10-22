@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Monte a sua loja de calçados | Igreja Eco</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Monte a sua loja de calçados em 4 passos e veja a vitrine ganhar forma na hora. Sem compromisso: enviamos o seu pedido e respondemos no WhatsApp.">
+<style>
+:root{
+  --noite:#061a3a; --noite2:#0b2f66; --azul:#1e6bff; --azul2:#5b97ff; --ciano:#12c6e8; --gelo:#7ff0ff;
+  --creme:#f5f9ff; --lilas:#eaf3ff; --tinta:#0f1b33; --cinza:#55607a; --borda:#dbe6f7;
+  --grad:linear-gradient(135deg,#12c6e8,#1e6bff);
+  --cor:#1e6bff; --cor2:#12c6e8;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--tinta);background:var(--noite);line-height:1.55;-webkit-text-size-adjust:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gelo);outline-offset:3px}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1140px;margin:0 auto;padding:16px max(20px,env(safe-area-inset-left)) 0}
+.topo a{text-decoration:none;color:#fff;font-weight:700}
+.topo .voltar{font-weight:600;font-size:.95rem;color:rgba(255,255,255,.82)}
+.fundo{position:relative;overflow:hidden;min-height:100vh;
+  background:radial-gradient(900px 420px at 90% 10%,rgba(18,198,232,.30),transparent 60%),radial-gradient(700px 380px at 0% 100%,rgba(30,107,255,.34),transparent 60%),linear-gradient(115deg,var(--noite) 0%,var(--noite2) 55%,#0f4fb8 100%)}
+.bolha{position:absolute;border-radius:50%;filter:blur(2px);opacity:.18;background:var(--grad);animation:flutua 9s ease-in-out infinite;pointer-events:none}
+.b1{width:260px;height:260px;left:-80px;top:30%}
+.b2{width:160px;height:160px;right:6%;top:62%;animation-delay:-3s}
+.b3{width:90px;height:90px;left:44%;top:8%;animation-delay:-5s}
+@keyframes flutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+.dentro{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:28px max(20px,env(safe-area-inset-left)) 64px;display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start}
+.pilula{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.06)}
+.pilula i{width:8px;height:8px;border-radius:50%;background:var(--gelo);animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(127,240,255,.7)}70%,100%{box-shadow:0 0 0 10px rgba(127,240,255,0)}}
+h1{font-size:clamp(2rem,4.6vw,3.3rem);line-height:1.06;font-weight:800;letter-spacing:-.02em;margin:18px 0 0;color:#fff;text-wrap:balance}
+h1 em{font-style:normal;color:var(--gelo)}
+.lead{color:rgba(255,255,255,.86);font-size:1.05rem;margin:14px 0 0;max-width:34em}
+
+/* Assistente */
+.cartao{background:#fff;border-radius:22px;padding:24px;margin-top:24px;box-shadow:0 30px 70px rgba(0,10,40,.5)}
+.progresso{display:flex;gap:6px;margin:0 0 6px}
+.progresso span{flex:1;height:6px;border-radius:99px;background:var(--borda);overflow:hidden;position:relative}
+.progresso span::after{content:"";position:absolute;inset:0;background:var(--grad);transform:translateX(-101%);transition:transform .5s ease}
+.progresso span.feito::after{transform:none}
+.passo-info{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cinza);font-weight:700;margin:0 0 14px}
+.passo{display:none;animation:entra .45s ease}
+.passo.ativo{display:block}
+@keyframes entra{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.passo h2{font-size:1.4rem;margin:0 0 4px;line-height:1.2}
+.passo .dica{color:var(--cinza);margin:0 0 16px;font-size:.95rem}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0}
+.niveis{display:grid;gap:10px}
+.opcao{position:relative;display:block;cursor:pointer}
+.opcao input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.opcao .caixa{display:block;border:2px solid var(--borda);border-radius:14px;padding:14px 16px;background:var(--creme);transition:border-color .2s,transform .2s,box-shadow .2s,background .2s}
+.opcao:hover .caixa{transform:translateY(-2px);border-color:var(--azul2)}
+.opcao input:focus-visible+.caixa{outline:3px solid var(--azul);outline-offset:2px}
+.opcao input:checked+.caixa{border-color:var(--azul);background:#fff;box-shadow:0 8px 24px rgba(30,107,255,.22)}
+.opcao strong{display:block;font-size:1.05rem}
+.opcao small{display:block;color:var(--cinza);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips .opcao .caixa{padding:9px 14px;border-radius:999px;font-weight:600;font-size:.92rem}
+label.campo{display:grid;gap:5px;font-weight:600;font-size:.92rem;margin-top:14px}
+label.campo:first-of-type{margin-top:0}
+.campo input[type=text],.campo input[type=tel],.campo select,.campo textarea{font:inherit;font-weight:400;color:var(--tinta);background:var(--creme);border:2px solid var(--borda);border-radius:10px;padding:11px 13px;width:100%;min-width:0}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--azul)}
+.campo textarea{min-height:76px;resize:vertical}
+.subtitulo{font-weight:600;font-size:.92rem;margin:16px 0 8px}
+.cores{display:flex;gap:10px;flex-wrap:wrap}
+.cores .opcao .caixa{width:44px;height:44px;border-radius:50%;padding:0;border-width:3px}
+.cores .opcao input:checked+.caixa{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--tinta)}
+.acoes{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;border-radius:999px;padding:14px 26px;border:2px solid transparent;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-block;text-align:center}
+.btn:hover{transform:translateY(-2px)}
+.btn.principal{background:var(--grad);color:#fff;box-shadow:0 10px 26px rgba(18,160,255,.4);flex:1 1 180px}
+.btn.contorno{background:#fff;color:var(--tinta);border-color:var(--borda)}
+.btn[disabled]{opacity:.6;cursor:wait;transform:none}
+.erro{color:#b3261e;font-weight:600;font-size:.9rem;min-height:1.3em;margin:10px 0 0}
+.nota{font-size:.82rem;color:var(--cinza);margin:12px 0 0}
+.resumo{display:grid;gap:6px;background:var(--creme);border-radius:12px;padding:12px 14px;font-size:.92rem;margin:0 0 16px}
+.resumo div{display:flex;justify-content:space-between;gap:12px}
+.resumo dt{color:var(--cinza)} .resumo dd{margin:0;font-weight:600;text-align:right}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.sucesso{text-align:center;padding:8px 0}
+.sucesso .selo{width:74px;height:74px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:2.2rem;margin:0 auto 12px;animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+.sucesso pre{text-align:left;white-space:pre-wrap;word-break:break-word;background:var(--creme);border:2px dashed var(--borda);border-radius:12px;padding:12px;font-size:.82rem;margin:14px 0}
+
+/* Celular com a loja ao vivo */
+.palco{position:sticky;top:20px;display:grid;place-items:center;padding:6px 0}
+.celular{width:min(300px,86%);border-radius:36px;padding:12px;background:#0a1226;border:3px solid rgba(255,255,255,.18);box-shadow:0 36px 80px rgba(0,10,40,.6);transform:rotate(2deg);animation:balanca 7s ease-in-out infinite}
+@keyframes balanca{0%,100%{transform:rotate(2deg) translateY(0)}50%{transform:rotate(1deg) translateY(-10px)}}
+.tela{background:#fff;border-radius:26px;overflow:hidden;min-height:480px;display:flex;flex-direction:column}
+.tela .barra{background:linear-gradient(135deg,var(--cor),var(--cor2));color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800;transition:background .5s}
+.tela .barra span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:78%}
+.tela .faixa{padding:10px 14px 0;display:flex;gap:6px;flex-wrap:wrap;min-height:34px}
+.tela .faixa em{font-style:normal;font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--lilas);color:var(--tinta);animation:entra .4s ease}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px}
+.card{border:1px solid var(--borda);border-radius:12px;padding:8px;font-size:.72rem;line-height:1.25}
+.card .foto{height:62px;border-radius:8px;display:grid;place-items:center;font-size:1.7rem;margin-bottom:6px;background:linear-gradient(135deg,color-mix(in srgb,var(--cor) 16%,#fff),color-mix(in srgb,var(--cor2) 24%,#fff))}
+.card b{display:block}
+.card span{color:var(--cor);font-weight:800}
+.tela .pagar{margin:auto 14px 14px;background:linear-gradient(135deg,var(--cor),var(--cor2));color:#fff;border-radius:99px;text-align:center;padding:10px;font-weight:800;font-size:.82rem;transition:background .5s}
+.chip{position:absolute;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:8px 13px;font-size:.82rem;font-weight:700;color:#fff;box-shadow:0 12px 30px rgba(0,10,40,.35);animation:sobe 5s ease-in-out infinite}
+.c1{top:4px;right:0}.c2{bottom:40px;left:-6px;animation-delay:-2s}
+@keyframes sobe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.palco-in{position:relative;width:100%;display:grid;place-items:center}
+
+@media (max-width:900px){
+  .dentro{grid-template-columns:1fr;gap:24px}
+  .palco{position:static;order:-1}
+  .tela{min-height:0}
+  .celular{width:min(250px,80%)}
+  .c1,.c2{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="fundo">
+  <i class="bolha b1"></i><i class="bolha b2"></i><i class="bolha b3"></i>
+  <div class="topo">
+    <a href="/">👟 Igreja Eco</a>
+    <a class="voltar" href="/">← Voltar para a página inicial</a>
+  </div>
+
+  <main class="dentro">
+    <div>
+      <span class="pilula"><i></i>Loja de Calçados Pronta</span>
+      <h1>Monte a sua loja <em>em 4 passos</em> e veja ela ganhar forma</h1>
+      <p class="lead">Escolha o seu nível, o que quer vender e o nome da loja. A vitrine ao lado muda na hora. No fim, você manda o pedido e respondemos no WhatsApp, sem compromisso.</p>
+
+      <form class="cartao" id="assistente" novalidate>
+        <div class="progresso" id="progresso" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <p class="passo-info" id="passoInfo" aria-live="polite">Passo 1 de 4</p>
+
+        <section class="passo ativo" data-passo="1">
+          <fieldset>
+            <legend><h2>Qual é o seu momento?</h2></legend>
+            <p class="dica">Isso define o tamanho da loja que montamos para você.</p>
+            <div class="niveis">
+              <label class="opcao"><input type="radio" name="nivel" value="Iniciante" checked><span class="caixa"><strong>🌱 Iniciante</strong><small>Nunca vendi calçado. Quero começar com tudo pronto.</small></span></label>
+              <label class="opcao"><input type="radio" name="nivel" value="Intermediário"><span class="caixa"><strong>📲 Intermediário</strong><small>Já vendo pelo WhatsApp, feira ou como revendedor(a).</small></span></label>
+              <label class="opcao"><input type="radio" name="nivel" value="Avançado"><span class="caixa"><strong>🏪 Avançado</strong><small>Tenho loja ou fábrica e quero vender também pela internet.</small></span></label>
+              <label class="opcao"><input type="radio" name="nivel" value="Não sei, preciso de ajuda"><span class="caixa"><strong>🤔 Ainda não sei</strong><small>Prefiro que vocês me ajudem a escolher.</small></span></label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="passo" data-passo="2">
+          <fieldset>
+            <legend><h2>O que você quer vender?</h2></legend>
+            <p class="dica">Marque quantos quiser. A vitrine mostra as suas escolhas.</p>
+            <div class="chips" id="categorias">
+              <label class="opcao"><input type="checkbox" name="cat" value="Femininos" data-emoji="👠"><span class="caixa">👠 Femininos</span></label>
+              <label class="opcao"><input type="checkbox" name="cat" value="Masculinos" data-emoji="👞"><span class="caixa">👞 Masculinos</span></label>
+              <label class="opcao"><input type="checkbox" name="cat" value="Infantis" data-emoji="👟"><span class="caixa">👟 Infantis</span></label>
+              <label class="opcao"><input type="checkbox" name="cat" value="Esportivos" data-emoji="🏃"><span class="caixa">🏃 Esportivos</span></label>
+              <label class="opcao"><input type="checkbox" name="cat" value="Sandálias" data-emoji="🩴"><span class="caixa">🩴 Sandálias</span></label>
+              <label class="opcao"><input type="checkbox" name="cat" value="Acessórios" data-emoji="👜"><span class="caixa">👜 Acessórios</span></label>
+            </div>
+            <label class="campo" style="margin-top:18px">Onde você vende hoje?
+              <select id="ondeVende">
+                <option>Ainda não vendo</option>
+                <option>WhatsApp</option>
+                <option>Instagram</option>
+                <option>Feira ou loja física</option>
+                <option>Marketplace (Mercado Livre, Shopee)</option>
+              </select>
+            </label>
+          </fieldset>
+        </section>
+
+        <section class="passo" data-passo="3">
+          <h2>Dê a cara da sua loja</h2>
+          <p class="dica">Pode mudar depois. É só para vermos a ideia.</p>
+          <label class="campo">Nome da loja
+            <input type="text" id="nomeLoja" maxlength="30" placeholder="Ex.: Passos de Franca" autocomplete="off">
+          </label>
+          <p class="subtitulo" id="rotuloCor">Cor principal</p>
+          <fieldset class="cores" aria-labelledby="rotuloCor">
+            <label class="opcao"><input type="radio" name="cor" value="Azul" data-a="#1e6bff" data-b="#12c6e8" checked aria-label="Azul"><span class="caixa" style="background:linear-gradient(135deg,#1e6bff,#12c6e8)"></span></label>
+            <label class="opcao"><input type="radio" name="cor" value="Rosa" data-a="#e5307a" data-b="#ff8fb1" aria-label="Rosa"><span class="caixa" style="background:linear-gradient(135deg,#e5307a,#ff8fb1)"></span></label>
+            <label class="opcao"><input type="radio" name="cor" value="Verde" data-a="#0a8f6a" data-b="#43d6a4" aria-label="Verde"><span class="caixa" style="background:linear-gradient(135deg,#0a8f6a,#43d6a4)"></span></label>
+            <label class="opcao"><input type="radio" name="cor" value="Laranja" data-a="#f0600a" data-b="#ffb347" aria-label="Laranja"><span class="caixa" style="background:linear-gradient(135deg,#f0600a,#ffb347)"></span></label>
+            <label class="opcao"><input type="radio" name="cor" value="Roxo" data-a="#6a3de8" data-b="#b18cff" aria-label="Roxo"><span class="caixa" style="background:linear-gradient(135deg,#6a3de8,#b18cff)"></span></label>
+            <label class="opcao"><input type="radio" name="cor" value="Preto e dourado" data-a="#14110f" data-b="#c9a24a" aria-label="Preto e dourado"><span class="caixa" style="background:linear-gradient(135deg,#14110f,#c9a24a)"></span></label>
+          </fieldset>
+          <label class="campo" style="margin-top:18px">Quantos modelos quer começar a vender?
+            <select id="modelos">
+              <option>10 a 20 modelos</option>
+              <option>20 a 50 modelos</option>
+              <option>Mais de 50 modelos</option>
+              <option>Ainda não sei</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="passo" data-passo="4">
+          <h2>Quase lá! Seus dados</h2>
+          <p class="dica">Respondemos pelo WhatsApp com o nível indicado e o orçamento.</p>
+          <dl class="resumo" id="resumo"></dl>
+          <label class="campo">Seu nome
+            <input type="text" id="nome" maxlength="120" autocomplete="name" required>
+          </label>
+          <label class="campo">WhatsApp com DDD
+            <input type="tel" id="whatsapp" maxlength="30" autocomplete="tel" inputmode="tel" placeholder="(16) 99999-9999" required>
+          </label>
+          <label class="campo">Prazo desejado (opcional)
+            <input type="text" id="prazo" maxlength="80" placeholder="Ex.: o mais rápido possível">
+          </label>
+          <label class="campo">Quer contar mais alguma coisa? (opcional)
+            <textarea id="obs" maxlength="500"></textarea>
+          </label>
+          <div class="hp" aria-hidden="true"><label>Não preencha <input type="text" id="site" tabindex="-1" autocomplete="off"></label></div>
+          <p class="nota">Guardamos só os dados necessários para responder o seu pedido, e apenas para isso. Não prometemos vendas nem lucro: entregamos a loja funcionando.</p>
+        </section>
+
+        <p class="erro" id="erro" role="alert"></p>
+        <div class="acoes" id="botoes">
+          <button type="button" class="btn contorno" id="voltar" hidden>Voltar</button>
+          <button type="button" class="btn principal" id="avancar">Continuar</button>
+        </div>
+
+        <section class="sucesso" id="sucesso" hidden>
+          <div class="selo" aria-hidden="true">✓</div>
+          <h2 id="sucessoTitulo"></h2>
+          <p id="sucessoTexto" style="color:var(--cinza);margin-top:6px"></p>
+          <pre id="msg"></pre>
+          <div class="acoes" style="justify-content:center">
+            <button type="button" class="btn contorno" id="copiar">Copiar mensagem</button>
+            <a class="btn principal" id="zap" target="_blank" rel="noopener">Abrir WhatsApp</a>
+          </div>
+          <p class="nota" id="copiado" aria-live="polite">WhatsApp da agência: (16) 99154-3663</p>
+        </section>
+      </form>
+    </div>
+
+    <aside class="palco" aria-label="Prévia da sua loja">
+      <div class="palco-in">
+        <div class="celular" aria-hidden="true">
+          <div class="tela">
+            <div class="barra"><span id="pvNome">👟 Sua Loja</span><span>🛒</span></div>
+            <div class="faixa" id="pvFaixa"></div>
+            <div class="grade" id="pvGrade"></div>
+            <div class="pagar">Pagar com PIX ou cartão</div>
+          </div>
+        </div>
+        <span class="chip c1">⚡ Prévia ao vivo</span>
+        <span class="chip c2">PIX e cartão</span>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script>
+(function(){
+  var WHATS="5516991543663";
+  var form=document.getElementById("assistente");
+  var passos=[].slice.call(form.querySelectorAll(".passo"));
+  var barras=[].slice.call(document.querySelectorAll("#progresso span"));
+  var info=document.getElementById("passoInfo"), erro=document.getElementById("erro");
+  var btnVoltar=document.getElementById("voltar"), btnAvancar=document.getElementById("avancar");
+  var atual=0, enviando=false;
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function valor(n){var e=form.querySelector("input[name="+n+"]:checked");return e?e.value:""}
+  function cats(){return [].slice.call(form.querySelectorAll("input[name=cat]:checked")).map(function(e){return e.value})}
+  function el(id){return document.getElementById(id)}
+
+  // Prévia ao vivo
+  var EXEMPLOS={Femininos:["👠","Sandália salto","R$ 89,90"],Masculinos:["👞","Sapato social","R$ 139,90"],Infantis:["👟","Tênis infantil","R$ 79,90"],Esportivos:["🏃","Tênis esportivo","R$ 149,90"],"Sandálias":["🩴","Sandália rasteira","R$ 59,90"],"Acessórios":["👜","Bolsa e cinto","R$ 49,90"]};
+  var PADRAO=[["👠","Sandália salto","R$ 89,90"],["👟","Tênis casual","R$ 119,90"],["🥿","Sapatilha","R$ 69,90"],["👞","Sapato social","R$ 139,90"]];
+  function previa(){
+    var c=form.querySelector("input[name=cor]:checked");
+    var r=document.documentElement.style;
+    if(c){r.setProperty("--cor",c.getAttribute("data-a"));r.setProperty("--cor2",c.getAttribute("data-b"))}
+    var n=el("nomeLoja").value.trim();
+    el("pvNome").textContent="👟 "+(n||"Sua Loja");
+    var cs=cats();
+    el("pvFaixa").innerHTML=cs.map(function(x){return "<em>"+esc(x)+"</em>"}).join("");
+    var itens=cs.length?cs.slice(0,4).map(function(x){return EXEMPLOS[x]}):PADRAO;
+    while(itens.length<4)itens.push(PADRAO[itens.length]);
+    el("pvGrade").innerHTML=itens.map(function(i){return '<div class="card"><div class="foto">'+i[0]+'</div><b>'+esc(i[1])+'</b><span>'+esc(i[2])+'</span></div>'}).join("");
+  }
+  form.addEventListener("input",previa);form.addEventListener("change",previa);previa();
+
+  function mostrar(i){
+    atual=i;
+    passos.forEach(function(p,k){p.classList.toggle("ativo",k===i)});
+    barras.forEach(function(b,k){b.classList.toggle("feito",k<=i)});
+    info.textContent="Passo "+(i+1)+" de 4";
+    btnVoltar.hidden=i===0;
+    btnAvancar.textContent=i===3?"Enviar meu pedido":"Continuar";
+    erro.textContent="";
+    if(i===3)resumo();
+    var h=passos[i].querySelector("h2");if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true})}
+    form.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function resumo(){
+    var cs=cats();
+    var linhas=[["Nível",valor("nivel")],["Vai vender",cs.length?cs.join(", "):"A definir"],["Nome da loja",el("nomeLoja").value.trim()||"A definir"],["Cor",valor("cor")],["Começa com",el("modelos").value]];
+    el("resumo").innerHTML=linhas.map(function(l){return "<div><dt>"+esc(l[0])+"</dt><dd>"+esc(l[1])+"</dd></div>"}).join("");
+  }
+  function texto(){
+    var cs=cats();
+    return "Olá! Quero montar a minha loja de calçados.\n\n"+
+      "Nome: "+el("nome").value.trim()+"\n"+
+      "WhatsApp: "+el("whatsapp").value.trim()+"\n"+
+      "Nível: "+valor("nivel")+"\n"+
+      "Quero vender: "+(cs.length?cs.join(", "):"a definir")+"\n"+
+      "Vendo hoje em: "+el("ondeVende").value+"\n"+
+      "Nome da loja: "+(el("nomeLoja").value.trim()||"a definir")+"\n"+
+      "Cor: "+valor("cor")+"\n"+
+      "Modelos no início: "+el("modelos").value+
+      (el("prazo").value.trim()?"\nPrazo: "+el("prazo").value.trim():"")+
+      (el("obs").value.trim()?"\nObservação: "+el("obs").value.trim():"");
+  }
+  function descricao(){
+    var cs=cats();
+    return "[Monte a sua loja] Nível: "+valor("nivel")+
+      " | Vender: "+(cs.length?cs.join(", "):"a definir")+
+      " | Vende hoje em: "+el("ondeVende").value+
+      " | Nome da loja: "+(el("nomeLoja").value.trim()||"a definir")+
+      " | Cor: "+valor("cor")+
+      " | Modelos: "+el("modelos").value+
+      (el("obs").value.trim()?" | Obs: "+el("obs").value.trim():"");
+  }
+  function validar(){
+    if(atual===3){
+      if(el("nome").value.trim().length<2){erro.textContent="Informe o seu nome.";el("nome").focus();return false}
+      if(el("whatsapp").value.replace(/\D/g,"").length<10){erro.textContent="Informe o WhatsApp com DDD.";el("whatsapp").focus();return false}
+    }
+    return true;
+  }
+  function fim(res,msg){
+    form.querySelectorAll(".passo,.progresso,.passo-info,#botoes,#erro").forEach(function(n){n.hidden=true;n.style.display="none"});
+    var s=el("sucesso");s.hidden=false;
+    el("sucessoTitulo").textContent=res.ok?"Pedido nº "+res.numero+" registrado!":"Quase pronto!";
+    el("sucessoTexto").textContent=res.ok
+      ?"Recebemos o seu pedido. Para agilizar, envie também esta mensagem no WhatsApp da agência:"
+      :(res.erro||"Não conseguimos registrar agora.")+" Envie esta mensagem pelo WhatsApp da agência e cuidamos do resto:";
+    el("msg").textContent=msg;
+    el("zap").href="https://wa.me/"+WHATS+"?text="+encodeURIComponent(msg);
+    s.scrollIntoView({behavior:"smooth",block:"start"});
+    var t=s.querySelector("h2");t.setAttribute("tabindex","-1");t.focus({preventScroll:true});
+  }
+  function enviar(){
+    if(enviando)return;
+    enviando=true;btnAvancar.disabled=true;btnAvancar.textContent="Enviando...";
+    var dados={tipo:"pedido",nome:el("nome").value.trim(),whatsapp:el("whatsapp").value.trim(),servico:"Loja de Calçados Pronta",descricao:descricao(),prazo:el("prazo").value.trim(),site:el("site").value};
+    var msg=texto();
+    fetch("/api/atelie",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(dados)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok===true,numero:j.numero,erro:j.erro}})})
+      .catch(function(){return {ok:false}})
+      .then(function(res){fim(res,msg)});
+  }
+  btnAvancar.addEventListener("click",function(){
+    if(!validar())return;
+    if(atual<3)mostrar(atual+1);else enviar();
+  });
+  btnVoltar.addEventListener("click",function(){if(atual>0)mostrar(atual-1)});
+  form.addEventListener("submit",function(e){e.preventDefault();btnAvancar.click()});
+  el("copiar").addEventListener("click",function(){
+    var m=el("copiado"),t=el("msg").textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(el("msg"));var s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent="Texto selecionado. Copie com Ctrl+C."}
+    try{navigator.clipboard.writeText(t).then(function(){m.textContent="Mensagem copiada."},sel)}catch(e){sel()}
+  });
+  barras[0].classList.add("feito");
+})();
+</script>
+</body>
+</html>
