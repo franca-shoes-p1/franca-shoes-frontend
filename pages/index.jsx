@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/home.module.css';
+import AtelieBanner from '../lib/AtelieBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -168,6 +169,7 @@ export default function Home() {
       </header>
 
       <main id="topo">
+        <AtelieBanner />
         <section className={styles.hero}>
           <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
