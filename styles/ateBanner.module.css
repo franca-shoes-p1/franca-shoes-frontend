@@ -1,0 +1,69 @@
+/* Banner do Ateliê Sob Medida (home). Usa as mesmas cores da home (.pagina em home.module.css). */
+.banner { position: relative; overflow: hidden; color: #fff;
+  background:
+    radial-gradient(900px 420px at 88% 20%, rgba(18, 198, 232, 0.30), transparent 60%),
+    radial-gradient(700px 380px at 5% 110%, rgba(30, 107, 255, 0.32), transparent 60%),
+    linear-gradient(115deg, var(--noite, #061a3a) 0%, var(--noite2, #0b2f66) 55%, #0f4fb8 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+.banner * { box-sizing: border-box; }
+.dentro { max-width: 1140px; margin: 0 auto; padding: 56px 20px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+.pilula { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 999px; padding: 9px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(255, 255, 255, 0.06); }
+.pilula i { width: 8px; height: 8px; border-radius: 50%; background: var(--ciano, #7ff0ff); animation: ping 2s infinite; }
+.titulo { font-size: clamp(34px, 5.2vw, 60px); line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; margin: 22px 0 0; text-wrap: balance; }
+.titulo em { font-style: normal; color: var(--ciano, #7ff0ff); }
+.texto { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: rgba(255, 255, 255, 0.86); margin: 20px 0 0; max-width: 36em; }
+.passos { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 0; padding: 0; list-style: none; }
+.passos li { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 14px; padding: 10px 16px; font-weight: 600; font-size: 15px; }
+.passos b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--grad, linear-gradient(135deg, #12c6e8, #1e6bff)); font-size: 13px; }
+.acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.botao { display: inline-block; font-weight: 700; font-size: 16px; border-radius: 999px; padding: 16px 30px; color: #fff; transition: transform 0.15s, box-shadow 0.15s; }
+.principal { background: var(--grad, linear-gradient(135deg, #12c6e8, #1e6bff)); box-shadow: 0 10px 30px rgba(18, 160, 255, 0.45); }
+.contorno { border: 2px solid rgba(255, 255, 255, 0.55); background: transparent; }
+.botao:hover { transform: translateY(-2px); }
+.botao:focus-visible { outline: 3px solid var(--ciano, #7ff0ff); outline-offset: 3px; }
+.nota { margin: 16px 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.68); }
+
+.palco { position: relative; min-width: 0; padding: 18px 0; }
+.cartao { position: relative; background: #fff; color: #0f1b33; border-radius: 22px; padding: 22px; box-shadow: 0 30px 70px rgba(0, 10, 40, 0.55); transform: rotate(-2deg); animation: flutua 7s ease-in-out infinite; }
+.cartaoTopo { margin: 0; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #55607a; padding-bottom: 12px; border-bottom: 2px dashed #dbe6f7; font-weight: 700; }
+.linha { display: grid; grid-template-columns: 1fr 84px 22px; gap: 10px; align-items: center; padding: 11px 0; border-bottom: 1px solid #eaf3ff; font-size: 15px; font-weight: 600; }
+.barra { height: 8px; border-radius: 99px; background: #e3ebf8; overflow: hidden; }
+.barra span { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--grad, linear-gradient(90deg, #12c6e8, #1e6bff)); animation: enche 12s infinite; }
+.ok { width: 20px; height: 20px; border-radius: 50%; background: #19c37d; color: #fff; font-size: 12px; display: grid; place-items: center; opacity: 0; animation: visto 12s infinite; }
+.linha:nth-of-type(1) .barra span, .linha:nth-of-type(1) .ok { animation-delay: 0.4s; }
+.linha:nth-of-type(2) .barra span, .linha:nth-of-type(2) .ok { animation-delay: 1.6s; }
+.linha:nth-of-type(3) .barra span, .linha:nth-of-type(3) .ok { animation-delay: 2.8s; }
+.linha:nth-of-type(4) .barra span, .linha:nth-of-type(4) .ok { animation-delay: 4s; }
+.linha:nth-of-type(5) .barra span, .linha:nth-of-type(5) .ok { animation-delay: 5.2s; }
+.linha:nth-of-type(6) .barra span, .linha:nth-of-type(6) .ok { animation-delay: 6.4s; }
+.rodape { margin-top: 14px; font-size: 13px; color: #55607a; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.chip { position: absolute; display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 14px; padding: 9px 14px; font-size: 14px; font-weight: 700; color: #fff; box-shadow: 0 12px 30px rgba(0, 10, 40, 0.35); }
+.chip svg { width: 20px; height: 20px; flex: none; }
+.c1 { top: -6px; right: 2%; animation: sobe 5s ease-in-out infinite; }
+.c2 { bottom: 46px; left: -14px; animation: sobe 6s ease-in-out -2s infinite; }
+.c3 { bottom: -8px; right: 8%; animation: sobe 5.5s ease-in-out -1s infinite; }
+
+.dentro > div:first-child > * { opacity: 0; transform: translateY(16px); animation: entra 0.7s ease forwards; }
+.dentro > div:first-child > *:nth-child(2) { animation-delay: 0.1s; }
+.dentro > div:first-child > *:nth-child(3) { animation-delay: 0.2s; }
+.dentro > div:first-child > *:nth-child(4) { animation-delay: 0.3s; }
+.dentro > div:first-child > *:nth-child(5) { animation-delay: 0.4s; }
+.dentro > div:first-child > *:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes entra { to { opacity: 1; transform: none; } }
+@keyframes flutua { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-10px); } }
+@keyframes sobe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(127, 240, 255, 0.7); } 70%, 100% { box-shadow: 0 0 0 10px rgba(127, 240, 255, 0); } }
+@keyframes enche { 0% { width: 0; } 18%, 100% { width: 100%; } }
+@keyframes visto { 0%, 17% { opacity: 0; transform: scale(0.4); } 22%, 100% { opacity: 1; transform: scale(1); } }
+
+@media (max-width: 860px) {
+  .dentro { grid-template-columns: 1fr; gap: 34px; padding-top: 40px; padding-bottom: 40px; }
+  .c2 { left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .banner *, .banner *::before, .banner *::after { animation: none !important; }
+  .dentro > div:first-child > * { opacity: 1; transform: none; }
+  .barra span { width: 100%; }
+  .ok { opacity: 1; }
+}
