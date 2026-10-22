@@ -20,12 +20,13 @@ const CONFIG = {
 const VIDEO_URL = '';
 
 const FALAS = [
-  'Oi! Eu sou o assistente da Loja de Calçados Pronta.',
-  'Você quer vender calçados, mas não sabe por onde começar?',
-  'A gente monta a sua loja online, com PIX e cartão.',
-  'Você cadastra os modelos pelo celular, com a foto na hora.',
-  'E ainda recebe o guia de fornecedores e o treinamento.',
-  'Chame no WhatsApp e escolha o seu nível!',
+  'Olá! Eu sou o assistente da Loja de Calçados Pronta.',
+  'Nós criamos a sua loja online de calçados e acessórios, do zero, e entregamos pronta.',
+  'Ela já vem com vitrine, carrinho e pagamento por PIX e cartão.',
+  'Você cadastra os modelos pelo celular: tira a foto, põe o preço e publica.',
+  'Você recebe o guia de fornecedores das fábricas de Franca, com lote mínimo e prazo.',
+  'E aprende a vender com o nosso treinamento, com suporte depois da entrega.',
+  'Escolha o seu nível: Iniciante, Intermediário ou Avançado. Chame no WhatsApp!',
 ];
 
 function embedVideo(url) {
@@ -173,7 +174,7 @@ export default function Home() {
           <span className={`${styles.mancha} ${styles.m3}`} aria-hidden="true" />
           <div className={styles.contido + ' ' + styles.heroGrade}>
             <div>
-              <span className={styles.selinho}>Loja de Calçados Pronta</span>
+              <span className={styles.selinho}>Negócio de calçados pronto para vender</span>
               <h1 className={styles.titulo}>
                 Criamos o seu negócio do zero e entregamos <em>com tudo pronto e funcional</em>
               </h1>
@@ -223,12 +224,12 @@ export default function Home() {
           <div className={styles.contido + ' ' + styles.videoGrade}>
             <div data-reveal="1">
               <p className={styles.sobre}>Apresentação</p>
-              <h2 className={styles.h2}>Veja em 1 minuto como a sua loja fica pronta</h2>
-              <p className={styles.sub}>Um assistente apresenta o serviço, explica os níveis e leva você direto ao WhatsApp.</p>
+              <h2 className={styles.h2}>Veja como a sua loja de calçados fica pronta</h2>
+              <p className={styles.sub}>Nosso assistente explica o que é a Loja de Calçados Pronta: uma loja online de calçados e acessórios de Franca, montada por nós, com PIX e cartão, painel pelo celular, guia de fornecedores e treinamento.</p>
               <div className={styles.assistentes}>
-                <span className={styles.chip}>🤖 Atendimento por IA</span>
-                <span className={styles.chip}>🎬 Vídeo de apresentação</span>
-                <span className={styles.chip}>💬 Resposta no WhatsApp</span>
+                <span className={styles.chip}>🤖 Assistente de IA</span>
+                <span className={styles.chip}>👟 Loja de calçados pronta</span>
+                <span className={styles.chip}>💬 Orçamento no WhatsApp</span>
               </div>
             </div>
             <div data-reveal="2">
@@ -240,7 +241,7 @@ export default function Home() {
                 {!video && (
                   <>
                     <span className={styles.selinhoVideo}>Avatar de demonstração</span>
-                    <div className={styles.palco} aria-live="polite">
+                    <div className={styles.palco} aria-live="polite" aria-label="Apresentação da Loja de Calçados Pronta">
                       <div className={styles.avatar} aria-hidden="true">
                         <div className={styles.corpo} />
                         <div className={styles.cabeca}>
