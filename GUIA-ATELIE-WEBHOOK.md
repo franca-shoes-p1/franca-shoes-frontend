@@ -34,7 +34,7 @@ Projeto `franca-shoes-frontend` → **Settings → Environment Variables**. `SUP
 | Nome | Valor |
 |---|---|
 | `N8N_WEBHOOK_ATELIE` | a Production URL copiada no Passo 2 |
-| `N8N_WEBHOOK_TOKEN` | a senha do Passo 2 (só adicione se ainda não existir) |
+| `N8N_WEBHOOK_TOKEN_ATELIE` | a senha do Passo 2 (variável própria do Ateliê, não mexe nos outros fluxos) |
 
 Depois faça **Redeploy** do último deploy.
 
