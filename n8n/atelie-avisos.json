@@ -1,0 +1,100 @@
+{
+  "name": "Ateliê Sob Medida - avisos de pedido e candidatura",
+  "nodes": [
+    {
+      "id": "a1",
+      "name": "Webhook Ateliê",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "atelie-novo",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "atelie-novo",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "a2",
+      "name": "Conferir e montar mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Confere o token enviado pelo site e monta o texto do aviso.\nconst TOKEN = 'COLE_AQUI_O_MESMO_VALOR_DE_N8N_WEBHOOK_TOKEN';\nconst item = $input.first().json;\nconst recebido = (item.headers || {})['x-webhook-token'] || '';\nif (recebido !== TOKEN) { throw new Error('Token inválido: o aviso foi recusado'); }\n\nconst d = item.body || {};\nlet numero = String(d.whatsapp || '').replace(/\\D/g, '');\nif (numero.length === 10 || numero.length === 11) numero = '55' + numero;\nconst link = numero ? 'https://wa.me/' + numero : '(sem WhatsApp)';\n\nlet mensagem;\nif (d.evento === 'atelie_pedido') {\n  mensagem = [\n    '🔔 Novo PEDIDO no Ateliê nº ' + d.numero,\n    'Nome: ' + d.nome,\n    'WhatsApp: ' + d.whatsapp,\n    'Serviço: ' + d.servico,\n    'Prazo: ' + (d.prazo || 'a combinar'),\n    'Situação: ' + (d.descricao || '(não informou)'),\n    'Responder: ' + link,\n  ].join('\\n');\n} else if (d.evento === 'atelie_montador') {\n  mensagem = [\n    '🧰 Nova CANDIDATURA de montador nº ' + d.numero,\n    'Nome: ' + d.nome,\n    'WhatsApp: ' + d.whatsapp,\n    'Setor: ' + d.setor,\n    'Equipamento e tempo: ' + (d.disponibilidade || '(não informou)'),\n    'Experiência: ' + (d.experiencia || '(não informou)'),\n    'Responder: ' + link,\n  ].join('\\n');\n} else {\n  throw new Error('Evento desconhecido');\n}\n\nreturn [{ json: { mensagem, evento: d.evento, numero: d.numero, link } }];\n"
+      }
+    },
+    {
+      "id": "a3",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        -80
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a4",
+      "name": "Avisar no Telegram (opcional)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        100
+      ],
+      "disabled": true,
+      "parameters": {
+        "chatId": "COLE_AQUI_O_ID_DO_SEU_CHAT",
+        "text": "={{ $json.mensagem }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Ateliê": {
+      "main": [
+        [
+          {
+            "node": "Conferir e montar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conferir e montar mensagem": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Avisar no Telegram (opcional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

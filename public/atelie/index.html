@@ -174,7 +174,7 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
   </div>
   <form id="f-pedido" novalidate style="background:var(--surface);color:var(--ink)">
     <label for="p-nome">Seu nome<input id="p-nome" required autocomplete="name"></label>
-    <label for="p-zap">WhatsApp com DDD<input id="p-zap" inputmode="tel" autocomplete="tel" placeholder="(16) 90000-0000"></label>
+    <label for="p-zap">WhatsApp com DDD<input id="p-zap" required inputmode="tel" autocomplete="tel" placeholder="(16) 90000-0000"></label>
     <label for="p-serv">O que você quer montar
       <select id="p-serv">
         <option>Site ou página de vendas</option>
@@ -189,7 +189,8 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
     </label>
     <label for="p-desc">Conte o que acontece hoje e o que você quer resolver<textarea id="p-desc"></textarea></label>
     <label for="p-prazo">Prazo desejado<input id="p-prazo" placeholder="ex.: 15 dias"></label>
-    <button class="btn primary" type="submit">Gerar meu pedido</button>
+    <input id="hp-pedido" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <button class="btn primary" type="submit">Enviar meu pedido</button>
     <div class="out" id="o-pedido" aria-live="polite"></div>
   </form>
 </div></section>
@@ -218,7 +219,7 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
   <div style="margin-top:32px;max-width:640px">
   <form id="f-oper" novalidate>
     <label for="o-nome">Seu nome<input id="o-nome" required autocomplete="name"></label>
-    <label for="o-zap">WhatsApp com DDD<input id="o-zap" inputmode="tel" autocomplete="tel"></label>
+    <label for="o-zap">WhatsApp com DDD<input id="o-zap" required inputmode="tel" autocomplete="tel"></label>
     <label for="o-setor">Setor de interesse
       <select id="o-setor">
         <option>Briefing e atendimento</option>
@@ -232,7 +233,8 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
     <label for="o-disp">Equipamento e tempo disponível por semana<input id="o-disp" placeholder="ex.: celular e notebook, 10 horas"></label>
     <label for="o-exp">Experiência ou algo que você já fez (opcional)<textarea id="o-exp"></textarea></label>
     <p class="small">Guardamos só os dados necessários para contato e avaliação, e apenas para esse fim.</p>
-    <button class="btn primary" type="submit">Gerar minha candidatura</button>
+    <input id="hp-montador" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <button class="btn primary" type="submit">Enviar minha candidatura</button>
     <div class="out" id="o-oper" aria-live="polite"></div>
   </form>
   </div>
@@ -247,13 +249,21 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
 <script>
 (function(){
   var WHATS="5516991543663";
-  var WEBHOOK=""; // cole aqui a URL do webhook do n8n para receber os formulários direto no sistema
   function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
-  function val(id){return document.getElementById(id).value.trim()}
-  function show(boxId,text,tipo){
+  function val(id){var el=document.getElementById(id);return el?el.value.trim():""}
+  function need(id){var el=document.getElementById(id);if(!el.value.trim()){el.focus();return false}return true}
+  function enviar(dados){
+    return fetch("/api/atelie",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(dados)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok===true,numero:j.numero,erro:j.erro}})})
+      .catch(function(){return {ok:false}});
+  }
+  function show(boxId,text,res,rotulo){
     var box=document.getElementById(boxId);
     var url="https://wa.me/"+WHATS+"?text="+encodeURIComponent(text);
-    box.innerHTML='<p><strong>Pronto. Envie esta mensagem pelo WhatsApp da agência:</strong></p><pre>'+esc(text)+'</pre>'+
+    var topo=res.ok
+      ? "Registramos "+rotulo+" nº "+esc(res.numero)+". Para agilizar, envie também esta mensagem pelo WhatsApp da agência:"
+      : esc(res.erro||"Não conseguimos registrar agora.")+" Envie esta mensagem pelo WhatsApp da agência e cuidamos do resto:";
+    box.innerHTML='<p><strong>'+topo+'</strong></p><pre>'+esc(text)+'</pre>'+
       '<div class="row"><button type="button" class="btn ghost" data-copy>Copiar mensagem</button>'+
       '<a class="btn primary" href="'+url+'" target="_blank" rel="noopener">Abrir WhatsApp</a></div>'+
       '<p class="small" data-msg>WhatsApp da agência: <span class="num">(16) 99154-3663</span></p>';
@@ -263,20 +273,30 @@ footer.site .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:spac
       function sel(){var r=document.createRange();r.selectNodeContents(box.querySelector("pre"));var s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent="Texto selecionado. Copie com Ctrl+C."}
       try{navigator.clipboard.writeText(text).then(function(){m.textContent="Mensagem copiada."},sel)}catch(e){sel()}
     });
-    if(WEBHOOK){try{fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo:tipo,mensagem:text})}).catch(function(){})}catch(e){}}
   }
-  function need(id){var el=document.getElementById(id);if(!el.value.trim()){el.focus();return false}return true}
-  document.getElementById("f-pedido").addEventListener("submit",function(e){
-    e.preventDefault();
-    if(!need("p-nome"))return;
-    var t="Olá! Quero fazer um pedido no Ateliê Sob Medida.\n\nNome: "+val("p-nome")+"\nWhatsApp: "+(val("p-zap")||"este mesmo")+"\nO que montar: "+val("p-serv")+"\nSituação e objetivo: "+(val("p-desc")||"a definir na consultoria")+"\nPrazo: "+(val("p-prazo")||"a combinar");
-    show("o-pedido",t,"pedido");
+  function ligar(formId,btnTexto,montar){
+    var f=document.getElementById(formId);
+    f.addEventListener("submit",function(e){
+      e.preventDefault();
+      var b=f.querySelector("button[type=submit]");
+      var r=montar();
+      if(!r)return;
+      b.disabled=true;b.textContent="Enviando...";
+      enviar(r.dados).then(function(res){
+        show(r.box,r.texto,res,r.rotulo);
+        b.disabled=false;b.textContent=btnTexto;
+      });
+    });
+  }
+  ligar("f-pedido","Enviar meu pedido",function(){
+    if(!need("p-nome")||!need("p-zap"))return null;
+    var t="Olá! Quero fazer um pedido no Ateliê Sob Medida.\n\nNome: "+val("p-nome")+"\nWhatsApp: "+val("p-zap")+"\nO que montar: "+val("p-serv")+"\nSituação e objetivo: "+(val("p-desc")||"a definir na consultoria")+"\nPrazo: "+(val("p-prazo")||"a combinar");
+    return {box:"o-pedido",texto:t,rotulo:"o seu pedido",dados:{tipo:"pedido",site:val("hp-pedido"),nome:val("p-nome"),whatsapp:val("p-zap"),servico:val("p-serv"),descricao:val("p-desc"),prazo:val("p-prazo")}};
   });
-  document.getElementById("f-oper").addEventListener("submit",function(e){
-    e.preventDefault();
-    if(!need("o-nome"))return;
-    var t="Olá! Quero me candidatar a montador no Ateliê Sob Medida.\n\nNome: "+val("o-nome")+"\nWhatsApp: "+(val("o-zap")||"este mesmo")+"\nSetor: "+val("o-setor")+"\nEquipamento e tempo: "+(val("o-disp")||"a informar")+"\nExperiência: "+(val("o-exp")||"a informar");
-    show("o-oper",t,"montador");
+  ligar("f-oper","Enviar minha candidatura",function(){
+    if(!need("o-nome")||!need("o-zap"))return null;
+    var t="Olá! Quero me candidatar a montador no Ateliê Sob Medida.\n\nNome: "+val("o-nome")+"\nWhatsApp: "+val("o-zap")+"\nSetor: "+val("o-setor")+"\nEquipamento e tempo: "+(val("o-disp")||"a informar")+"\nExperiência: "+(val("o-exp")||"a informar");
+    return {box:"o-oper",texto:t,rotulo:"a sua candidatura",dados:{tipo:"montador",site:val("hp-montador"),nome:val("o-nome"),whatsapp:val("o-zap"),setor:val("o-setor"),disponibilidade:val("o-disp"),experiencia:val("o-exp")}};
   });
 })();
 </script>
