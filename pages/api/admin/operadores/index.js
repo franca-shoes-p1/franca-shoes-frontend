@@ -10,7 +10,13 @@ export default async function handler(req, res) {
   if (!exigirAdmin(req, res)) return;
   try {
     if (req.method === 'GET') {
-      const operadores = await sb(`op_operarios?select=${CAMPOS}&order=setor.asc,nome.asc&limit=500`);
+      let operadores;
+      try {
+        operadores = await sb(`op_operarios?select=${CAMPOS},pode_catalogo&order=setor.asc,nome.asc&limit=500`);
+      } catch (e) {
+        // SQL do catálogo ainda não rodado: lista sem essa coluna.
+        operadores = await sb(`op_operarios?select=${CAMPOS}&order=setor.asc,nome.asc&limit=500`);
+      }
       return res.json({ operadores });
     }
     if (req.method === 'POST') {

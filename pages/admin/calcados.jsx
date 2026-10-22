@@ -295,6 +295,7 @@ export default function AdminCalcados() {
                         </span>{' '}
                         {noAr ? <span className="ea-tag ok">na loja</span> : <span className="ea-tag am">fora da loja</span>}
                         {Number(p.preco_venda_sugerido) <= 0 && <span className="ea-tag er">sem preço de venda</span>}
+                        {p.de_operador && !noAr && <span className="ea-tag am">enviado por operador: revisar</span>}
                       </div>
                     </div>
                     <div className="pc-acoes">

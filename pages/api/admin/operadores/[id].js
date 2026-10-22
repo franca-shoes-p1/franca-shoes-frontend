@@ -26,6 +26,7 @@ export default async function handler(req, res) {
       d.nivel = c.nivel;
     }
     if (c.ativo !== undefined) d.ativo = !!c.ativo;
+    if (c.pode_catalogo !== undefined) d.pode_catalogo = !!c.pode_catalogo;
     let codigo = null;
     if (c.novo_codigo) {
       codigo = novoCodigo();

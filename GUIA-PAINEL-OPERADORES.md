@@ -48,3 +48,38 @@ Suba as pastas `lib`, `pages` e o `supabase-operadores.sql` no GitHub (ou faça 
 
 - "Não foi possível salvar: relation op_... does not exist": o Passo 1 não foi executado.
 - "Falta ADMIN_SESSION_SECRET": crie a variável na Vercel e faça Redeploy.
+
+---
+
+# Acesso de operador só para cadastro de modelos
+
+Permite que um operador de confiança (setor Catálogo) cadastre modelos com foto **sem ter a sua senha de administrador**. A senha de `/admin` mostra pagamentos e chaves Pix dos operadores, então **nunca a entregue a um operador**.
+
+## Passo 1: rodar o SQL (1 min)
+
+Supabase → **SQL Editor** → cole `supabase-operadores-catalogo.sql` → **Run**. (Rode antes o `supabase-operadores.sql`.)
+Se você ainda não rodou este SQL, o resto do painel continua funcionando; só o catálogo do operador fica desligado.
+
+## Passo 2: liberar o operador
+
+`/admin/operadores` → aba **Operadores** → botão **Liberar catálogo** no operador. Para tirar o acesso, **Bloquear catálogo**.
+
+## O que o operador faz
+
+Em `/operador` aparece o botão **Cadastrar modelos** (`/operador/catalogo`). Ele tira ou escolhe a foto, preenche nome, categoria, material, números (`35 ao 40`), preço de venda e descrição, e clica **Enviar para revisão**.
+
+## O que o sistema impõe (no servidor)
+
+- O modelo entra **sempre oculto**. Só você publica.
+- O operador **não envia custo** e não vê o custo de ninguém. Você preenche o custo depois, em `/admin/calcados`.
+- O operador só vê e edita **os modelos que ele mesmo cadastrou**, e só **enquanto não estiverem publicados**.
+- Limite de **50 modelos por dia** por operador.
+- Só quem **aceitou as regras** e foi **liberado** consegue usar.
+
+## Como você revisa
+
+Em `/admin/calcados`, os modelos de operador aparecem com a etiqueta **"enviado por operador: revisar"** e fora da loja. Confira nome, preço, números e foto, preencha o **custo** e clique em **Publicar**.
+
+## Arquivos novos
+
+`lib/uploadFoto.js`, `pages/api/operador/catalogo/` (3 arquivos), `pages/operador/catalogo.jsx` e `supabase-operadores-catalogo.sql`. Alterados: `lib/operadorAuth.js`, `lib/produtosAdmin.js`, `pages/api/admin/produtos/foto.js`, `pages/api/admin/produtos/index.js`, `pages/api/admin/operadores/` (2), `pages/api/operador/tarefas/index.js`, `pages/admin/calcados.jsx`, `pages/admin/operadores.jsx` e `pages/operador/index.jsx`.

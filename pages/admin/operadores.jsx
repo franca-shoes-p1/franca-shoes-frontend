@@ -269,11 +269,13 @@ export default function AdminOperadores() {
                           <div className="ea-item" key={o.id} style={{ opacity: o.ativo ? 1 : 0.55 }}>
                             <div>
                               <b>{o.nome}</b> <span className="ea-tag">{(NIVEIS.find((n) => n[0] === o.nivel) || [])[1]}</span>{' '}
-                              {o.aceite_em ? <span className="ea-tag ok">regras aceitas</span> : <span className="ea-tag am">ainda não aceitou</span>}
+                              {o.aceite_em ? <span className="ea-tag ok">regras aceitas</span> : <span className="ea-tag am">ainda não aceitou</span>}{' '}
+                              {o.pode_catalogo && <span className="ea-tag ok">catálogo liberado</span>}
                               <div className="ea-mu">{o.whatsapp || 'sem WhatsApp'}{o.chave_pix ? ` · Pix ${o.chave_pix}` : ''}</div>
                             </div>
                             <div className="ea-row">
                               <select style={{ width: 'auto' }} value={o.nivel} onChange={(e) => opPatch(o.id, { nivel: e.target.value })}>{NIVEIS.map(([v, n]) => <option key={v} value={v}>{n}</option>)}</select>
+                              <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => opPatch(o.id, { pode_catalogo: !o.pode_catalogo })}>{o.pode_catalogo ? 'Bloquear catálogo' : 'Liberar catálogo'}</button>
                               <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => window.confirm('Gerar código novo? O código antigo deixa de funcionar.') && opPatch(o.id, { novo_codigo: true })}>Novo código</button>
                               <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => opPatch(o.id, { ativo: !o.ativo })}>{o.ativo ? 'Desativar' : 'Reativar'}</button>
                             </div>

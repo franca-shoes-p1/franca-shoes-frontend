@@ -8,6 +8,13 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       const produtos = await sb(`rf_produtos?select=${CAMPOS_ADMIN}&order=criado_em.desc&limit=500`);
+      // Marca os modelos cadastrados por operadores (para você revisar antes de publicar).
+      // Se o SQL do catálogo ainda não foi rodado, simplesmente não marca.
+      try {
+        const regs = await sb('op_catalogo_registros?select=produto_id&limit=2000');
+        const deOp = new Set(regs.map((r) => r.produto_id));
+        produtos.forEach((p) => { if (deOp.has(p.id)) p.de_operador = true; });
+      } catch (e) {}
       return res.json({ produtos });
     }
     if (req.method === 'POST') {

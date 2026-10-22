@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
@@ -95,6 +96,13 @@ export default function Operador() {
 
         {fase === 'pronto' && op && op.aceite_em && (
           <>
+            {op.pode_catalogo && (
+              <div className="ea-card">
+                <h2>Cadastro de modelos</h2>
+                <p className="ea-mu" style={{ marginTop: 0 }}>Você tem permissão para cadastrar modelos. Eles entram ocultos e só vão para a loja depois que a coordenação revisar e publicar.</p>
+                <Link href="/operador/catalogo" className="ea-btn">Cadastrar modelos</Link>
+              </div>
+            )}
             {abertas.length === 0 && <div className="ea-card ea-mu">Nenhuma tarefa para você agora. Quando houver, ela aparece aqui.</div>}
             {abertas.map((t) => {
               const [rot, cor] = STATUS[t.status] || [t.status, ''];
