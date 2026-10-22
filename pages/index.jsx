@@ -169,6 +169,7 @@ export default function Home() {
             <Link href="/catalogo" onClick={fechar}>Catálogo</Link>
             <Link href="/ebooks" onClick={fechar}>E-books</Link>
             {temContato && <a href="#contato" onClick={fechar}>Contato</a>}
+            <Link href="/calcados" onClick={fechar}>Calçados</Link>
             <Link href="/loja" className={styles.menuLoja} onClick={fechar}>Loja</Link>
             <Link href="/carrinho" className={styles.menuCarrinho} onClick={fechar}>🛒 Carrinho</Link>
           </nav>
