@@ -61,7 +61,7 @@ async function avisarN8n(corpo) {
   try {
     await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN || '' },
+      headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN_ATELIE || process.env.N8N_WEBHOOK_TOKEN || '' },
       body: JSON.stringify(corpo),
       signal: controle.signal,
     });
