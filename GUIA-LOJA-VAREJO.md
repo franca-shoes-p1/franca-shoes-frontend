@@ -78,3 +78,26 @@ Abra `lib/varejo.js` (bloco `VAREJO` no topo) e troque:
 
 Supabase → **Table Editor** → `varejo_pedidos`. Status: `aguardando_pagamento`, `pago`, `em_compra_fabrica`, `enviado`, `entregue`, `cancelado`, `reembolsado`. Mude o status e preencha `codigo_rastreio` na própria tabela.
 Quando virar `pago`, é a hora de comprar o par na fábrica.
+
+---
+
+# Painel de cadastro dos modelos (`/admin/calcados`)
+
+Página protegida por senha para cadastrar, editar e ocultar modelos, com foto direto do celular. Ela usa **a mesma senha** do painel de e-books (`ADMIN_PASSWORD` e `ADMIN_SESSION_SECRET` já configuradas na Vercel). Se o painel de e-books não abre para você, essas duas variáveis ainda não existem: crie-as em Settings → Environment Variables (a senha é a que você quiser; o segredo é qualquer texto longo, com 16+ caracteres) e faça Redeploy.
+
+## Como usar
+
+1. Abra `seu-site/admin/calcados` e entre com a senha.
+2. Toque em **Tirar ou escolher foto**. A foto é reduzida automaticamente e guardada no Supabase (o espaço de fotos `produtos` é criado sozinho na primeira vez).
+3. Preencha nome, categoria, números (`38 ao 44`), preço de venda e custo na fábrica.
+4. **Cadastrar na loja**. O modelo já aparece em `/calcados`.
+5. Na lista: **Editar** muda qualquer dado, **Ocultar** tira da loja sem apagar, **Publicar** devolve.
+
+## Arquivos novos (suba no GitHub junto com os anteriores)
+
+`pages/admin/calcados.jsx`, `pages/api/admin/produtos/` (3 arquivos) e `lib/produtosAdmin.js`.
+
+## Se algo der erro
+
+- "Não foi possível salvar: ... fornecedor_id": a tabela exige o fornecedor. Me mande a mensagem completa que eu ajusto o formulário.
+- "Não foi possível enviar a foto": você pode colar o endereço `https://` da foto no campo logo abaixo do botão enquanto me manda a mensagem de erro.
