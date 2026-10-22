@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/home.module.css';
@@ -13,6 +13,28 @@ const CONFIG = {
   whatsapp: '5516991543663',
   email: 'ricardobelo1973@gmail.com',
 };
+
+// VÍDEO DA APRESENTAÇÃO: cole aqui o endereço do vídeo quando estiver pronto.
+// Aceita link do YouTube (https://www.youtube.com/watch?v=... ou youtu.be/...) ou arquivo .mp4.
+// Enquanto estiver vazio, aparece o avatar animado de demonstração.
+const VIDEO_URL = '';
+
+const FALAS = [
+  'Oi! Eu sou o assistente da Loja de Calçados Pronta.',
+  'Você quer vender calçados, mas não sabe por onde começar?',
+  'A gente monta a sua loja online, com PIX e cartão.',
+  'Você cadastra os modelos pelo celular, com a foto na hora.',
+  'E ainda recebe o guia de fornecedores e o treinamento.',
+  'Chame no WhatsApp e escolha o seu nível!',
+];
+
+function embedVideo(url) {
+  if (!url) return null;
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+  if (yt) return { tipo: 'iframe', src: `https://www.youtube.com/embed/${yt[1]}?rel=0` };
+  if (/\.(mp4|webm)(\?|$)/i.test(url)) return { tipo: 'video', src: url };
+  return null;
+}
 
 const LINK_WHATS = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
   'Olá! Vi o site e quero saber como funciona a Loja de Calçados Pronta.'
@@ -84,9 +106,32 @@ const PROJETOS = [
 export default function Home() {
   const [menu, setMenu] = useState(false);
   const fechar = () => setMenu(false);
+  const raiz = useRef(null);
+  const [fala, setFala] = useState(0);
+  const video = embedVideo(VIDEO_URL);
+
+  // animação de entrada ao rolar a página
+  useEffect(() => {
+    const el = raiz.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    el.classList.add(styles.anim);
+    const io = new IntersectionObserver(
+      (itens) => itens.forEach((i) => { if (i.isIntersecting) { i.target.classList.add(styles.visivel); io.unobserve(i.target); } }),
+      { threshold: 0.12 }
+    );
+    el.querySelectorAll('[data-reveal]').forEach((n) => io.observe(n));
+    return () => io.disconnect();
+  }, []);
+
+  // legendas do avatar de demonstração
+  useEffect(() => {
+    if (video) return;
+    const t = setInterval(() => setFala((f) => (f + 1) % FALAS.length), 3600);
+    return () => clearInterval(t);
+  }, [video]);
 
   return (
-    <div className={styles.pagina}>
+    <div className={styles.pagina} ref={raiz}>
       <Head>
         <title>Loja de Calçados Pronta | {CONFIG.nome}</title>
         <meta
@@ -123,6 +168,9 @@ export default function Home() {
 
       <main id="topo">
         <section className={styles.hero}>
+          <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
+          <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
+          <span className={`${styles.mancha} ${styles.m3}`} aria-hidden="true" />
           <div className={styles.contido + ' ' + styles.heroGrade}>
             <div>
               <span className={styles.selinho}>Loja de Calçados Pronta</span>
@@ -170,6 +218,51 @@ export default function Home() {
           </div>
         </div>
 
+        <section id="video" className={`${styles.secao} ${styles.escura}`}>
+          <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
+          <div className={styles.contido + ' ' + styles.videoGrade}>
+            <div data-reveal="1">
+              <p className={styles.sobre}>Apresentação</p>
+              <h2 className={styles.h2}>Veja em 1 minuto como a sua loja fica pronta</h2>
+              <p className={styles.sub}>Um assistente apresenta o serviço, explica os níveis e leva você direto ao WhatsApp.</p>
+              <div className={styles.assistentes}>
+                <span className={styles.chip}>🤖 Atendimento por IA</span>
+                <span className={styles.chip}>🎬 Vídeo de apresentação</span>
+                <span className={styles.chip}>💬 Resposta no WhatsApp</span>
+              </div>
+            </div>
+            <div data-reveal="2">
+              <div className={styles.moldura}>
+                {video && video.tipo === 'iframe' && (
+                  <iframe src={video.src} title="Apresentação da Loja de Calçados Pronta" allow="accelerometer; encrypted-media; picture-in-picture" allowFullScreen />
+                )}
+                {video && video.tipo === 'video' && <video src={video.src} controls playsInline preload="metadata" />}
+                {!video && (
+                  <>
+                    <span className={styles.selinhoVideo}>Avatar de demonstração</span>
+                    <div className={styles.palco} aria-live="polite">
+                      <div className={styles.avatar} aria-hidden="true">
+                        <div className={styles.corpo} />
+                        <div className={styles.cabeca}>
+                          <span className={`${styles.olho} ${styles.olhoE}`} />
+                          <span className={`${styles.olho} ${styles.olhoD}`} />
+                          <span className={styles.boca} />
+                        </div>
+                      </div>
+                      <div className={styles.legendaBox}>
+                        <div key={fala} className={styles.balao}>{FALAS[fala]}</div>
+                        <div className={styles.ondas} aria-hidden="true">
+                          {Array.from({ length: 14 }).map((_, i) => <i key={i} />)}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className={styles.secao}>
           <div className={styles.contido}>
             <p className={styles.sobre}>Para quem é</p>
@@ -177,7 +270,7 @@ export default function Home() {
             <p className={styles.sub}>Cada nível foi pensado para um ponto de partida diferente.</p>
             <div className={styles.grade3}>
               {PARA_QUEM.map((c) => (
-                <div key={c.t} className={styles.cartao}>
+                <div key={c.t} className={styles.cartao} data-reveal="1">
                   <div className={styles.emoji}>{c.e}</div>
                   <h3>{c.t}</h3>
                   <p>{c.p}</p>
@@ -194,7 +287,7 @@ export default function Home() {
             <p className={styles.sub}>Você não precisa juntar ferramentas nem contratar vários profissionais.</p>
             <div className={styles.grade3}>
               {RECEBE.map((c) => (
-                <div key={c.t} className={styles.cartao}>
+                <div key={c.t} className={styles.cartao} data-reveal="1">
                   <div className={styles.emoji}>{c.e}</div>
                   <h3>{c.t}</h3>
                   <p>{c.p}</p>
@@ -211,7 +304,7 @@ export default function Home() {
             <p className={styles.sub}>Você acompanha cada etapa e a loja fica nas suas contas.</p>
             <ol className={styles.passos}>
               {PASSOS.map((p, i) => (
-                <li key={p.t}>
+                <li key={p.t} data-reveal="1">
                   <div className={styles.passoN}>{i + 1}</div>
                   <strong>{p.t}</strong>
                   <p>{p.p}</p>
@@ -228,7 +321,7 @@ export default function Home() {
             <p className={styles.sub}>Os valores são passados no WhatsApp, de acordo com o que você precisa.</p>
             <div className={styles.grade3}>
               {NIVEIS.map((n) => (
-                <div key={n.nome} className={`${styles.cartao} ${styles.nivel} ${n.destaque ? styles.nivelDestaque : ''}`}>
+                <div key={n.nome} data-reveal="1" className={`${styles.cartao} ${styles.nivel} ${n.destaque ? styles.nivelDestaque : ''}`}>
                   {n.destaque && <span className={styles.etiqueta}>Mais procurado</span>}
                   <h3>{n.nome}</h3>
                   <p className={styles.nivelPara}>{n.para}</p>
@@ -245,7 +338,7 @@ export default function Home() {
 
         <section className={`${styles.secao} ${styles.clara}`}>
           <div className={styles.contido + ' ' + styles.grade2}>
-            <div className={styles.honesto}>
+            <div className={styles.honesto} data-reveal="1">
               <h3>Transparência desde o começo</h3>
               <ul>
                 <li>Entregamos a loja funcionando. Não prometemos vendas nem ganhos.</li>
