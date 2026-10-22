@@ -185,9 +185,9 @@ export default function Home() {
                 guia de fornecedores e treinamento. Para começar a comprar e vender agora mesmo.
               </p>
               <div className={styles.acoes}>
-                <a href={LINK_WHATS} className={`${styles.botao} ${styles.principal}`} target="_blank" rel="noopener noreferrer">
+                <Link href="/calcados" className={`${styles.botao} ${styles.principal}`}>
                   Quero a minha loja
-                </a>
+                </Link>
                 <Link href="/calcados" className={`${styles.botao} ${styles.contorno}`}>Ver a loja de exemplo →</Link>
               </div>
               <p className={styles.nota}>Entregamos a loja funcionando. Não prometemos vendas nem lucro.</p>
