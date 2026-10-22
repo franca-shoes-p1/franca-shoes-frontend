@@ -7,7 +7,7 @@ O que acontece depois de ativar:
 3. O site avisa o n8n, que monta a mensagem e avisa você.
 4. A pessoa ainda recebe a mensagem pronta para mandar no seu WhatsApp. Se qualquer passo acima falhar, esse último continua funcionando.
 
-Enquanto você não ativar nada, o site continua igual: o visitante vê a mensagem pronta para o WhatsApp.
+Enquanto você não fizer os passos abaixo, o registro não funciona: o visitante vê o aviso "Não foi possível registrar agora" e a mensagem pronta para mandar no seu WhatsApp. Nada quebra, mas faça os passos logo depois de publicar.
 
 ## Passo 1: criar as tabelas no Supabase (3 min)
 
