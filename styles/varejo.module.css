@@ -1,0 +1,81 @@
+.pagina { min-height: 100vh; background: #f6f7f9; color: #1f2937; }
+
+.topo { background: #fff; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 10; }
+.topoInterno { max-width: 1160px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.marca { font-weight: 800; font-size: 1.15rem; color: #1e3a8a; text-decoration: none; }
+.topoLinks { display: flex; align-items: center; gap: 14px; font-size: 0.95rem; }
+.topoLinks a { color: #374151; text-decoration: none; }
+.botaoCarrinho { background: #1e3a8a; color: #fff !important; padding: 8px 14px; border-radius: 999px; font-weight: 600; }
+
+.conteudo { max-width: 1160px; margin: 0 auto; padding: 20px 16px 48px; }
+.faixa { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; border-radius: 10px; padding: 12px 14px; font-size: 0.92rem; margin-bottom: 18px; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; align-items: center; }
+.chip { border: 1px solid #d1d5db; background: #fff; border-radius: 999px; padding: 6px 14px; font-size: 0.9rem; cursor: pointer; }
+.chipAtivo { background: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+.busca { flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; }
+
+.grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 720px) { .grade { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+@media (min-width: 1000px) { .grade { grid-template-columns: repeat(4, 1fr); } }
+
+.card { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow 0.15s; }
+.card:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+.foto { aspect-ratio: 1 / 1; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 56px; overflow: hidden; }
+.foto img { width: 100%; height: 100%; object-fit: cover; }
+.cardCorpo { padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.cardTitulo { font-size: 0.98rem; font-weight: 600; line-height: 1.3; }
+.cardCategoria { font-size: 0.8rem; color: #6b7280; }
+.preco { font-size: 1.15rem; font-weight: 800; color: #111827; }
+.parcela { font-size: 0.8rem; color: #6b7280; }
+
+.vazio { background: #fff; border: 1px dashed #d1d5db; border-radius: 12px; padding: 32px 18px; text-align: center; color: #4b5563; }
+
+/* produto */
+.produto { display: grid; gap: 22px; }
+@media (min-width: 820px) { .produto { grid-template-columns: 1fr 1fr; gap: 36px; } }
+.produtoFoto { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; font-size: 96px; }
+.produtoFoto img { width: 100%; height: 100%; object-fit: cover; }
+.produtoInfo h1 { font-size: 1.5rem; line-height: 1.25; margin-bottom: 6px; }
+.precoGrande { font-size: 1.9rem; font-weight: 800; margin: 10px 0 2px; }
+.rotulo { font-weight: 600; margin: 18px 0 8px; font-size: 0.95rem; }
+.tamanhos { display: flex; flex-wrap: wrap; gap: 8px; }
+.tamanho { min-width: 46px; text-align: center; padding: 9px 10px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600; }
+.tamanhoAtivo { background: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+.campo { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #fff; }
+.quantidade { width: 90px; }
+.botaoPrincipal { display: block; width: 100%; background: #16a34a; color: #fff; border: 0; border-radius: 10px; padding: 14px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-top: 18px; text-align: center; text-decoration: none; }
+.botaoPrincipal:disabled { background: #9ca3af; cursor: not-allowed; }
+.botaoSecundario { display: inline-block; background: #fff; color: #1e3a8a; border: 1px solid #1e3a8a; border-radius: 10px; padding: 11px 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.aviso { margin-top: 14px; padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; font-size: 0.9rem; color: #78350f; }
+.ok { margin-top: 12px; padding: 10px 14px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; color: #065f46; font-weight: 600; }
+.erro { margin: 12px 0; padding: 10px 14px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; color: #991b1b; }
+.descricao { margin-top: 18px; color: #374151; white-space: pre-line; }
+.garantias { list-style: none; margin-top: 16px; display: grid; gap: 6px; font-size: 0.92rem; color: #374151; }
+
+/* carrinho + checkout */
+.duasColunas { display: grid; gap: 20px; }
+@media (min-width: 900px) { .duasColunas { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+.caixa { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+.caixa h2 { font-size: 1.1rem; margin-bottom: 12px; }
+.linhaItem { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+.linhaItem:last-child { border-bottom: 0; }
+.miniFoto { width: 64px; height: 64px; background: #f3f4f6; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+.miniFoto img { width: 100%; height: 100%; object-fit: cover; }
+.itemNome { font-weight: 600; font-size: 0.95rem; }
+.itemMeta { font-size: 0.85rem; color: #6b7280; }
+.itemDireita { text-align: right; font-weight: 700; }
+.remover { background: none; border: 0; color: #b91c1c; cursor: pointer; font-size: 0.82rem; margin-top: 4px; }
+.linhaTotal { display: flex; justify-content: space-between; padding: 6px 0; }
+.totalFinal { font-size: 1.2rem; font-weight: 800; border-top: 1px solid #e5e7eb; margin-top: 6px; padding-top: 10px; }
+
+.formGrade { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.formGrade .cheio { grid-column: 1 / -1; }
+.grupo label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+
+.rodape { max-width: 1160px; margin: 0 auto; padding: 24px 16px 40px; color: #6b7280; font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.rodape a { color: #1e3a8a; }
+.texto { max-width: 760px; }
+.texto h2 { margin: 22px 0 6px; font-size: 1.15rem; }
+.texto p, .texto li { margin-bottom: 8px; }
+.texto ul { padding-left: 20px; }
