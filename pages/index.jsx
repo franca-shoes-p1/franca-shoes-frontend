@@ -95,6 +95,8 @@ const FAQ = [
 
 export default function Home() {
   const raiz = useRef(null);
+  const [menu, setMenu] = useState(false);
+  const fechar = () => setMenu(false);
   const [fala, setFala] = useState(0);
   const video = embedVideo(VIDEO_URL);
 
@@ -136,10 +138,21 @@ export default function Home() {
 
       <header className={styles.cabecalho}>
         <div className={styles.contido + ' ' + styles.barra}>
-          <span className={styles.marca}>
+          <a href="#topo" className={styles.marca} onClick={fechar}>
             <span className={styles.selo}>IE</span>
             <span>{CONFIG.nome}</span>
-          </span>
+          </a>
+          <button className={styles.botaoMenu} aria-label="Abrir menu" aria-expanded={menu} onClick={() => setMenu(!menu)}>
+            <span /><span /><span />
+          </button>
+          <nav className={`${styles.menu} ${menu ? styles.menuAberto : ''}`}>
+            <a href="#recebe" onClick={fechar}>O que você recebe</a>
+            <a href="#como" onClick={fechar}>Como funciona</a>
+            <a href="#niveis" onClick={fechar}>Níveis</a>
+            <a href="#duvidas" onClick={fechar}>Dúvidas</a>
+            <Link href="/calcados" onClick={fechar}>Loja de exemplo</Link>
+            <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          </nav>
         </div>
       </header>
 
@@ -367,10 +380,21 @@ export default function Home() {
 
       <footer className={styles.rodape}>
         <div className={styles.contido + ' ' + styles.rodapeCentro}>
-          <span className={styles.marca}>
+          <a href="#topo" className={styles.marca} onClick={fechar}>
             <span className={styles.selo}>IE</span>
             <span>{CONFIG.nome}</span>
-          </span>
+          </a>
+          <button className={styles.botaoMenu} aria-label="Abrir menu" aria-expanded={menu} onClick={() => setMenu(!menu)}>
+            <span /><span /><span />
+          </button>
+          <nav className={`${styles.menu} ${menu ? styles.menuAberto : ''}`}>
+            <a href="#recebe" onClick={fechar}>O que você recebe</a>
+            <a href="#como" onClick={fechar}>Como funciona</a>
+            <a href="#niveis" onClick={fechar}>Níveis</a>
+            <a href="#duvidas" onClick={fechar}>Dúvidas</a>
+            <Link href="/calcados" onClick={fechar}>Loja de exemplo</Link>
+            <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          </nav>
           <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
           <Link href="/portal" className={styles.botaoPortal}>
             <span>Entrar no portal completo</span>
