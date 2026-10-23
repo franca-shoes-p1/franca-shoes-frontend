@@ -47,9 +47,8 @@ const RAMOS = [
       'Calçados e acessórios de Franca. Escolha os produtos, monte o carrinho e pague com Pix.',
     status: 'Disponível',
     destaque: true,
-    link: '/loja',
+    link: 'https://loja.igreja.eco.br',
     chamada: 'Ir para a loja',
-    interno: true,
   },
   {
     id: 'revenda',
@@ -137,7 +136,7 @@ export default function Home() {
   return (
     <div className={styles.pagina}>
       <Head>
-        <title>{CONFIG.nome} | Ovinocultura, IA e Loja</title>
+        <title>{CONFIG.nome} Portal</title>
         <meta
           name="description"
           content="Escola de Ovinocultura, serviços de IA e automação e loja virtual de calçados de Franca, reunidos em um só portal."
@@ -189,7 +188,7 @@ export default function Home() {
               </p>
               <div className={`${styles.heroAcoes} ${styles.heroAcoesGrandes}`}>
                 <a href="#ramos" className={styles.botaoPrincipal}>Explorar o portal</a>
-                <Link href="/loja" className={styles.botaoSecundario}>Ir para a loja →</Link>
+                <a href="https://loja.igreja.eco.br" className={styles.botaoSecundario}>Ir para a loja →</a>
                 <a href="/assistentes" className={styles.botaoAssistentes}>✨ Assistentes do Ateliê</a>
               </div>
             </div>
