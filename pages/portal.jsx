@@ -187,9 +187,10 @@ export default function Home() {
                 Aprenda ovinocultura, automatize o seu negócio com inteligência artificial e compre na loja
                 virtual. Tudo reunido em um só endereço.
               </p>
-              <div className={styles.heroAcoes}>
+              <div className={`${styles.heroAcoes} ${styles.heroAcoesGrandes}`}>
                 <a href="#ramos" className={styles.botaoPrincipal}>Explorar o portal</a>
                 <Link href="/loja" className={styles.botaoSecundario}>Ir para a loja →</Link>
+                <a href="/assistentes" className={styles.botaoAssistentes}>✨ Assistentes do Ateliê</a>
               </div>
             </div>
             <div className={styles.heroPainel} aria-hidden="true">
