@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
+import AssistentesBanner from '../lib/AssistentesBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -92,22 +93,7 @@ const FAQ = [
   ['Vou ganhar dinheiro?', 'Eu entrego a loja pronta e funcionando. Não prometo vendas nem lucro: o resultado depende dos modelos, dos preços e da sua divulgação.'],
 ];
 
-const PROJETOS = [
-  ['Portal completo', '/portal'],
-  ['Escola de Ovinocultura', '/portal#escola'],
-  ['Serviços de IA e Automação', '/portal#servicos'],
-  ['Alimentos da Amazônia', '/portal#ramos'],
-  ['Loja Franca Shoes', '/loja'],
-  ['Revenda de calçados de Franca', '/projeto-fornecedores'],
-  ['Calculadora de margem', '/calculadora'],
-  ['Catálogo de calçados', '/catalogo'],
-  ['E-books práticos', '/ebooks'],
-  ['Loja de calçados (varejo)', '/calcados'],
-];
-
 export default function Home() {
-  const [menu, setMenu] = useState(false);
-  const fechar = () => setMenu(false);
   const raiz = useRef(null);
   const [fala, setFala] = useState(0);
   const video = embedVideo(VIDEO_URL);
@@ -150,21 +136,10 @@ export default function Home() {
 
       <header className={styles.cabecalho}>
         <div className={styles.contido + ' ' + styles.barra}>
-          <a href="#topo" className={styles.marca} onClick={fechar}>
+          <span className={styles.marca}>
             <span className={styles.selo}>IE</span>
             <span>{CONFIG.nome}</span>
-          </a>
-          <button className={styles.botaoMenu} aria-label="Abrir menu" aria-expanded={menu} onClick={() => setMenu(!menu)}>
-            <span /><span /><span />
-          </button>
-          <nav className={`${styles.menu} ${menu ? styles.menuAberto : ''}`}>
-            <a href="#recebe" onClick={fechar}>O que você recebe</a>
-            <a href="#como" onClick={fechar}>Como funciona</a>
-            <a href="#niveis" onClick={fechar}>Níveis</a>
-            <a href="#duvidas" onClick={fechar}>Dúvidas</a>
-            <Link href="/calcados" onClick={fechar}>Loja de exemplo</Link>
-            <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
-          </nav>
+          </span>
         </div>
       </header>
 
@@ -386,25 +361,21 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <AssistentesBanner />
       </main>
 
       <footer className={styles.rodape}>
-        <div className={styles.contido + ' ' + styles.rodapeGrade}>
-          <div>
-            <a href="#topo" className={styles.marca}>
-              <span className={styles.selo}>IE</span>
-              <span>{CONFIG.nome}</span>
-            </a>
-            <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
-          </div>
-          <div>
-            <h4>Outros projetos do portal</h4>
-            <div className={styles.links}>
-              {PROJETOS.map(([nome, href]) => (
-                <Link key={nome} href={href}>{nome}</Link>
-              ))}
-            </div>
-          </div>
+        <div className={styles.contido + ' ' + styles.rodapeCentro}>
+          <span className={styles.marca}>
+            <span className={styles.selo}>IE</span>
+            <span>{CONFIG.nome}</span>
+          </span>
+          <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
+          <Link href="/portal" className={styles.botaoPortal}>
+            <span>Entrar no portal completo</span>
+            <small>Escola, serviços de IA, loja, calculadora e mais</small>
+          </Link>
         </div>
         <div className={styles.contido + ' ' + styles.rodapeFim}>
           <p>© 2026 {CONFIG.nome}. Todos os direitos reservados.</p>

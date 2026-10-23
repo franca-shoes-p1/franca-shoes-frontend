@@ -184,3 +184,12 @@
 .links a { color: #cfe0ff; font-size: 0.95rem; transition: color 0.2s; }
 .links a:hover { color: var(--rosa); }
 .rodapeFim { border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 32px; padding-top: 18px; font-size: 0.82rem; }
+
+/* Rodapé reduzido: logo e um botão grande para o portal completo */
+.rodapeCentro { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+.rodapeCentro p { max-width: 520px; margin: 0; }
+.botaoPortal { display: flex; flex-direction: column; align-items: center; gap: 2px; width: min(100%, 460px); margin-top: 8px; padding: 20px 30px; border-radius: 999px; color: #fff !important; font-weight: 800; font-size: 1.2rem; background: var(--grad); box-shadow: 0 14px 36px rgba(18, 160, 255, 0.45); transition: transform 0.15s, box-shadow 0.15s; }
+.botaoPortal small { font-weight: 500; font-size: 0.85rem; opacity: 0.92; }
+.botaoPortal:hover { transform: translateY(-3px); box-shadow: 0 18px 44px rgba(18, 160, 255, 0.55); }
+.botaoPortal:focus-visible { outline: 3px solid var(--ciano); outline-offset: 4px; }
+.rodapeFim { text-align: center; }
