@@ -5,6 +5,11 @@ import { useRouter } from 'next/router';
 import { api, ADMIN_CSS } from '../../../lib/adminClient';
 import { reduzirFoto } from '../../../lib/reduzirFoto';
 
+// Deixa endereços https:// clicáveis dentro do texto do cartão.
+function comLinks(t) {
+  return String(t).split(/(https:\/\/[^\s)]+)/g).map((p, i) => (/^https:\/\//.test(p) ? <a key={i} href={p} target="_blank" rel="noopener noreferrer">{p}</a> : p));
+}
+
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const ST = { entregue: 'Em análise', ajuste: 'Ajuste pedido', aprovada: 'Aprovada', paga: 'Paga', recusada: 'Recusada' };
 
@@ -78,7 +83,7 @@ export default function CartaoPagina() {
             {ult && <div className={`ea-msg ${ult.status === 'ajuste' || ult.status === 'recusada' ? 'er' : 'ok'}`}>Sua última entrega: <b>{ST[ult.status] || ult.status}</b>{ult.comentario_revisao ? ` · ${ult.comentario_revisao}` : ''}</div>}
 
             <div className="ea-card"><b>Objetivo:</b> {c.objetivo}<br /><b>Como saber que acabou:</b> {c.pronto_quando}</div>
-            <div className="ea-card"><h2 style={{ marginTop: 0 }}>Material pronto</h2><ul className="cp-l">{c.material.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
+            <div className="ea-card"><h2 style={{ marginTop: 0 }}>Material pronto</h2><ul className="cp-l">{c.material.map((m, i) => <li key={i}>{comLinks(m)}</li>)}</ul></div>
             <div className="ea-card"><h2 style={{ marginTop: 0 }}>Passo a passo</h2><ol className="cp-l">{c.passos.map((m, i) => <li key={i}>{m}</li>)}</ol></div>
             <div className="ea-card"><h2 style={{ marginTop: 0 }}>Erros comuns</h2><ul className="cp-l">{c.erros.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
             {c.seguranca && <div className="ea-card"><b>Segurança:</b> {c.seguranca}</div>}
