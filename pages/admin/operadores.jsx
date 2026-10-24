@@ -259,7 +259,7 @@ export default function AdminOperadores() {
 
                 <div className="ea-card">
                   <h2>Equipe</h2>
-                  {SETORES.map((s) => {
+                  {[...SETORES, ...Array.from(new Set(ops.map((o) => o.setor))).filter((x) => x && !SETORES.includes(x))].map((s) => {
                     const doSetor = ops.filter((o) => o.setor === s);
                     const ativos = doSetor.filter((o) => o.ativo).length;
                     return (
