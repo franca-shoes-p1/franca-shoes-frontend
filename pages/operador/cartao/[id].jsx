@@ -24,6 +24,9 @@ export default function CartaoPagina() {
   const [obs, setObs] = useState('');
   const [anexos, setAnexos] = useState([]);
   const [ocupado, setOcupado] = useState(false);
+  const [duv, setDuv] = useState('');
+  const [ia, setIa] = useState(null);
+  const [pensando, setPensando] = useState(false);
 
   const carregar = useCallback(async () => {
     if (!id) return;
@@ -61,6 +64,19 @@ export default function CartaoPagina() {
     setOcupado(false);
   }
 
+  async function perguntar(ev) {
+    ev.preventDefault();
+    if (pensando || duv.trim().length < 3) return;
+    setPensando(true); setIa(null);
+    try {
+      const r = await fetch('/api/operador/oficina/tutor', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cartao_id: id, pergunta: duv }) });
+      const j = await r.json();
+      setIa(r.ok ? j : { erro: j.erro || 'Não foi possível responder.' });
+      if (r.ok) setDuv('');
+    } catch (e) { setIa({ erro: 'Sem conexão. Tente de novo.' }); }
+    setPensando(false);
+  }
+
   const c = d && d.cartao;
   const ult = d && d.minhas[0];
   const podeEntregar = c && d.aceite_em && !(ult && ['entregue'].includes(ult.status)) && !(c.unica && ult && ['aprovada', 'paga'].includes(ult.status));
@@ -88,6 +104,15 @@ export default function CartaoPagina() {
             <div className="ea-card"><h2 style={{ marginTop: 0 }}>Erros comuns</h2><ul className="cp-l">{c.erros.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
             {c.seguranca && <div className="ea-card"><b>Segurança:</b> {c.seguranca}</div>}
             {c.avaliacao && <div className="ea-card"><b>Como é avaliada:</b> {c.avaliacao}</div>}
+
+            <form className="ea-card" onSubmit={perguntar}>
+              <h2 style={{ marginTop: 0 }}>Pergunte à IA</h2>
+              <div className="ea-mu" style={{ marginBottom: 8 }}>Travou em algum passo? Escreva a sua dúvida. A IA responde com base neste cartão.</div>
+              <textarea value={duv} onChange={(e) => setDuv(e.target.value)} maxLength={600} rows={3} placeholder="Ex.: Onde eu acho o link para trocar na legenda?" />
+              <button className="ea-btn" type="submit" disabled={pensando} style={{ marginTop: 8 }}>{pensando ? 'Pensando…' : 'Perguntar'}</button>
+              {ia && ia.erro && <div className="ea-msg er" style={{ marginTop: 8 }}>{ia.erro}</div>}
+              {ia && ia.resposta && <div className="ea-msg ok" style={{ marginTop: 8, whiteSpace: 'pre-wrap' }}>{ia.resposta}{ia.chamado ? '\n\nNão tenho certeza dessa resposta. Avisei a coordenação, que vai conferir.' : ''}</div>}
+            </form>
 
             {podeEntregar && (
               <form className="ea-card" onSubmit={enviar}>
