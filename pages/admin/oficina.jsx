@@ -85,7 +85,7 @@ export default function AdminOficina() {
             )}
             <div className="ea-mu">Pontos em circulação: <b>{d.total_pontos}</b> · Em análise: <b>{emAnalise.length}</b> · Candidatos novos: <b>{d.candidatos.filter((c) => c.status === 'novo').length}</b></div>
             <div className="po-tabs">
-              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['resgates', `Resgates (${d.resgates.length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
+              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['resgates', `Resgates (${d.resgates.length})`], ['chamados', `Chamados (${(d.chamados || []).length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
                 <button key={k} className={'po-t' + (aba === k ? ' on' : '')} onClick={() => setAba(k)}>{r}</button>
               ))}
             </div>
@@ -101,6 +101,12 @@ export default function AdminOficina() {
                     {Object.entries(x.respostas || {}).map(([k, v]) => <div className="po-ent" key={k}><b>{(x.cartao && (x.cartao.campos.find((c) => c.id === k) || {}).rotulo) || k}:</b>{'\n'}{v}</div>)}
                     {x.observacoes && <div className="po-ent"><b>Observações:</b>{'\n'}{x.observacoes}</div>}
                     {x.anexos && x.anexos.length > 0 && <div className="ea-row" style={{ marginTop: 8 }}>{x.anexos.map((u) => <a key={u} href={u} target="_blank" rel="noreferrer"><img src={u} alt="" className="po-img" /></a>)}</div>}
+                    {x.sugestao && (
+                      <div className={'ea-msg ' + (x.sugestao.nivel === 'ok' ? 'ok' : 'er')} style={{ marginTop: 8 }}>
+                        <b>Pré-avaliação da IA (só sugestão): {x.sugestao.nivel === 'ok' ? 'parece ok' : 'atenção'}</b>
+                        {x.sugestao.itens.map((i, n) => <div key={n}>{i.ok ? '✔' : '⚠'} {i.t}</div>)}
+                      </div>
+                    )}
                     <label>Comentário (obrigatório para pedir ajuste)</label>
                     <input value={com[x.id] || ''} onChange={(ev) => setCom({ ...com, [x.id]: ev.target.value })} />
                     <div className="ea-row" style={{ marginTop: 10 }}>
@@ -154,6 +160,21 @@ export default function AdminOficina() {
                     <div className="ea-row" style={{ marginTop: 8 }}>
                       <button className="ea-btn ea-btn-ok" disabled={ocupado} onClick={() => acao({ tipo: 'resgate', id: r.id, acao: 'aprovar' }, 'Aprovado. Os pontos foram descontados; entregue o benefício.')}>Aprovar</button>
                       <button className="ea-btn ea-btn-er" disabled={ocupado} onClick={() => acao({ tipo: 'resgate', id: r.id, acao: 'recusar' })}>Recusar</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {aba === 'chamados' && (
+              <div style={{ marginTop: 12 }}>
+                {(d.chamados || []).length === 0 && <div className="ea-card ea-mu">Nenhuma dúvida sem resposta da IA.</div>}
+                {(d.chamados || []).map((c) => (
+                  <div className="ea-card" key={c.id}>
+                    <b>{c.operario && c.operario.nome}</b> <span className="ea-mu">· {new Date(c.criado_em).toLocaleString('pt-BR')}</span>
+                    <div className="po-ent">{c.texto}</div>
+                    <div className="ea-row" style={{ marginTop: 8 }}>
+                      <button className="ea-btn ea-btn-ok" disabled={ocupado} onClick={() => acao({ tipo: 'chamado', id: c.id, acao: 'resolver' }, 'Chamado resolvido.')}>Marcar como resolvido</button>
                     </div>
                   </div>
                 ))}
