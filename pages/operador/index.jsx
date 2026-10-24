@@ -96,6 +96,11 @@ export default function Operador() {
 
         {fase === 'pronto' && op && op.aceite_em && (
           <>
+            <div className="ea-card">
+              <h2>Oficina Digital</h2>
+              <p className="ea-mu" style={{ marginTop: 0 }}>Cartões de Tarefa, seus Pontos e benefícios.</p>
+              <Link href="/operador/oficina" className="ea-btn">Abrir a Oficina</Link>
+            </div>
             {op.pode_catalogo && (
               <div className="ea-card">
                 <h2>Cadastro de modelos</h2>
