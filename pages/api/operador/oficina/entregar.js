@@ -2,6 +2,7 @@
 import { sb, UUID, txt } from '../../../../lib/varejoServer';
 import { exigirOperador } from '../../../../lib/operadorAuth';
 import { nivelNum, historico, CAMPOS_CARTAO } from '../../../../lib/oficina';
+import { preAvaliar } from '../../../../lib/preavaliacao';
 
 export default async function handler(req, res) {
   const op = await exigirOperador(req, res);
@@ -42,6 +43,27 @@ export default async function handler(req, res) {
       }),
     });
     await historico(op.id, 'entrega_enviada', { entrega_id: e.id, cartao: cart.codigo });
+    // Aviso opcional ao dono (n8n -> WhatsApp). Se falhar, a entrega continua valendo.
+    const hook = process.env.N8N_WEBHOOK_OFICINA;
+    if (hook) {
+      try {
+        const s = preAvaliar(cart.codigo, respostas, anexos, e.observacoes);
+        await fetch(hook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN || '' },
+          body: JSON.stringify({
+            evento: 'entrega_nova',
+            operador: op.nome,
+            cartao: `${cart.codigo} · ${cart.titulo}`,
+            pontos: cart.pontos,
+            valor: cart.valor,
+            sugestao: s.nivel === 'ok' ? 'parece ok' : 'atenção: ' + s.itens.filter((i) => !i.ok).map((i) => i.t).join('; '),
+            painel: 'https://igreja.eco.br/admin/oficina',
+          }),
+          signal: AbortSignal.timeout(4000),
+        });
+      } catch (err) { console.error('aviso n8n oficina', err.message); }
+    }
     return res.status(201).json({ ok: true, id: e.id });
   } catch (e) {
     console.error('operador/oficina/entregar', e.message);
