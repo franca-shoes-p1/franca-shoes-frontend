@@ -58,6 +58,12 @@ export default async function handler(req, res) {
       return bad(res, 'Ação inválida.');
     }
 
+    if (tipo === 'chamado') {
+      if (!UUID.test(id)) return bad(res, 'Chamado inválido.');
+      if (acao !== 'resolver') return bad(res, 'Ação inválida.');
+      await sb(`op_chamados?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'resolvido' }) });
+      return res.json({ ok: true });
+    }
     if (tipo === 'candidato') {
       if (!UUID.test(id)) return bad(res, 'Candidato inválido.');
       const [k] = await sb(`op_candidatos?id=eq.${id}&select=*`);
