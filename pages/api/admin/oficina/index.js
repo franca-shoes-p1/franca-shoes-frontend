@@ -8,16 +8,16 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return res.status(405).json({ erro: 'Método não permitido.' }); }
   try {
     const [entregas, candidatos, resgates, cartoes, beneficios, empreendimentos, saldos, chamados] = await Promise.all([
-      sb('op_entregas?status=in.(entregue,ajuste,aprovada)&select=*,operario:op_operarios(nome,setor,nivel,whatsapp),cartao:op_cartoes(codigo,titulo,checklist,campos)&order=entregue_em.asc&limit=200'),
+      sb('op_entregas?status=in.(entregue,ajuste,aprovada)&select=*,operario:op_operarios(nome,setor,nivel,whatsapp),cartao:op_cartoes(codigo,titulo,checklist,campos,regras)&order=entregue_em.asc&limit=200'),
       sb('op_candidatos?status=in.(novo,chamado)&select=*&order=criado_em.desc&limit=200'),
       sb('op_resgates?status=eq.pendente&select=id,pontos,criado_em,operario:op_operarios(nome,whatsapp),beneficio:op_beneficios(nome)&order=criado_em.asc'),
-      sb('op_cartoes?select=id,codigo,titulo,valor,pontos,ativo,nivel_min&order=ordem.asc'),
+      sb('op_cartoes?select=id,codigo,titulo,valor,pontos,ativo,nivel_min,campos,regras&order=ordem.asc'),
       sb('op_beneficios?select=id,nome,custo_pontos,ativo&order=ordem.asc'),
       sb('op_empreendimentos?select=*&order=ordem.asc,criado_em.desc'),
       sb('op_saldo_pontos?select=operario_id,saldo'),
       sb('op_chamados?status=eq.aberto&select=id,criado_em,texto,operario:op_operarios(nome,whatsapp)&order=criado_em.desc&limit=200').catch(() => []),
     ]);
-    for (const e of entregas) e.sugestao = e.status === 'entregue' ? preAvaliar(e.cartao && e.cartao.codigo, e.respostas, e.anexos, e.observacoes) : null;
+    for (const e of entregas) e.sugestao = e.status === 'entregue' ? preAvaliar(e.cartao && e.cartao.codigo, e.respostas, e.anexos, e.observacoes, e.cartao && e.cartao.regras) : null;
     return res.json({ entregas, chamados, candidatos, resgates, cartoes, beneficios, empreendimentos, total_pontos: saldos.reduce((s, x) => s + x.saldo, 0) });
   } catch (e) {
     console.error('admin/oficina', e.message);

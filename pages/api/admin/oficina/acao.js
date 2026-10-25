@@ -109,6 +109,11 @@ export default async function handler(req, res) {
       if (c.valor !== undefined) { if (c.valor === '' || c.valor === null) d.valor = null; else { const n = num(c.valor); if (n === null) return bad(res, 'Valor inválido.'); d.valor = n; } }
       if (c.pontos !== undefined) { const n = parseInt(c.pontos, 10); if (!(n >= 0 && n <= 100000)) return bad(res, 'Pontos inválidos.'); d.pontos = n; }
       if (c.ativo !== undefined) d.ativo = c.ativo === true;
+      if (c.regras !== undefined) {
+        const TP = ['min_caracteres', 'contem', 'nao_contem', 'sem_colchetes', 'min_linhas', 'anexo'];
+        if (!Array.isArray(c.regras) || c.regras.length > 30) return bad(res, 'Regras inválidas.');
+        d.regras = c.regras.filter((r) => r && TP.includes(r.tipo)).map((r) => ({ tipo: r.tipo, campo: txt(r.campo, 60) || '', valor: txt(r.valor, 200) || '', minimo: parseInt(r.minimo, 10) || 0, msg: txt(r.msg, 200) || '' }));
+      }
       if (!Object.keys(d).length) return bad(res, 'Nada para alterar.');
       await sb(`op_cartoes?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(d) });
       return res.json({ ok: true });
