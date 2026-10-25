@@ -50,7 +50,7 @@ export default async function handler(req, res) {
         const s = preAvaliar(cart.codigo, respostas, anexos, e.observacoes);
         await fetch(hook, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN || '' },
+          headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN_OFICINA || process.env.N8N_WEBHOOK_TOKEN || '' },
           body: JSON.stringify({
             evento: 'entrega_nova',
             operador: op.nome,
