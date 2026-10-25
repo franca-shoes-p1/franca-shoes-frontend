@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
+import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 
 /* ------------------------------------------------------------------
@@ -158,6 +159,7 @@ export default function Home() {
 
       <main id="topo">
         <AtelieBanner />
+        <OficinaHomeBanner />
         <section className={styles.hero}>
           <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
