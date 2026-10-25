@@ -11,6 +11,7 @@ const SERVICOS = [
   'Mentoria',
   'Ainda não sei, preciso de ajuda para definir',
   'Loja de Calçados Pronta',
+  'Tarefa avulsa da Oficina',
 ];
 const SETORES = [
   'Briefing e atendimento',
