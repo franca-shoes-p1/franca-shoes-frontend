@@ -3,14 +3,14 @@
 -- O link do modelo no Canva (cartão C2) ainda está como aviso: troque quando tiver o link.
 
 update public.op_cartoes set material = $j$[
- "Página de exemplo para conferir no celular: https://igreja.eco.br/calcados",
+ "Página de exemplo para conferir no celular: https://www.igreja.eco.br/calcados",
  "Print correto mostra a tela inteira, sem cortes."
 ]$j$::jsonb where codigo = 'C1';
 
 update public.op_cartoes set material = $j$[
  "TEXTO DO DIA (legenda do Instagram): Hoje abrimos a Oficina Digital. É uma bancada online onde pessoas comuns aprendem fazendo e executam tarefas de produtos digitais com a ajuda de uma IA. Sem experiência, sem horário fixo, de casa. Se você quer conhecer, o link está na bio. [LINK]",
  "TÍTULO DA ARTE DO DIA: Estamos abrindo a Oficina Digital",
- "Valores para trocar na legenda: [LINK] = https://igreja.eco.br/oficina  |  [WHATSAPP] = https://wa.me/5516991543663",
+ "Valores para trocar na legenda: [LINK] = https://www.igreja.eco.br/oficina  |  [WHATSAPP] = https://wa.me/5516991543663",
  "AVISO OBRIGATÓRIO (cole no final da legenda): Trabalho autônomo, pago por tarefa aprovada depois que o cliente paga. Sem promessa de ganho. Projetos e benefícios são informativos.",
  "Modelo de arte no Canva: [LINK DO MODELO NO CANVA] (o dono troca pelo link real)",
  "Palavras proibidas: renda garantida, ganhe por mês, estágio, emprego, sociedade, retorno"
