@@ -6,6 +6,7 @@ const nextConfig = {
       { source: '/atelie', destination: '/atelie/index.html' },
       // Assistente "Monte a sua loja" (botão Quero a minha loja da home)
       { source: '/monte-sua-loja', destination: '/monte-sua-loja/index.html' },
+      { source: '/monte-sua-oficina', destination: '/monte-sua-oficina/index.html' },
       { source: '/monte-seu-site', destination: '/monte-seu-site/index.html' },
       { source: '/assistentes', destination: '/assistentes/index.html' },
     ];

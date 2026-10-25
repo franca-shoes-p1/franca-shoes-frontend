@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import o from '../styles/oficina.module.css';
 import OficinaBanner from '../lib/OficinaBanner';
+import OficinaMotorBanner from '../lib/OficinaMotorBanner';
 import { api } from '../lib/adminClient';
 
 /* Página pública da Oficina Digital: mesmo layout e acabamento da home (igreja.eco.br). */
@@ -13,7 +14,7 @@ const LINK_WHATS = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('
 const ACESSOS = [
   { e: '🙋', t: 'Quero ser operador', p: 'Faça o seu cadastro. A coordenação chama você no WhatsApp com o código de acesso.', b: 'Fazer cadastro', href: '#cadastro', destaque: true },
   { e: '🔑', t: 'Sou operador', p: 'Entre com o seu código para ver suas tarefas, pontos e benefícios.', b: 'Entrar como operador', href: '/operador' },
-  { e: '🤝', t: 'Sou cliente', p: 'Quer um site, agente de WhatsApp ou automação sob medida? Conheça o Ateliê.', b: 'Ver o Ateliê', href: '/atelie' },
+  { e: '🤝', t: 'Sou cliente', p: 'Precisa de uma tarefa, de um site ou de um agente de WhatsApp? Peça pelo assistente ou conheça o Ateliê.', b: 'Pedir uma tarefa', href: '/monte-sua-oficina' },
   { e: '🧭', t: 'Vitrine de projetos', p: 'Veja o que estamos construindo e onde os Pontos Oficina podem virar benefícios.', b: 'Abrir a vitrine', href: '/vitrine' },
   { e: '🛠️', t: 'Painel do dono', p: 'Área reservada para a coordenação: entregas, pagamentos, chamados e cartões.', b: 'Entrar no painel', href: '/admin/oficina', dono: true },
 ];
@@ -126,6 +127,8 @@ export default function Oficina() {
             </div>
           </div>
         </section>
+
+        <OficinaMotorBanner />
 
         <section id="como" className={`${styles.secao} ${styles.escura}`}>
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
