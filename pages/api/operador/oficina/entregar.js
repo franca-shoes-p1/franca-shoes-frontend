@@ -58,7 +58,7 @@ export default async function handler(req, res) {
             pontos: cart.pontos,
             valor: cart.valor,
             sugestao: s.nivel === 'ok' ? 'parece ok' : 'atenção: ' + s.itens.filter((i) => !i.ok).map((i) => i.t).join('; '),
-            painel: 'https://igreja.eco.br/admin/oficina',
+            painel: 'https://www.igreja.eco.br/admin/oficina',
           }),
           signal: AbortSignal.timeout(4000),
         });
