@@ -31,6 +31,7 @@ export default function AdminOficina() {
   const [rg, setRg] = useState({});
   const [ne, setNe] = useState({ nome: '', categoria: 'digital', resumo: '' });
   const [ex, setEx] = useState({});
+  const [po, setPo] = useState({});
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/oficina')); setFase('pronto'); }
@@ -87,7 +88,7 @@ export default function AdminOficina() {
             )}
             <div className="ea-mu">Pontos em circulação: <b>{d.total_pontos}</b> · Em análise: <b>{emAnalise.length}</b> · Candidatos novos: <b>{d.candidatos.filter((c) => c.status === 'novo').length}</b></div>
             <div className="po-tabs">
-              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['resgates', `Resgates (${d.resgates.length})`], ['chamados', `Chamados (${(d.chamados || []).length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
+              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['pedidos', `Pedidos (${(d.pedidos || []).length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['resgates', `Resgates (${d.resgates.length})`], ['chamados', `Chamados (${(d.chamados || []).length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
                 <button key={k} className={'po-t' + (aba === k ? ' on' : '')} onClick={() => setAba(k)}>{r}</button>
               ))}
             </div>
@@ -131,6 +132,41 @@ export default function AdminOficina() {
                     <div style={{ marginTop: 8 }}><button className="ea-btn" disabled={ocupado} onClick={() => acao({ tipo: 'entrega', id: x.id, acao: 'pagar' }, 'Marcada como paga.')}>Marcar como paga</button></div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {aba === 'pedidos' && (
+              <div style={{ marginTop: 12 }}>
+                <div className="ea-card ea-mu">Pedidos de clientes vindos do site. Depois de combinar com o cliente por WhatsApp, escolha os cartões e crie a ordem. Em seguida, em <b>Ordens e operadores</b>, escolha o operador, confirme a entrada e acompanhe.</div>
+                {(d.pedidos || []).length === 0 && <div className="ea-card ea-mu">Nenhum pedido novo.</div>}
+                {(d.pedidos || []).map((p) => {
+                  const f = po[p.id] || { cartoes: [], valor_total: '', prazo: '' };
+                  const set = (x) => setPo({ ...po, [p.id]: { ...f, ...x } });
+                  return (
+                    <div className="ea-card" key={p.id}>
+                      <b>#{p.numero} · {p.nome}</b> <span className="ea-tag">{p.status}</span>
+                      <div className="ea-mu">{p.whatsapp} · {p.servico}{p.prazo ? ` · prazo: ${p.prazo}` : ''} · {new Date(p.criado_em).toLocaleString('pt-BR')}</div>
+                      {p.descricao && <div className="po-ent">{p.descricao}</div>}
+                      <label>Cartões desta ordem</label>
+                      <div>
+                        {d.cartoes.filter((c) => c.ativo).map((c) => (
+                          <label key={c.id} style={{ display: 'block' }}>
+                            <input type="checkbox" checked={f.cartoes.includes(c.id)} onChange={(ev) => set({ cartoes: ev.target.checked ? [...f.cartoes, c.id] : f.cartoes.filter((x) => x !== c.id) })} /> {c.codigo} · {c.titulo}
+                          </label>
+                        ))}
+                      </div>
+                      <div className="po-ln" style={{ marginTop: 8 }}>
+                        <div><label>Valor do pedido R$ (o que o cliente paga)</label><input value={f.valor_total} onChange={(ev) => set({ valor_total: ev.target.value })} /></div>
+                        <div><label>Prazo</label><input type="date" value={f.prazo} onChange={(ev) => set({ prazo: ev.target.value })} /></div>
+                      </div>
+                      <div className="ea-row" style={{ marginTop: 10 }}>
+                        <a className="ea-btn ea-btn2" target="_blank" rel="noreferrer" href={`https://wa.me/55${String(p.whatsapp).replace(/\D/g, '').replace(/^55/, '')}`}>Chamar no WhatsApp</a>
+                        <button className="ea-btn" disabled={ocupado || !f.cartoes.length} onClick={() => acao({ tipo: 'pedido', id: p.id, acao: 'criar_ordem', cartoes: f.cartoes, valor_total: f.valor_total, prazo: f.prazo }, 'Ordem criada. Agora abra Ordens e operadores para escolher o operador.')}>Criar ordem com cartões</button>
+                        <button className="ea-btn ea-btn-er" disabled={ocupado} onClick={() => acao({ tipo: 'pedido', id: p.id, acao: 'cancelar' })}>Cancelar pedido</button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
 
