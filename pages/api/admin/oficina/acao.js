@@ -103,6 +103,41 @@ export default async function handler(req, res) {
       return bad(res, 'Ação inválida.');
     }
 
+    if (tipo === 'pedido') {
+      if (!UUID.test(id)) return bad(res, 'Pedido inválido.');
+      const [p] = await sb(`op_atelie_pedidos?id=eq.${id}&select=*`);
+      if (!p) return res.status(404).json({ erro: 'Pedido não encontrado.' });
+      if (acao === 'cancelar') {
+        await sb(`op_atelie_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'cancelado' }) });
+        return res.json({ ok: true });
+      }
+      if (acao === 'criar_ordem') {
+        const ids = Array.isArray(c.cartoes) ? c.cartoes.filter((x) => UUID.test(String(x))).slice(0, 12) : [];
+        if (!ids.length) return bad(res, 'Escolha pelo menos um cartão.');
+        const ja = await sb(`op_ordens?pedido_id=eq.${id}&select=id&limit=1`);
+        if (ja.length) return bad(res, 'Este pedido já virou uma ordem.');
+        const cards = await sb(`op_cartoes?id=in.(${ids.join(',')})&ativo=eq.true&select=id,codigo,titulo,posto_slug,pronto_quando,ordem&order=ordem.asc`);
+        if (!cards.length) return bad(res, 'Cartões não encontrados ou desligados.');
+        const postos = await sb('op_postos?select=slug,nome');
+        const nomePosto = Object.fromEntries(postos.map((x) => [x.slug, x.nome]));
+        const valor = c.valor_total === undefined || c.valor_total === '' ? 0 : num(c.valor_total);
+        if (valor === null) return bad(res, 'Valor inválido.');
+        const prazo = /^\d{4}-\d{2}-\d{2}$/.test(String(c.prazo || '')) ? c.prazo : null;
+        const [ordem] = await sb('op_ordens', { method: 'POST', body: JSON.stringify({ cliente: p.nome, servico: p.servico, prazo, valor_total: valor, pedido_id: p.id, nota_interna: txt(`Pedido #${p.numero} do site. WhatsApp ${p.whatsapp}.`, 500) }) });
+        const linhas = cards.map((k, i) => ({
+          ordem_id: ordem.id, posicao: i, cartao_id: k.id, prazo,
+          setor: nomePosto[k.posto_slug] || 'Oficina',
+          titulo: k.titulo,
+          instrucoes: `Pedido do cliente ${p.nome}: ${p.descricao || 'sem descrição'}\n\nGuia: abra o cartão ${k.codigo} em www.igreja.eco.br/operador/cartao/${k.id} para ver o material e o passo a passo. Entregue aqui o resultado final (texto ou link).`,
+          criterio: k.pronto_quando,
+        }));
+        await sb('op_tarefas', { method: 'POST', body: JSON.stringify(linhas) });
+        await sb(`op_atelie_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'em_producao' }) });
+        return res.json({ ok: true, numero: ordem.numero, tarefas: linhas.length });
+      }
+      return bad(res, 'Ação inválida.');
+    }
+
     if (tipo === 'cartao') {
       if (!UUID.test(id)) return bad(res, 'Cartão inválido.');
       const d = {};
