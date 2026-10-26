@@ -150,8 +150,8 @@ export default function AdminOficina() {
                       <label>Cartões desta ordem</label>
                       <div>
                         {d.cartoes.filter((c) => c.ativo).map((c) => (
-                          <label key={c.id} style={{ display: 'block' }}>
-                            <input type="checkbox" checked={f.cartoes.includes(c.id)} onChange={(ev) => set({ cartoes: ev.target.checked ? [...f.cartoes, c.id] : f.cartoes.filter((x) => x !== c.id) })} /> {c.codigo} · {c.titulo}
+                          <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '6px 0', color: 'var(--tx)' }}>
+                            <input type="checkbox" style={{ width: 20, height: 20, flex: 'none', margin: 0 }} checked={f.cartoes.includes(c.id)} onChange={(ev) => set({ cartoes: ev.target.checked ? [...f.cartoes, c.id] : f.cartoes.filter((x) => x !== c.id) })} /> {c.codigo} · {c.titulo}
                           </label>
                         ))}
                       </div>
