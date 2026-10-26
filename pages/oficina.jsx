@@ -130,6 +130,28 @@ export default function Oficina() {
 
         <OficinaMotorBanner />
 
+        <section id="manuais" className={`${styles.secao} ${styles.clara}`}>
+          <div className={styles.contido}>
+            <p className={styles.sobre}>Manuais</p>
+            <h2 className={styles.h2}>Entenda tudo, passo a passo</h2>
+            <p className={styles.sub}>Manuais ilustrados com telas desenhadas, para você conhecer a Oficina antes de participar ou de pedir.</p>
+          <div className={o.manuais}>
+            <div className={o.acesso} data-reveal="1">
+              <div className={styles.emoji}>📗</div>
+              <h3>Manual do operador</h3>
+              <p>Como entrar, fazer um cartão de tarefa, entregar e ganhar Pontos Oficina.</p>
+              <Link href="/manual-operador" className={`${styles.botao} ${styles.contornoEscuro}`}>Ler o manual</Link>
+            </div>
+            <div className={o.acesso} data-reveal="1">
+              <div className={styles.emoji}>📘</div>
+              <h3>Manual do cliente</h3>
+              <p>Como pedir uma tarefa, o que acontece depois e como o trabalho chega até você.</p>
+              <Link href="/manual-cliente" className={`${styles.botao} ${styles.contornoEscuro}`}>Ler o manual</Link>
+            </div>
+          </div>
+          </div>
+        </section>
+
         <section id="como" className={`${styles.secao} ${styles.escura}`}>
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
           <div className={styles.contido}>
