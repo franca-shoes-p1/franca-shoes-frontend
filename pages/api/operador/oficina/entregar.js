@@ -47,7 +47,8 @@ export default async function handler(req, res) {
     const hook = process.env.N8N_WEBHOOK_OFICINA;
     if (hook) {
       try {
-        const s = preAvaliar(cart.codigo, respostas, anexos, e.observacoes);
+        const [rg] = await sb(`op_cartoes?id=eq.${cart.id}&select=regras`);
+        const s = preAvaliar(cart.codigo, respostas, anexos, e.observacoes, rg && rg.regras);
         await fetch(hook, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-webhook-token': process.env.N8N_WEBHOOK_TOKEN_OFICINA || process.env.N8N_WEBHOOK_TOKEN || '' },

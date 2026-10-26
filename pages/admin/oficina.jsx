@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
+import { TIPOS_REGRA } from '../../lib/preavaliacao';
 
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const CSS = `
@@ -27,6 +28,7 @@ export default function AdminOficina() {
   const [com, setCom] = useState({});
   const [cod, setCod] = useState(null);
   const [ce, setCe] = useState({});
+  const [rg, setRg] = useState({});
   const [ne, setNe] = useState({ nome: '', categoria: 'digital', resumo: '' });
   const [ex, setEx] = useState({});
 
@@ -195,6 +197,28 @@ export default function AdminOficina() {
                         <button className="ea-btn" disabled={ocupado} onClick={() => acao({ tipo: 'cartao', id: c.id, valor: f.valor, pontos: f.pontos }, 'Cartão salvo.')}>Salvar</button>
                         <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => acao({ tipo: 'cartao', id: c.id, ativo: !c.ativo })}>{c.ativo ? 'Desligar' : 'Ligar'}</button>
                       </div>
+                      <details style={{ marginTop: 10 }}>
+                        <summary><b>Regras de conferência</b> ({(rg[c.id] || c.regras || []).length})</summary>
+                        <div className="ea-mu" style={{ margin: '6px 0' }}>Cada regra vira um ✔ ou ⚠ na sugestão que você vê ao abrir a entrega. A conferência só sugere; quem aprova é você. Sem regras, vale a conferência padrão.</div>
+                        {(rg[c.id] || c.regras || []).map((r, i) => {
+                          const lista = rg[c.id] || c.regras || [];
+                          const mud = (p) => setRg({ ...rg, [c.id]: lista.map((x, j) => (j === i ? { ...x, ...p } : x)) });
+                          return (
+                            <div className="po-ln" key={i} style={{ marginBottom: 6 }}>
+                              <select value={r.tipo} onChange={(ev) => mud({ tipo: ev.target.value })}>{TIPOS_REGRA.map(([k, t]) => <option key={k} value={k}>{t}</option>)}</select>
+                              {r.tipo !== 'anexo' && <select value={r.campo} onChange={(ev) => mud({ campo: ev.target.value })}><option value="">Campo…</option>{(c.campos || []).map((k) => <option key={k.id} value={k.id}>{k.rotulo || k.id}</option>)}</select>}
+                              {['min_caracteres', 'contem', 'nao_contem', 'min_linhas'].includes(r.tipo) && <input placeholder="Texto ou número" value={r.valor} onChange={(ev) => mud({ valor: ev.target.value })} />}
+                              {r.tipo === 'min_linhas' && <input placeholder="Mínimo de linhas" value={r.minimo} onChange={(ev) => mud({ minimo: ev.target.value })} />}
+                              <input placeholder="Mensagem (ex.: Aviso obrigatório presente)" value={r.msg} onChange={(ev) => mud({ msg: ev.target.value })} />
+                              <button className="ea-btn ea-btn2" onClick={() => setRg({ ...rg, [c.id]: lista.filter((_, j) => j !== i) })}>Tirar</button>
+                            </div>
+                          );
+                        })}
+                        <div className="po-ln">
+                          <button className="ea-btn ea-btn2" onClick={() => setRg({ ...rg, [c.id]: [...(rg[c.id] || c.regras || []), { tipo: 'contem', campo: '', valor: '', minimo: 0, msg: '' }] })}>+ Nova regra</button>
+                          <button className="ea-btn" disabled={ocupado} onClick={() => acao({ tipo: 'cartao', id: c.id, regras: rg[c.id] || c.regras || [] }, 'Regras salvas.')}>Salvar regras</button>
+                        </div>
+                      </details>
                     </div>
                   );
                 })}
