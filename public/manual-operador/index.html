@@ -1,0 +1,117 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manual do operador | Oficina Digital</title><meta name="description" content="Como entrar, fazer um Cartão de Tarefa, entregar e ganhar Pontos Oficina."><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap"><style>:root{--bg:#f4f6fa;--card:#fff;--fg:#17202e;--mu:#5a6678;--line:#dbe1ec;--acc:#1d4ed8;--acc-bg:#e6edff;--op:#0f8a55;--op-bg:#dcf5e8;--am:#b45309;--am-bg:#fff0d4;--er:#c0262d;--er-bg:#fde3e3;--mock:#eef1f7;--mockline:#cfd6e4;--disp:'Bricolage Grotesque','Trebuchet MS',sans-serif;--body:'Source Sans 3','Segoe UI',Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1622;--card:#172132;--fg:#e8edf6;--mu:#9aa8bf;--line:#27344a;--acc:#7ea2ff;--acc-bg:#1a2a55;--op:#4fd391;--op-bg:#123b2a;--am:#f3b45a;--am-bg:#3d2c10;--er:#ff8a90;--er-bg:#4a1a1d;--mock:#0f1827;--mockline:#2b3a55;color-scheme:dark}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;padding:0 max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+.w{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--disp);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,46px);font-weight:800}h2{font-size:clamp(24px,4.4vw,32px);font-weight:800;margin-bottom:6px}h3{font-size:20px;font-weight:600;margin:24px 0 8px}
+p{margin:8px 0}.mu{color:var(--mu)}
+.topo{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;font-weight:700;font-size:15px}
+.topo a{color:var(--acc);text-decoration:none}
+.hero{padding-block:20px 12px}.hero p{max-width:60ch;font-size:19px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:8px;margin-bottom:6px}
+nav .w{display:flex;gap:8px;overflow-x:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--fg);font-weight:700;font-size:14px;border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:99px}
+section{padding-block:28px 6px;scroll-margin-top:56px}
+.band{border-radius:14px;padding:14px 18px;margin:14px 0}
+.band.acc{background:var(--acc-bg)}.band.op{background:var(--op-bg)}.band.am{background:var(--am-bg)}.band.er{background:var(--er-bg)}
+.band b.t{display:block;font-family:var(--disp);font-size:18px;margin-bottom:2px}
+.band.acc b.t{color:var(--acc)}.band.op b.t{color:var(--op)}.band.am b.t{color:var(--am)}.band.er b.t{color:var(--er)}
+.step{display:grid;grid-template-columns:1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+@media(min-width:760px){.step{grid-template-columns:1fr 1fr;align-items:start}}
+.step>*{min-width:0}
+.sh{display:flex;gap:12px;align-items:flex-start}
+.n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-weight:800;color:#fff;background:var(--acc)}
+.step.op .n{background:var(--op)}
+.sh b{font-family:var(--disp);font-size:19px;display:block;line-height:1.2;margin-bottom:3px}.sh p{margin:0;font-size:16px}
+.tela{background:var(--mock);border:2px solid var(--mockline);border-radius:12px;overflow:hidden;font-size:13px;line-height:1.35}
+.bar{display:flex;gap:5px;align-items:center;padding:7px 10px;background:var(--card);border-bottom:2px solid var(--mockline)}
+.bar i{width:9px;height:9px;border-radius:50%;background:var(--mockline)}
+.bar span{margin-left:8px;font-size:11px;color:var(--mu);background:var(--mock);border-radius:99px;padding:2px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cor{padding:10px;display:grid;gap:8px}
+.bx{background:var(--card);border:1px solid var(--mockline);border-radius:8px;padding:8px 10px}
+.b{display:inline-block;font-weight:700;font-size:12px;padding:5px 11px;border-radius:7px;background:var(--acc);color:#fff;margin:2px 3px 2px 0}
+.b.ok{background:var(--op)}.b.lt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.inp{border:1px solid var(--mockline);background:var(--bg);border-radius:6px;padding:5px 8px;color:var(--mu);margin-top:3px}
+.hl{outline:3px solid var(--am);outline-offset:2px;border-radius:8px;position:relative}
+.seta{position:absolute;right:-4px;top:-13px;background:var(--am);color:#fff;font-weight:800;font-size:11px;padding:1px 7px;border-radius:99px}
+.big{font-family:var(--disp);font-weight:800;font-size:26px}
+.ok-l{color:var(--op);font-weight:700}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.flow>div{flex:1 1 130px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;min-width:0}
+.flow>div b{display:block;font-family:var(--disp)}
+.flow .ar{flex:0 0 auto;align-self:center;background:none;border:0;padding:0;color:var(--mu);font-weight:800;font-size:20px}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--disp);font-size:14px;color:var(--mu)}
+ul.c{padding-left:20px;margin:8px 0}ul.c li{margin:4px 0}
+.cta{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;margin:30px 0 10px}
+.cta a{display:inline-block;margin:6px;padding:12px 20px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--acc);color:#fff}
+.cta a.l{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.aviso{margin-top:30px;color:var(--mu);font-size:14.5px;border-top:1px solid var(--line);padding-top:14px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:700}
+</style></head><body>
+<div class="w"><div class="topo"><a href="/oficina">← Oficina Digital</a><a href="/manual-cliente">Manual do cliente →</a></div>
+<div class="hero"><h1>Manual do operador</h1>
+<p>Tudo o que você precisa saber para trabalhar na Oficina Digital: como entrar, como fazer um Cartão de Tarefa, como entregar e como funcionam os pontos.</p>
+<p class="mu" style="font-size:15px">Atualizado em 25/10/2026.</p></div></div>
+<nav><div class="w"><a href="#quem">O que é</a><a href="#entrar">Entrar</a><a href="#cartao">Fazer um cartão</a><a href="#entrega">Entregar</a><a href="#pontos">Pontos e valores</a><a href="#regras">Regras</a><a href="#duvidas">Dúvidas</a></div></nav>
+<div class="w">
+<section id="quem"><h2>1. O que é a Oficina</h2>
+<p>A Oficina Digital reúne pessoas que fazem tarefas digitais pequenas para clientes: legendas, artes para redes sociais, bases de respostas para atendimento, listas, conferências e testes. Cada tarefa vem num <b>Cartão de Tarefa</b>, que já traz o material, o passo a passo e o que conferir.</p>
+<div class="flow"><div><b>1. Cadastro</b>você se inscreve</div><div class="ar">→</div><div><b>2. Código</b>chega no WhatsApp</div><div class="ar">→</div><div><b>3. Cartão</b>você faz a tarefa</div><div class="ar">→</div><div><b>4. Conferência</b>a coordenação revisa</div><div class="ar">→</div><div><b>5. Pontos</b>aprovou, ganhou</div></div>
+<div class="band am"><b class="t">Trabalho autônomo</b>Você trabalha como autônomo, sem vínculo de emprego e sem promessa de ganho. Os Pontos Oficina são benefícios, não são dinheiro.</div></section>
+
+<section id="entrar"><h2>2. Como entrar</h2>
+<div class="step op"><div class="sh"><span class="n">1</span><div><b>Faça o cadastro</b><p>Na página da Oficina, preencha o formulário "Quero ser operador". A coordenação chama você no WhatsApp.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>www.igreja.eco.br/oficina</span></div><div class="cor"><div class="bx"><b>Quero ser operador</b><div class="inp">Seu nome</div><div class="inp">Seu WhatsApp</div><div style="margin-top:8px"><span class="b ok hl">Enviar cadastro</span></div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">2</span><div><b>Receba o código</b><p>Você recebe um código pessoal, com 10 caracteres, e o endereço <b>www.igreja.eco.br/operador</b>. O código é só seu. Não compartilhe.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>www.igreja.eco.br/operador</span></div><div class="cor"><div class="big" style="font-size:20px">Minhas tarefas</div><div class="bx"><b>Entrar</b><div class="mu">Seu código de acesso</div><div class="inp hl">XXXXX-XXXXX</div><div style="margin-top:8px"><span class="b ok">Entrar</span></div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">3</span><div><b>Aceite as regras de trabalho</b><p>Na primeira entrada, leia as regras, marque a caixa e clique em <b>Aceitar e continuar</b>. Sem isso você não consegue entregar nem pedir benefícios.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador</span></div><div class="cor"><div class="bx"><b>Antes de começar: regras de trabalho</b><div class="hl" style="margin:8px 0">☑ Li e aceito as regras</div><span class="b ok">Aceitar e continuar</span></div></div></div></div></section>
+
+<section id="cartao"><h2>3. Como fazer um Cartão de Tarefa</h2>
+<p>Em Minhas tarefas, clique em <b>Abrir a Oficina</b>. Você vê seus pontos e os cartões disponíveis para o seu nível. Cada cartão mostra o tempo, o valor (quando houver pagamento em dinheiro) e os pontos.</p>
+<div class="step op"><div class="sh"><span class="n">1</span><div><b>Escolha um cartão</b><p>Clique em <b>Abrir</b>. Comece pelo C1, que é uma tarefa de teste, curta, para você conhecer o sistema.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/oficina</span></div><div class="cor"><div class="bx"><b>Seus Pontos Oficina</b><div class="big" style="color:var(--op)">0 <span class="mu" style="font-size:12px;font-weight:400">disponíveis</span></div></div><div class="bx"><b>Cartões de Tarefa</b><div style="margin-top:6px"><b>C1 · Tarefa 0: conferir uma página no celular</b><div class="mu">10 a 15 minutos · +pontos</div><span class="b ok hl">Abrir</span></div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">2</span><div><b>Leia o cartão de cima para baixo</b><p><b>Material pronto</b>: links e textos que você vai usar. <b>Passo a passo</b>: o que fazer, na ordem. <b>Erros comuns</b>: o que costuma dar errado e como resolver.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/cartao</span></div><div class="cor"><div class="bx"><b>Material pronto</b><div class="mu">• Link da página de exemplo</div></div><div class="bx"><b>Passo a passo</b><div class="mu">1. Abra o link no celular…<br>2. Espere carregar…</div></div><div class="bx"><b>Erros comuns</b><div class="mu">Página em branco: espere 30 segundos…</div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">3</span><div><b>Travou? Pergunte à IA</b><p>No campo <b>Pergunte à IA</b>, escreva a dúvida. A IA responde com base naquele cartão. Se ela não souber, a dúvida vai para a coordenação, que responde por WhatsApp.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/cartao</span></div><div class="cor"><div class="bx hl"><b>Pergunte à IA</b><div class="inp">Não sei tirar print no celular</div><span class="b">Perguntar</span></div></div></div></div></section>
+
+<section id="entrega"><h2>4. Como entregar</h2>
+<div class="step op"><div class="sh"><span class="n">1</span><div><b>Preencha "Sua entrega"</b><p>No fim do cartão: responda o <b>checklist</b> (Sim ou Não em cada item, com sinceridade), escreva nos campos pedidos, anexe as <b>imagens ou prints</b> exigidas e use <b>Observações</b> para contar o que viu de estranho. Clique em <b>Enviar entrega</b>.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/cartao</span></div><div class="cor"><div class="bx"><b>Sua entrega</b><div style="margin-top:4px">A página abriu sem demorar &nbsp; ◉ Sim ○ Não</div><div class="mu" style="margin-top:4px">Imagens / prints (3 de 3 no mínimo)</div><div class="inp">print1.png, print2.png, print3.png</div><div style="margin-top:8px"><span class="b ok hl">Enviar entrega</span></div></div></div></div></div>
+<h3>O que acontece depois</h3>
+<div class="tw"><table><tr><th>Resultado</th><th>O que significa</th><th>O que você faz</th></tr>
+<tr><td><b style="color:var(--op)">Aprovada</b></td><td>Está certo. Os pontos entram no seu extrato.</td><td>Escolha o próximo cartão.</td></tr>
+<tr><td><b style="color:var(--am)">Ajuste pedido</b></td><td>Está quase. O cartão volta com um recado da coordenação.</td><td>Leia o recado, corrija e envie de novo.</td></tr>
+<tr><td><b style="color:var(--er)">Recusada</b></td><td>Não atendeu ao que o cartão pedia.</td><td>Fale com a coordenação e releia o cartão.</td></tr></table></div>
+<p>Antes de a coordenação olhar, o sistema faz uma conferência automática de itens objetivos, como texto faltando ou imagem sem anexar. Ela só sugere. Quem aprova é sempre uma pessoa.</p></section>
+
+<section id="pontos"><h2>5. Pontos e valores</h2>
+<div class="band op"><b class="t">Pontos Oficina</b>São benefícios: descontos em produtos digitais, prioridade em tarefas novas e mentoria. Valem 12 meses. Não são dinheiro, não se compram e não viram participação em empresa.</div>
+<div class="step op"><div class="sh"><span class="n">1</span><div><b>Acompanhe o extrato</b><p>Em <b>Seus Pontos Oficina</b> você vê quanto tem disponível. O <b>Extrato</b> lista cada cartão aprovado.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/oficina</span></div><div class="cor"><div class="bx"><b>Extrato</b><div style="display:flex;justify-content:space-between"><span>C1 aprovado</span><b class="ok-l">+pontos</b></div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">2</span><div><b>Peça um benefício</b><p>Em <b>Benefícios</b>, o botão com o custo em pontos fica ativo quando o seu saldo é suficiente. A coordenação analisa o pedido e, se aprovar, os pontos são descontados e o benefício é entregue.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/oficina</span></div><div class="cor"><div class="bx"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span><b>Prioridade em tarefas novas</b></span><span class="b ok">100 pts</span></div></div></div></div></div>
+<h3>Pagamento em dinheiro</h3>
+<p>Alguns cartões informam um valor em reais, e outros dizem "sem pagamento em dinheiro" (só pontos). Quando há valor, ele aparece no cartão antes de você começar, e o pagamento acontece depois da aprovação e depois que o cliente pagou. Cada cartão mostra a sua condição, então leia antes de aceitar.</p>
+<h3>Níveis</h3>
+<p>Há três níveis: <b>Iniciante</b>, <b>Aprovado</b> e <b>Referência</b>. Quanto maior o nível, mais cartões e mais responsabilidade. Entregas bem avaliadas ajudam a subir.</p></section>
+
+<section id="regras"><h2>6. Regras de conduta</h2>
+<ul class="c"><li>Trabalho autônomo, sem vínculo de emprego e sem promessa de ganho.</li><li>O seu código é pessoal. Nunca compartilhe.</li><li>Nunca peça nem guarde senhas de clientes.</li><li>Não prometa resultados de vendas a ninguém em nome da Oficina.</li><li>Entregue só o que você mesmo conferiu. Marque "Não" no checklist quando for o caso.</li><li>Participação em projetos é por convite da coordenação, com contrato formal. Não é consequência automática dos pontos.</li></ul></section>
+
+<section id="duvidas"><h2>7. Dúvidas frequentes</h2>
+<details><summary>Preciso pagar para ser operador?</summary><p>Não. O cadastro e o código são gratuitos.</p></details>
+<details><summary>Perdi o meu código. E agora?</summary><p>Avise a coordenação pelo WhatsApp. Ela gera um código novo, e o antigo deixa de funcionar.</p></details>
+<details><summary>Quanto tempo leva a conferência?</summary><p>Você recebe o resultado assim que a coordenação revisar. O prazo está no próprio cartão ou combinado por WhatsApp.</p></details>
+<details><summary>Posso fazer o mesmo cartão duas vezes?</summary><p>Alguns cartões são únicos. Os que podem se repetir continuam aparecendo na lista.</p></details>
+<details><summary>Tenho uma ideia de tarefa nova.</summary><p>Conte para a coordenação por WhatsApp. Novos cartões entram aos poucos.</p></details>
+<h3>Em breve</h3>
+<p class="mu">Mais cartões de tarefa, ordens de clientes direto no seu painel e novos benefícios. Quando chegarem, este manual é atualizado.</p>
+<div class="cta"><b style="font-family:var(--disp);font-size:20px">Pronto para começar?</b><br><a href="/oficina#cadastro">Quero ser operador</a><a class="l" href="/operador">Já tenho código</a></div>
+<p class="aviso">Trabalho autônomo, sem promessa de ganho. Pontos Oficina são benefícios com validade de 12 meses, não são dinheiro nem participação em empresa.</p></section>
+</div>
+</body></html>

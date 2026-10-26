@@ -30,3 +30,6 @@
 .lista li::before { content: '✓'; position: absolute; left: 0; color: var(--roxo); font-weight: 900; }
 .lista b { color: var(--tinta); }
 .isca { position: absolute; left: -9999px; width: 1px; height: 1px; }
+
+.manuais { display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .manuais { grid-template-columns: repeat(2, 1fr); } }

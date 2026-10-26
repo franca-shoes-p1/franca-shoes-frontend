@@ -1,0 +1,103 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manual do cliente | Oficina Digital</title><meta name="description" content="Como pedir uma tarefa à Oficina Digital e como o trabalho chega até você."><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap"><style>:root{--bg:#f4f6fa;--card:#fff;--fg:#17202e;--mu:#5a6678;--line:#dbe1ec;--acc:#1d4ed8;--acc-bg:#e6edff;--op:#0f8a55;--op-bg:#dcf5e8;--am:#b45309;--am-bg:#fff0d4;--er:#c0262d;--er-bg:#fde3e3;--mock:#eef1f7;--mockline:#cfd6e4;--disp:'Bricolage Grotesque','Trebuchet MS',sans-serif;--body:'Source Sans 3','Segoe UI',Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1622;--card:#172132;--fg:#e8edf6;--mu:#9aa8bf;--line:#27344a;--acc:#7ea2ff;--acc-bg:#1a2a55;--op:#4fd391;--op-bg:#123b2a;--am:#f3b45a;--am-bg:#3d2c10;--er:#ff8a90;--er-bg:#4a1a1d;--mock:#0f1827;--mockline:#2b3a55;color-scheme:dark}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;padding:0 max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+.w{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--disp);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,46px);font-weight:800}h2{font-size:clamp(24px,4.4vw,32px);font-weight:800;margin-bottom:6px}h3{font-size:20px;font-weight:600;margin:24px 0 8px}
+p{margin:8px 0}.mu{color:var(--mu)}
+.topo{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;font-weight:700;font-size:15px}
+.topo a{color:var(--acc);text-decoration:none}
+.hero{padding-block:20px 12px}.hero p{max-width:60ch;font-size:19px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:8px;margin-bottom:6px}
+nav .w{display:flex;gap:8px;overflow-x:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--fg);font-weight:700;font-size:14px;border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:99px}
+section{padding-block:28px 6px;scroll-margin-top:56px}
+.band{border-radius:14px;padding:14px 18px;margin:14px 0}
+.band.acc{background:var(--acc-bg)}.band.op{background:var(--op-bg)}.band.am{background:var(--am-bg)}.band.er{background:var(--er-bg)}
+.band b.t{display:block;font-family:var(--disp);font-size:18px;margin-bottom:2px}
+.band.acc b.t{color:var(--acc)}.band.op b.t{color:var(--op)}.band.am b.t{color:var(--am)}.band.er b.t{color:var(--er)}
+.step{display:grid;grid-template-columns:1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+@media(min-width:760px){.step{grid-template-columns:1fr 1fr;align-items:start}}
+.step>*{min-width:0}
+.sh{display:flex;gap:12px;align-items:flex-start}
+.n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-weight:800;color:#fff;background:var(--acc)}
+.step.op .n{background:var(--op)}
+.sh b{font-family:var(--disp);font-size:19px;display:block;line-height:1.2;margin-bottom:3px}.sh p{margin:0;font-size:16px}
+.tela{background:var(--mock);border:2px solid var(--mockline);border-radius:12px;overflow:hidden;font-size:13px;line-height:1.35}
+.bar{display:flex;gap:5px;align-items:center;padding:7px 10px;background:var(--card);border-bottom:2px solid var(--mockline)}
+.bar i{width:9px;height:9px;border-radius:50%;background:var(--mockline)}
+.bar span{margin-left:8px;font-size:11px;color:var(--mu);background:var(--mock);border-radius:99px;padding:2px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cor{padding:10px;display:grid;gap:8px}
+.bx{background:var(--card);border:1px solid var(--mockline);border-radius:8px;padding:8px 10px}
+.b{display:inline-block;font-weight:700;font-size:12px;padding:5px 11px;border-radius:7px;background:var(--acc);color:#fff;margin:2px 3px 2px 0}
+.b.ok{background:var(--op)}.b.lt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.inp{border:1px solid var(--mockline);background:var(--bg);border-radius:6px;padding:5px 8px;color:var(--mu);margin-top:3px}
+.hl{outline:3px solid var(--am);outline-offset:2px;border-radius:8px;position:relative}
+.seta{position:absolute;right:-4px;top:-13px;background:var(--am);color:#fff;font-weight:800;font-size:11px;padding:1px 7px;border-radius:99px}
+.big{font-family:var(--disp);font-weight:800;font-size:26px}
+.ok-l{color:var(--op);font-weight:700}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.flow>div{flex:1 1 130px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;min-width:0}
+.flow>div b{display:block;font-family:var(--disp)}
+.flow .ar{flex:0 0 auto;align-self:center;background:none;border:0;padding:0;color:var(--mu);font-weight:800;font-size:20px}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--disp);font-size:14px;color:var(--mu)}
+ul.c{padding-left:20px;margin:8px 0}ul.c li{margin:4px 0}
+.cta{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;margin:30px 0 10px}
+.cta a{display:inline-block;margin:6px;padding:12px 20px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--acc);color:#fff}
+.cta a.l{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.aviso{margin-top:30px;color:var(--mu);font-size:14.5px;border-top:1px solid var(--line);padding-top:14px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:700}
+</style></head><body>
+<div class="w"><div class="topo"><a href="/oficina">← Oficina Digital</a><a href="/manual-operador">Manual do operador →</a></div>
+<div class="hero"><h1>Manual do cliente</h1>
+<p>Como pedir uma tarefa à Oficina Digital, o que acontece depois do pedido e como você recebe o trabalho pronto.</p>
+<p class="mu" style="font-size:15px">Atualizado em 25/10/2026.</p></div></div>
+<nav><div class="w"><a href="#oque">O que fazemos</a><a href="#pedir">Como pedir</a><a href="#depois">Depois do pedido</a><a href="#qualidade">Qualidade</a><a href="#duvidas">Dúvidas</a></div></nav>
+<div class="w">
+<section id="oque"><h2>1. O que a Oficina faz por você</h2>
+<p>A Oficina Digital faz tarefas digitais pequenas e bem definidas, por pessoas treinadas e conferidas por uma coordenação. Você pede, e o trabalho chega pronto para usar.</p>
+<div class="tw"><table><tr><th>Tarefa</th><th>O que você recebe</th></tr>
+<tr><td><b>Texto ou legenda</b></td><td>Legenda para o seu post, pronta em cerca de 1 dia.</td></tr>
+<tr><td><b>Arte para redes sociais</b></td><td>Post quadrado, feito no Canva.</td></tr>
+<tr><td><b>Base de respostas de atendimento</b></td><td>Perguntas e respostas organizadas para usar no WhatsApp.</td></tr>
+<tr><td><b>Pesquisa e lista</b></td><td>Lista organizada, com as fontes.</td></tr>
+<tr><td><b>Conferência e testes</b></td><td>Checklist de testes antes de você entregar algo a alguém.</td></tr>
+<tr><td><b>Outra tarefa</b></td><td>Tarefa sob medida. Combinamos juntos.</td></tr></table></div>
+<p class="mu">Para sites, lojas e agentes de WhatsApp completos, conheça também o <a href="/atelie" style="color:var(--acc)">Ateliê</a>.</p></section>
+
+<section id="pedir"><h2>2. Como pedir, em 4 passos</h2>
+<p>Abra <b>www.igreja.eco.br/monte-sua-oficina</b>. O cartão de tarefa muda na hora conforme você escolhe, para você ver o pedido ganhando forma.</p>
+<div class="step"><div class="sh"><span class="n">1</span><div><b>O que você precisa?</b><p>Marque quantos tipos quiser: texto, arte, base de respostas, pesquisa, conferência ou outra tarefa.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>www.igreja.eco.br/monte-sua-oficina</span></div><div class="cor"><div class="bx"><b>O que você precisa?</b><div style="margin-top:6px"><span class="b hl">Texto ou legenda</span><span class="b lt">Arte para redes sociais</span><span class="b lt">Pesquisa e lista</span></div></div></div></div></div>
+<div class="step"><div class="sh"><span class="n">2</span><div><b>Conte um pouco mais</b><p>Dê um nome à tarefa e escolha o tamanho: uma tarefa pequena, um pacote de 3 a 5, trabalho toda semana, ou "ainda não sei".</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>monte-sua-oficina</span></div><div class="cor"><div class="bx"><div class="mu">Nome da tarefa</div><div class="inp">Posts da semana da minha loja</div><div class="mu" style="margin-top:4px">Tamanho do pedido</div><div class="inp">Um pacote de 3 a 5 tarefas</div></div></div></div></div>
+<div class="step"><div class="sh"><span class="n">3</span><div><b>Para quando e com que cuidado?</b><p>Prazo: <b>Sem pressa</b>, <b>Esta semana</b> ou <b>Urgente</b>. Conferência: padrão (checklist e revisão), ou "quero aprovar antes de usar".</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>monte-sua-oficina</span></div><div class="cor"><div class="bx"><span class="b lt">Sem pressa</span><span class="b hl">Esta semana</span><span class="b lt">Urgente</span></div></div></div></div>
+<div class="step"><div class="sh"><span class="n">4</span><div><b>Envie o pedido</b><p>Informe seu nome e WhatsApp e envie. O pedido chega à coordenação e abre uma conversa no seu WhatsApp, sem compromisso.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>monte-sua-oficina</span></div><div class="cor"><div class="bx"><div class="inp">Seu nome</div><div class="inp">Seu WhatsApp</div><div style="margin-top:8px"><span class="b ok hl">Enviar pedido</span></div></div></div></div></div></section>
+
+<section id="depois"><h2>3. O que acontece depois</h2>
+<div class="flow"><div><b>Pedido</b>você envia</div><div class="ar">→</div><div><b>Conversa</b>respondemos no WhatsApp</div><div class="ar">→</div><div><b>Combinado</b>escopo, prazo e valor</div><div class="ar">→</div><div><b>Produção</b>um operador faz</div><div class="ar">→</div><div><b>Conferência</b>a coordenação revisa</div><div class="ar">→</div><div><b>Entrega</b>você recebe</div></div>
+<ul class="c"><li><b>Conversa:</b> respondemos no WhatsApp para entender o que você precisa e tirar dúvidas.</li><li><b>Combinado:</b> o que será feito, o prazo e o valor ficam combinados antes de começar. Nada começa sem o seu de acordo.</li><li><b>Produção:</b> uma pessoa treinada da Oficina executa a tarefa seguindo um cartão com passo a passo e checklist.</li><li><b>Conferência:</b> antes de chegar a você, o trabalho passa por checklist, por uma conferência automática e pela aprovação de uma pessoa da coordenação.</li><li><b>Entrega:</b> você recebe o resultado pelo WhatsApp e pode pedir ajustes.</li></ul>
+<div class="band acc"><b class="t">Valores</b>Os valores são combinados na conversa, de acordo com o tamanho do pedido. Você sabe quanto vai pagar antes de a tarefa começar.</div></section>
+
+<section id="qualidade"><h2>4. Como cuidamos da qualidade</h2>
+<ul class="c"><li>Cada tarefa segue um cartão com passo a passo e itens a conferir.</li><li>A conferência automática checa itens objetivos, como texto faltando ou imagem sem anexar. Ela só sugere.</li><li>A aprovação final é sempre de uma pessoa. A IA nunca aprova sozinha.</li><li>Se o resultado não ficou como combinado, você pede ajuste.</li></ul>
+<div class="band am"><b class="t">O que não prometemos</b>A Oficina entrega o trabalho combinado. Não prometemos resultado de vendas, de seguidores ou de ganho. O trabalho é feito por autônomos, sem vínculo de emprego.</div>
+<div class="band er"><b class="t">Cuidado com seus dados</b>Não envie senhas, números de cartão ou documentos pelo formulário. Se a tarefa exigir algum acesso, combinamos a forma segura pelo WhatsApp.</div></section>
+
+<section id="duvidas"><h2>5. Dúvidas frequentes</h2>
+<details><summary>Pedir tem custo?</summary><p>Enviar o pedido é gratuito e sem compromisso. O valor da tarefa é combinado antes de começar.</p></details>
+<details><summary>Quanto tempo leva?</summary><p>Depende da tarefa. Uma legenda costuma ficar pronta em cerca de 1 dia. O prazo é combinado na conversa.</p></details>
+<details><summary>Posso pedir mais de uma tarefa?</summary><p>Pode. No passo 2 escolha "Um pacote de 3 a 5 tarefas" ou "Trabalho contínuo, toda semana".</p></details>
+<details><summary>Quero um site ou um agente de WhatsApp.</summary><p>Esses serviços maiores estão no <a href="/atelie" style="color:var(--acc)">Ateliê</a>. A Oficina cuida das tarefas menores.</p></details>
+<details><summary>Quem faz o meu trabalho?</summary><p>Operadores cadastrados, treinados com cartões de tarefa e conferidos pela coordenação.</p></details>
+<h3>Em breve</h3>
+<p class="mu">Acompanhar o andamento do pedido direto no site e pagar online. Quando estiver pronto, este manual é atualizado.</p>
+<div class="cta"><b style="font-family:var(--disp);font-size:20px">Tem uma tarefa para entregar?</b><br><a href="/monte-sua-oficina">Pedir uma tarefa</a><a class="l" href="/oficina">Conhecer a Oficina</a></div>
+<p class="aviso">Trabalho feito por autônomos, sem promessa de resultado ou de ganho.</p></section>
+</div>
+</body></html>
