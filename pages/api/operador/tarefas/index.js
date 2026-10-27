@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     const tarefas = brutas
       .filter((t) => t.ordem && t.ordem.entrada_confirmada)
       .map((t) => ({ ...t, ordem: { numero: t.ordem.numero, cliente: t.ordem.cliente, servico: t.ordem.servico } }));
-    return res.json({ operador: { nome: op.nome, setor: op.setor, nivel: op.nivel, aceite_em: op.aceite_em, pode_catalogo: !!op.pode_catalogo }, tarefas });
+    return res.json({ operador: { nome: op.nome, setor: op.setor, nivel: op.nivel, aceite_em: op.aceite_em, pode_catalogo: !!op.pode_catalogo, pode_postagens: !!op.pode_postagens }, tarefas });
   } catch (e) {
     console.error('operador/tarefas', e.message);
     return res.status(500).json({ erro: 'Não foi possível carregar.' });
