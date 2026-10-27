@@ -27,6 +27,7 @@ export default function Fidelidade() {
         <div className={s.topoDentro}>
           <Link href="/">← Igreja Eco</Link>
           <div className={s.topoLinks}>
+            <Link href="/catalogo">Catálogo</Link>
             <Link href="/campanha">Campanha de Inauguração</Link>
             <Link href="/afiliados">Afiliados</Link>
             <Link href="/oficina">Oficina</Link>
@@ -100,6 +101,7 @@ export default function Fidelidade() {
 
         <div className={s.cta}>
           <Link href="/oficina#cadastro">Começar a juntar pontos</Link>
+          <Link className={s.sec} href="/catalogo">Ver o catálogo completo</Link>
           <Link className={s.sec} href="/afiliados">Ser afiliado</Link>
           <a className={s.sec} href={WHATS} target="_blank" rel="noopener noreferrer">Tirar dúvida no WhatsApp</a>
         </div>
