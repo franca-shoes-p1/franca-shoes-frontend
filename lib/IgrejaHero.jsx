@@ -18,9 +18,9 @@ export default function IgrejaHero() {
     <section className={s.banner} aria-label="Igreja Eco">
       <div className={s.dentro}>
         <header className={s.cabeca}>
-          <span className={s.pilula}><i />Igreja Eco</span>
-          <h2 className={s.titulo}>Conhecimento, tecnologia e <em>comércio em um só lugar</em></h2>
-          <p className={s.texto}>Sites e automações sob medida, trabalho pelo celular na Oficina, calçados direto de Franca e um Clube que premia quem participa.</p>
+          <span className={s.pilula}><i />Igreja Evangelho dos Pobres dos Alimentos Sagrados</span>
+          <h2 className={s.titulo}>Canal YouTube <em>Portal da Comunidade Cristã da Bíblia Sagrada</em></h2>
+          <p className={s.texto}>para Congregação da Palavra de Deus e Salvação de Jesus Cristo pela Fé no Espírito Santo</p>
         </header>
 
         <div className={s.grade}>
