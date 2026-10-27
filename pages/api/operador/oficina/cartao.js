@@ -10,7 +10,13 @@ export default async function handler(req, res) {
   if (!UUID.test(id)) return res.status(400).json({ erro: 'Cartão inválido.' });
   try {
     const [c] = await sb(`op_cartoes?id=eq.${id}&ativo=eq.true&select=${CAMPOS_CARTAO}`);
-    if (!c || c.nivel_min > nivelNum(op.nivel)) return res.status(404).json({ erro: 'Cartão não encontrado.' });
+    // Quem recebeu uma tarefa ligada a este cartão pode abrir o guia, mesmo sem o nível.
+    let atribuido = false;
+    if (c && c.nivel_min > nivelNum(op.nivel)) {
+      const t = await sb(`op_tarefas?operario_id=eq.${op.id}&cartao_id=eq.${id}&status=neq.cancelada&select=id&limit=1`);
+      atribuido = t.length > 0;
+    }
+    if (!c || (c.nivel_min > nivelNum(op.nivel) && !atribuido)) return res.status(404).json({ erro: 'Cartão não encontrado.' });
     const minhas = await sb(`op_entregas?operario_id=eq.${op.id}&cartao_id=eq.${id}&select=id,status,entregue_em,comentario_revisao,respostas,observacoes,checklist,anexos&order=criado_em.desc&limit=10`);
     return res.json({ cartao: c, minhas, aceite_em: op.aceite_em });
   } catch (e) {
