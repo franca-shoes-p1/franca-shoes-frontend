@@ -193,3 +193,29 @@
 .botaoPortal:hover { transform: translateY(-3px); box-shadow: 0 18px 44px rgba(18, 160, 255, 0.55); }
 .botaoPortal:focus-visible { outline: 3px solid var(--ciano); outline-offset: 4px; }
 .rodapeFim { text-align: center; }
+
+
+/* menu do topo com os três projetos */
+.topoMenu { display: none; gap: 8px; align-items: center; }
+.pagina .projeto { display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; color: #fff; transition: background 0.2s; }
+.pagina .projeto:hover { background: rgba(255, 255, 255, 0.12); }
+.projIcone { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; background: linear-gradient(135deg, #12c6e8, #1e6bff); }
+.projeto:nth-child(2) .projIcone { background: linear-gradient(135deg, #2fd69a, #12a98f); }
+.projeto:nth-child(3) .projIcone { background: linear-gradient(135deg, #ffb347, #ff7a45); }
+.projTexto { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.projTexto b { font-size: 0.92rem; }
+.projTexto small { font-size: 0.72rem; color: #b7cdf5; max-width: 190px; }
+.pagina .projCampanha { background: #ffd400; color: #064a24; font-weight: 800; padding: 9px 16px; border-radius: 999px; font-size: 0.9rem; white-space: nowrap; }
+.topoMenuAberto { display: flex; flex-direction: column; align-items: stretch; gap: 4px; position: absolute; top: 64px; left: 0; right: 0; background: var(--noite); padding: 12px 20px 18px; }
+.topoMenuAberto .projTexto small { max-width: none; }
+.topoMenuAberto .projCampanha { text-align: center; margin-top: 6px; }
+@media (min-width: 1000px) { .topoMenu { display: flex; } .topoMenuAberto { display: flex; flex-direction: row; position: static; background: none; padding: 0; } .barra .botaoMenu { display: none; } }
+@media (min-width: 860px) and (max-width: 999px) { .barra .botaoMenu { display: flex; } }
+
+/* menu da Loja de Calçados, logo abaixo da vitrine dela */
+.subMenu { background: #fff; border-bottom: 1px solid var(--borda); position: sticky; top: 64px; z-index: 40; }
+.subGrade { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 4px; padding-top: 10px; padding-bottom: 10px; }
+.subTitulo { font-weight: 800; color: var(--noite2); margin-right: 8px; font-size: 0.95rem; }
+.pagina .subMenu a { padding: 7px 14px; border-radius: 999px; font-size: 0.92rem; font-weight: 600; color: var(--tinta); transition: background 0.2s; }
+.pagina .subMenu a:hover { background: var(--lilas); }
+.pagina .subMenu a.subCta { margin-left: auto; background: var(--grad); color: #fff; font-weight: 800; }

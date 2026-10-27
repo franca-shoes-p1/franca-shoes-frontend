@@ -5,6 +5,7 @@ import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
+import CampanhaBanner from '../lib/CampanhaBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -43,6 +44,13 @@ function embedVideo(url) {
 const LINK_WHATS = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
   'Olá! Vi o site e quero saber como funciona a Loja de Calçados Pronta.'
 )}`;
+
+// Os três projetos ativos, mostrados no menu do topo.
+const PROJETOS = [
+  { e: '🧩', t: 'Ateliê Sob Medida', d: 'Sites, agentes de WhatsApp e automações montados para você', href: '/atelie' },
+  { e: '🛠️', t: 'Oficina Digital', d: 'Tarefas curtas pelo celular, com Pontos Oficina', href: '/oficina' },
+  { e: '👟', t: 'Loja de Calçados Pronta', d: 'Sua loja online de calçados, entregue funcionando', href: '#calcados' },
+];
 
 const PARA_QUEM = [
   { e: '🌱', t: 'Quem quer começar', p: 'Nunca vendeu calçado e quer um negócio online pronto, sem aprender programação.' },
@@ -146,21 +154,23 @@ export default function Home() {
           <button className={styles.botaoMenu} aria-label="Abrir menu" aria-expanded={menu} onClick={() => setMenu(!menu)}>
             <span /><span /><span />
           </button>
-          <nav className={`${styles.menu} ${menu ? styles.menuAberto : ''}`}>
-            <a href="#recebe" onClick={fechar}>O que você recebe</a>
-            <a href="#como" onClick={fechar}>Como funciona</a>
-            <a href="#niveis" onClick={fechar}>Níveis</a>
-            <a href="#duvidas" onClick={fechar}>Dúvidas</a>
-            <Link href="/calcados" onClick={fechar}>Loja de exemplo</Link>
-            <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          <nav className={`${styles.topoMenu} ${menu ? styles.topoMenuAberto : ''}`} aria-label="Projetos">
+            {PROJETOS.map((p) => (
+              <Link key={p.t} href={p.href} className={styles.projeto} onClick={fechar}>
+                <span className={styles.projIcone} aria-hidden="true">{p.e}</span>
+                <span className={styles.projTexto}><b>{p.t}</b><small>{p.d}</small></span>
+              </Link>
+            ))}
+            <a href="#campanha" className={styles.projCampanha} onClick={fechar}>🎁 Campanha</a>
           </nav>
         </div>
       </header>
 
       <main id="topo">
+        <CampanhaBanner />
         <AtelieBanner />
         <OficinaHomeBanner />
-        <section className={styles.hero}>
+        <section id="calcados" className={styles.hero}>
           <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m3}`} aria-hidden="true" />
@@ -201,6 +211,18 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <nav className={styles.subMenu} aria-label="Loja de Calçados Pronta">
+          <div className={styles.contido + ' ' + styles.subGrade}>
+            <span className={styles.subTitulo}>Loja de Calçados Pronta</span>
+            <a href="#recebe">O que você recebe</a>
+            <a href="#como">Como funciona</a>
+            <a href="#niveis">Níveis</a>
+            <a href="#duvidas">Dúvidas</a>
+            <Link href="/calcados">Loja de exemplo</Link>
+            <a href={LINK_WHATS} className={styles.subCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+          </div>
+        </nav>
 
         <div className={styles.faixa}>
           <div className={styles.contido + ' ' + styles.faixaGrade}>
