@@ -3,6 +3,15 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 
+// Deixa endereços do site clicáveis dentro do texto.
+function comLinks(t) {
+  return String(t).split(/((?:https?:\/\/)?www\.igreja\.eco\.br\/[^\s)]*)/g).map((p, i) => {
+    if (i % 2 === 0) return p;
+    const href = /^https?:/.test(p) ? p : 'https://' + p;
+    return <a key={i} href={href} target="_blank" rel="noopener noreferrer">{p}</a>;
+  });
+}
+
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const STATUS = {
   pendente: ['A fazer', ''],
@@ -121,7 +130,7 @@ export default function Operador() {
                     <span className={`ea-tag ${cor}`}>{rot}</span>
                   </div>
                   <p style={{ marginBottom: 6 }}><b>{brl(t.valor)}</b>{t.prazo ? ` · prazo ${t.prazo.split('-').reverse().join('/')}` : ''}</p>
-                  {t.instrucoes && <div className="po-ent"><b>Como fazer:</b>{'\n'}{t.instrucoes}</div>}
+                  {t.instrucoes && <div className="po-ent"><b>Como fazer:</b>{'\n'}{comLinks(t.instrucoes)}</div>}
                   {t.criterio && <div className="po-ent"><b>Será aprovada se:</b>{'\n'}{t.criterio}</div>}
                   {t.status === 'ajuste' && t.comentario_revisao && <div className="po-ent" style={{ borderColor: 'var(--er)' }}><b>Ajuste pedido:</b> {t.comentario_revisao}</div>}
                   {t.entrega_texto && t.status !== 'em_andamento' && <div className="po-ent"><b>Sua entrega:</b>{'\n'}{t.entrega_texto}</div>}
