@@ -172,9 +172,9 @@ export default function Home() {
       </header>
 
       <main id="topo">
-        <IgrejaHero />
         <FestaBanner />
         <CampanhaBanner />
+        <IgrejaHero />
         <AtelieBanner />
         <OficinaHomeBanner />
         <AfiliadosBanner />
