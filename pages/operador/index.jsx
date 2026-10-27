@@ -110,6 +110,13 @@ export default function Operador() {
               <p className="ea-mu" style={{ marginTop: 0 }}>Cartões de Tarefa, seus Pontos e benefícios.</p>
               <Link href="/operador/oficina" className="ea-btn">Abrir a Oficina</Link>
             </div>
+            {op.pode_postagens && (
+              <div className="ea-card">
+                <h2>Postagens do dia</h2>
+                <p className="ea-mu" style={{ marginTop: 0 }}>A divulgação do dia já chega pronta (texto e arte). Você só publica no horário e marca como feita.</p>
+                <Link href="/operador/postagens" className="ea-btn">Abrir a fila de postagens</Link>
+              </div>
+            )}
             {op.pode_catalogo && (
               <div className="ea-card">
                 <h2>Cadastro de modelos</h2>

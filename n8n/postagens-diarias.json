@@ -1,0 +1,207 @@
+{
+  "name": "Painel de Postagens - gerar divulgação do dia com IA e enviar ao painel",
+  "nodes": [
+    {
+      "id": "p1",
+      "name": "Toda noite às 21h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 21 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "p2",
+      "name": "Testar agora (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "p3",
+      "name": "Preparar pedido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        100
+      ],
+      "parameters": {
+        "jsCode": "// ===== CONFIGURAÇÃO (pode editar com calma) =====\nconst DIAS_A_FRENTE = 1;                 // 1 = gera as postagens de AMANHÃ (o fluxo roda à noite)\nconst HORARIOS = { telegram: 8, facebook: 10, instagram: 12, email: 17 }; // hora de Brasília em que cada uma deve sair\nconst EMAIL_DIAS = [2, 5];               // dias com e-mail marketing: 0=dom 1=seg 2=ter 3=qua 4=qui 5=sex 6=sáb\nconst SITE = 'https://www.igreja.eco.br';\n\n// Um tema por dia da semana. \"gancho\" é o texto de reserva usado se a IA estiver fora do ar.\nconst TEMAS = {\n  1: { nome: 'Oficina Digital', caminho: '/oficina', cor: 'azul',\n       foco: 'convite para pessoas que querem trabalhar como operadores digitais, por tarefa, com treinamento dentro da própria tarefa. Nunca prometa renda.',\n       gancho: 'Quer aprender fazendo? Na Oficina Digital você executa tarefas reais, com a IA ensinando enquanto trabalha, e acumula Pontos Oficina.',\n       arte: 'Aprenda fazendo na Oficina Digital', apoio: 'Tarefas reais, treinamento embutido' },\n  2: { nome: 'Ateliê Sob Medida', caminho: '/atelie', cor: 'azul',\n       foco: 'serviços digitais para comércios: site ou página de vendas, agente de WhatsApp com IA e automação de processos. Fale de problemas reais do pequeno comerciante.',\n       gancho: 'Seu comércio perde vendas por demorar a responder no WhatsApp? No Ateliê Sob Medida montamos site, atendimento com IA e automações sob medida.',\n       arte: 'Seu comércio atendendo 24 horas', apoio: 'Site, WhatsApp com IA e automação sob medida' },\n  3: { nome: 'Calçados de fábrica de Franca', caminho: '/calcados', cor: 'terra',\n       foco: 'calçados e acessórios direto de fábrica de Franca-SP. Não invente preços, prazos, frete nem descontos; convide a conhecer o catálogo.',\n       gancho: 'Calçado de fábrica de Franca, a capital do calçado, com catálogo online. Conheça os modelos e escolha o seu.',\n       arte: 'Calçado de fábrica, direto de Franca', apoio: 'Conheça o catálogo online' },\n  4: { nome: 'Alimentos da floresta e agroecologia', caminho: '/', cor: 'verde',\n       foco: 'agroecologia e alimentos naturais da Amazônia, com conteúdo educativo e respeitoso. Não faça nenhuma promessa de saúde, cura ou emagrecimento.',\n       gancho: 'Agroecologia é cuidar da terra produzindo alimento de verdade. Acompanhe a nossa caminhada e conheça os projetos do site.',\n       arte: 'Agroecologia: cuidar da terra, produzir alimento', apoio: 'Acompanhe a nossa caminhada' },\n  5: { nome: 'Pontos, Fidelidade e Afiliados', caminho: '/campanha', cor: 'noite',\n       foco: 'Campanha de Inauguração, Clube de Fidelidade e Programa de Afiliados (pontos por venda paga; sem pagar por cadastrar outros afiliados). Seja claro: pontos não são dinheiro e não há garantia de ganho.',\n       gancho: 'Na Campanha de Inauguração do igreja.eco.br você acumula pontos e troca por produtos e projetos. Veja as regras e participe.',\n       arte: 'Acumule pontos e troque por projetos', apoio: 'Campanha de Inauguração do igreja.eco.br' },\n  6: { nome: 'Cursos e e-books', caminho: '/ebooks', cor: 'verde',\n       foco: 'cursos e e-books práticos \"como fazer\", incluindo ovinocultura. Destaque o aprendizado prático e acessível; não prometa resultado financeiro.',\n       gancho: 'Aprender o passo a passo muda tudo. Conheça os e-books e cursos práticos do igreja.eco.br.',\n       arte: 'Aprenda o passo a passo', apoio: 'E-books e cursos práticos' },\n  0: { nome: 'Comunidade Igreja Eco', caminho: '/', cor: 'noite',\n       foco: 'mensagem de encorajamento e comunidade, de tom acolhedor e simples, convidando a conhecer o portal. Sem pregar política e sem prometer milagres ou ganhos.',\n       gancho: 'Domingo é dia de parar, agradecer e renovar as forças. Seja bem-vindo à nossa comunidade em igreja.eco.br.',\n       arte: 'Um domingo de gratidão e esperança', apoio: 'Bem-vindo à nossa comunidade' },\n};\n\n// ===== Data de Brasília (UTC-3, sem horário de verão) =====\nconst brasilia = new Date(Date.now() - 3 * 3600 * 1000 + DIAS_A_FRENTE * 24 * 3600 * 1000);\nconst dia = brasilia.getUTCDay();\nconst p2 = (n) => String(n).padStart(2, '0');\nconst dataISO = `${brasilia.getUTCFullYear()}-${p2(brasilia.getUTCMonth() + 1)}-${p2(brasilia.getUTCDate())}`;\nconst tema = TEMAS[dia];\nconst link = SITE + tema.caminho;\nconst comEmail = EMAIL_DIAS.includes(dia);\n\nconst prompt = `Você escreve a divulgação diária do site igreja.eco.br (portal em português do Brasil com Oficina Digital, Ateliê Sob Medida, calçados de fábrica de Franca, alimentos da floresta e cursos).\n\nTEMA DE HOJE: ${tema.nome}\nFOCO: ${tema.foco}\nLINK PRINCIPAL: ${link}\n\nREGRAS OBRIGATÓRIAS:\n- Português do Brasil, tom simples, caloroso e direto, como falaria uma pessoa de verdade.\n- NUNCA prometa renda, lucro, cura, emagrecimento ou resultado garantido.\n- NUNCA invente preço, prazo, desconto, estoque, depoimento ou número de clientes.\n- Cada texto deve terminar com um convite claro para ver o link principal.\n- Facebook: 400 a 700 caracteres. Instagram: 250 a 500 caracteres, com 3 a 6 emojis. Telegram: 250 a 450 caracteres.\n- \"arte_titulo\": frase curta e forte (no máximo 60 caracteres). \"arte_subtitulo\": no máximo 110 caracteres.\n- Hashtags: de 4 a 8, em português, separadas por espaço, cada uma começando com #.\n${comEmail ? '- E-mail: assunto de até 70 caracteres e corpo de 600 a 1000 caracteres, com saudação \"Olá!\" e despedida \"Equipe Igreja Eco\".' : '- Hoje NÃO haverá e-mail: omita o campo \"email\".'}\n\nResponda SOMENTE com um JSON válido neste formato, sem comentários:\n{\"facebook\":{\"texto\":\"\",\"hashtags\":\"\",\"arte_titulo\":\"\",\"arte_subtitulo\":\"\"},\"instagram\":{\"texto\":\"\",\"hashtags\":\"\",\"arte_titulo\":\"\",\"arte_subtitulo\":\"\"},\"telegram\":{\"texto\":\"\"}${comEmail ? ',\"email\":{\"assunto\":\"\",\"texto\":\"\"}' : ''}}`;\n\nconst corpo = {\n  contents: [{ role: 'user', parts: [{ text: prompt }] }],\n  generationConfig: { temperature: 0.9, responseMimeType: 'application/json' },\n};\n\nreturn [{ json: { dataISO, dia, tema, link, comEmail, horarios: HORARIOS, corpo } }];\n"
+      }
+    },
+    {
+      "id": "p4",
+      "name": "Gemini escreve os textos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        100
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.corpo) }}",
+        "options": {
+          "timeout": 90000
+        }
+      }
+    },
+    {
+      "id": "p5",
+      "name": "Montar postagens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        100
+      ],
+      "parameters": {
+        "jsCode": "// Junta a resposta da IA com os horários e monta o lote para o painel.\n// Se a IA falhar ou responder fora do formato, usa o texto de reserva do tema: o operador nunca fica sem postagens.\nconst cfg = $('Preparar pedido').first().json;\nconst resp = $input.first().json || {};\nconst { dataISO, tema, link, comEmail, horarios } = cfg;\n\nlet ia = null;\ntry {\n  const bruto = resp.candidates[0].content.parts[0].text;\n  ia = JSON.parse(String(bruto).replace(/^\\s*```(?:json)?/i, '').replace(/```\\s*$/, '').trim());\n} catch (e) {\n  ia = null;\n}\n\nconst limpa = (v, n) => String(v == null ? '' : v).trim().slice(0, n);\nconst hashtagsReserva = '#igrejaeco #igrejaecobr';\nconst [ano, mes, d] = dataISO.split('-');\nconst quando = (h) => `${dataISO}T${String(h).padStart(2, '0')}:00:00-03:00`;\nconst nomes = { facebook: 'Facebook', instagram: 'Instagram', telegram: 'Telegram', email: 'E-mail' };\n\nconst postagens = [];\nlet usouReserva = 0;\nfunction adicionar(rede, dadosIA) {\n  const ok = dadosIA && limpa(dadosIA.texto, 6000).length >= 40;\n  if (!ok) usouReserva++;\n  const base = {\n    chave: `${dataISO}-${rede}`,\n    rede,\n    titulo: `${tema.nome} · ${nomes[rede]} · ${d}/${mes}${ok ? '' : ' (texto de reserva)'}`,\n    link_destino: link,\n    arte_tema: tema.cor,\n    agendada_para: quando(horarios[rede]),\n  };\n  if (rede === 'email') {\n    postagens.push({\n      ...base,\n      email_assunto: ok ? limpa(dadosIA.assunto, 120) || tema.nome : tema.nome,\n      texto: ok ? limpa(dadosIA.texto, 6000) : `Olá!\\n\\n${tema.gancho}\\n\\nVeja mais em ${link}\\n\\nEquipe Igreja Eco`,\n    });\n    return;\n  }\n  postagens.push({\n    ...base,\n    texto: ok ? limpa(dadosIA.texto, 3000) : `${tema.gancho}\\n\\nSaiba mais: ${link}`,\n    hashtags: ok ? limpa(dadosIA.hashtags, 300) || hashtagsReserva : hashtagsReserva,\n    arte_titulo: ok ? limpa(dadosIA.arte_titulo, 90) || tema.arte : tema.arte,\n    arte_subtitulo: ok ? limpa(dadosIA.arte_subtitulo, 160) || tema.apoio : tema.apoio,\n  });\n}\n\nadicionar('telegram', ia && ia.telegram);\nadicionar('facebook', ia && ia.facebook);\nadicionar('instagram', ia && ia.instagram);\nif (comEmail) adicionar('email', ia && ia.email);\n\nreturn [{ json: { lote: dataISO, usouReserva, geradoPelaIA: !!ia, postagens } }];\n"
+      }
+    },
+    {
+      "id": "p6",
+      "name": "Enviar ao painel do operador",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.igreja.eco.br/api/postagens/receber",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-webhook-token",
+              "value": "COLE_AQUI_O_MESMO_VALOR_DE_N8N_TOKEN_POSTAGENS"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ lote: $json.lote, postagens: $json.postagens }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "p7",
+      "name": "Avisar no Telegram (opcional)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        100
+      ],
+      "disabled": true,
+      "parameters": {
+        "chatId": "COLE_AQUI_O_ID_DO_SEU_CHAT",
+        "text": "={{ '📣 Postagens de ' + $('Montar postagens').first().json.lote + ' enviadas ao painel: ' + ($json.criadas || 0) + ' nova(s)' + ($('Montar postagens').first().json.geradoPelaIA ? '' : ' (IA fora do ar: texto de reserva)') + '. Operador: https://www.igreja.eco.br/operador/postagens' }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Toda noite às 21h": {
+      "main": [
+        [
+          {
+            "node": "Preparar pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Testar agora (manual)": {
+      "main": [
+        [
+          {
+            "node": "Preparar pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar pedido": {
+      "main": [
+        [
+          {
+            "node": "Gemini escreve os textos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini escreve os textos": {
+      "main": [
+        [
+          {
+            "node": "Montar postagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar postagens": {
+      "main": [
+        [
+          {
+            "node": "Enviar ao painel do operador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar ao painel do operador": {
+      "main": [
+        [
+          {
+            "node": "Avisar no Telegram (opcional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo"
+  }
+}
