@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import s from '../styles/catalogo.module.css';
@@ -12,6 +12,17 @@ export default function Catalogo() {
   const [st, setSt] = useState('todos');
   const [q, setQ] = useState('');
   const t = totais();
+
+  // Link direto: /catalogo?situacao=agora (ou encomenda, breve, estudo) e /catalogo?area=sites
+  useEffect(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const sit = p.get('situacao');
+      const ar = p.get('area');
+      if (sit && STATUS[sit]) setSt(sit);
+      if (ar && CATEGORIAS.some((c) => c.id === ar)) setCat(ar);
+    } catch (e) { /* sem filtro */ }
+  }, []);
 
   const lista = useMemo(() => {
     const termo = q.trim().toLowerCase();
