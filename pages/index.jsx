@@ -7,6 +7,7 @@ import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
+import FestaBanner from '../lib/FestaBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -168,6 +169,7 @@ export default function Home() {
       </header>
 
       <main id="topo">
+        <FestaBanner />
         <CampanhaBanner />
         <AtelieBanner />
         <OficinaHomeBanner />

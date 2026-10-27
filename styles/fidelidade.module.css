@@ -1,0 +1,42 @@
+/* Página /fidelidade: Clube de Fidelidade. Azul-noite com dourado, formas redondas. */
+.pagina { font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif; color: #141a3a; line-height: 1.6; background: #f7f6ff; min-height: 100vh; }
+.pagina * { box-sizing: border-box; }
+.pagina a { color: inherit; }
+.topo { background: linear-gradient(90deg, #0a0f3a, #24106b); color: #fff; }
+.topoDentro { max-width: 1040px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topoDentro a { color: #fff; text-decoration: none; font-weight: 700; }
+.topoLinks { display: flex; gap: 8px; flex-wrap: wrap; }
+.topoLinks a { padding: 6px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); font-size: 14px; }
+.miolo { max-width: 1040px; margin: 0 auto; padding: 34px 20px 64px; }
+.h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.1; margin: 0 0 12px; color: #1b1260; }
+.h2 { font-size: 24px; margin: 40px 0 12px; color: #1b1260; }
+.lead { font-size: 18px; color: #33385c; max-width: 46em; }
+.grade { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 14px; }
+.cartao { background: #fff; border: 1px solid #e2defc; border-radius: 26px; padding: 22px; }
+.cartao h3 { margin: 10px 0 4px; font-size: 18px; color: #1b1260; }
+.cartao p { margin: 0; color: #454a70; font-size: 15px; }
+.bola { width: 56px; height: 56px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff6c9, #ffd400 60%, #ff9f1c); display: grid; place-items: center; font-size: 26px; }
+.nivel { text-align: center; }
+.nivel .bola { margin: 0 auto; width: 66px; height: 66px; font-size: 32px; }
+.nivel .de { color: #7a5b00; font-weight: 800; font-size: 14px; }
+.nivel ul { text-align: left; margin: 10px 0 0; padding-left: 18px; font-size: 14px; color: #454a70; }
+.fase { margin-top: 18px; }
+.fase h3 { margin: 0 0 8px; color: #1b1260; font-size: 18px; }
+.tabela { width: 100%; border-collapse: collapse; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 26px rgba(36, 16, 107, 0.10); }
+.tabela th { background: #24106b; color: #fff; text-align: left; padding: 12px 14px; font-size: 14px; }
+.tabela td { padding: 12px 14px; border-top: 1px solid #eeeafd; font-size: 15px; vertical-align: top; }
+.tabela td.num { white-space: nowrap; font-weight: 800; color: #1b1260; }
+.tabela td small { display: block; color: #5b6088; font-size: 13px; }
+.tag { display: inline-block; background: #fff1c2; color: #7a5b00; border-radius: 999px; padding: 2px 12px; font-size: 12px; font-weight: 800; }
+.cx { background: #fff; border: 1px solid #e2defc; border-radius: 22px; padding: 18px 22px; margin: 14px 0; }
+.cx.am { background: #fff8e1; border-color: #f2dc8a; }
+.cx b.t { display: block; margin-bottom: 4px; color: #1b1260; }
+.lista { margin: 8px 0 0; padding-left: 20px; }
+.lista li { margin-bottom: 6px; }
+.faq details { background: #fff; border: 1px solid #e2defc; border-radius: 16px; padding: 14px 18px; margin-bottom: 10px; }
+.faq summary { cursor: pointer; font-weight: 700; }
+.faq p { margin: 8px 0 0; color: #454a70; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.cta a { display: inline-block; background: #ffd400; color: #1b1260; font-weight: 800; border-radius: 999px; padding: 14px 26px; text-decoration: none; }
+.cta a.sec { background: #24106b; color: #fff; }
+@media (max-width: 640px) { .tabela th:nth-child(3), .tabela td:nth-child(3) { display: none; } }

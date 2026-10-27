@@ -15,7 +15,7 @@ export default function Campanha() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className={s.miolo}>
-        <Link href="/" className={s.voltar}>← Voltar ao início</Link>
+        <Link href="/" className={s.voltar}>← Voltar ao início</Link> · <Link href="/fidelidade" className={s.voltar}>Clube de Fidelidade</Link>
         <h1 className={s.h1}>{C.nome}</h1>
         <p className={s.lead}>
           Para comemorar a abertura da Oficina Digital, quem trabalha conosco e quem compra conosco pode trocar Pontos ou Créditos
