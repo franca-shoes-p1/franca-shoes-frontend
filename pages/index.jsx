@@ -164,6 +164,7 @@ export default function Home() {
               </Link>
             ))}
             <a href="#campanha" className={styles.projCampanha} onClick={fechar}>🎁 Campanha</a>
+            <Link href="/catalogo" className={styles.projCampanha} onClick={fechar}>📚 Catálogo</Link>
           </nav>
         </div>
       </header>
@@ -424,6 +425,10 @@ export default function Home() {
             <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
           </nav>
           <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
+          <Link href="/catalogo" className={styles.botaoPortal}>
+            <span>Catálogo completo de produtos e serviços</span>
+            <small>Tudo o que oferecemos e o que vem por aí</small>
+          </Link>
           <Link href="/portal" className={styles.botaoPortal}>
             <span>Entrar no portal completo</span>
             <small>Escola, serviços de IA, loja, calculadora e mais</small>
