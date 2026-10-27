@@ -1,0 +1,124 @@
+{
+  "name": "Atendimento - avisos de contato e candidato a operador",
+  "nodes": [
+    {
+      "id": "b1",
+      "name": "Webhook Atendimento",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "atendimento-novo",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "atendimento-novo"
+    },
+    {
+      "id": "b2",
+      "name": "Conferir e montar mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Confere o token enviado pelo site e monta o texto do aviso.\nconst TOKEN = 'COLE_AQUI_O_MESMO_VALOR_DE_N8N_WEBHOOK_TOKEN_ATENDIMENTO';\nconst item = $input.first().json;\nconst recebido = (item.headers || {})['x-webhook-token'] || '';\nif (recebido !== TOKEN) { throw new Error('Token inválido: o aviso foi recusado'); }\n\nconst d = item.body || {};\nconst limpa = (v, n) => String(v == null ? '' : v).replace(/\\s+/g, ' ').trim().slice(0, n);\nlet numero = String(d.whatsapp || '').replace(/\\D/g, '');\nif (numero.length === 10 || numero.length === 11) numero = '55' + numero;\nconst link = numero ? 'https://wa.me/' + numero : '(sem WhatsApp)';\n\nlet mensagem;\nlet assunto;\nif (d.evento === 'contato_novo') {\n  assunto = 'Novo contato nº ' + d.numero + ' - ' + limpa(d.assunto, 60);\n  mensagem = [\n    '💬 Novo CONTATO no site nº ' + d.numero,\n    'Nome: ' + limpa(d.nome, 120),\n    'WhatsApp: ' + (limpa(d.whatsapp, 30) || '(não informou)'),\n    'E-mail: ' + (limpa(d.email, 160) || '(não informou)'),\n    'Assunto: ' + limpa(d.assunto, 80),\n    'Página: ' + (limpa(d.pagina, 80) || '(contato)'),\n    'Mensagem: ' + limpa(d.mensagem, 1500),\n    'Responder: ' + link,\n  ].join('\\n');\n} else if (d.evento === 'operador_candidato') {\n  assunto = 'Novo candidato a operador: ' + limpa(d.nome, 60);\n  mensagem = [\n    '🧑‍🔧 Novo CANDIDATO a operador',\n    'Nome: ' + limpa(d.nome, 120),\n    'WhatsApp: ' + limpa(d.whatsapp, 30),\n    'Cidade: ' + (limpa(d.cidade, 80) || '(não informou)'),\n    'Interesse: ' + (limpa(d.interesse, 300) || '(não informou)'),\n    'Origem: ' + (limpa(d.origem, 60) || '(direto)'),\n    'Responder: ' + link,\n  ].join('\\n');\n} else {\n  throw new Error('Evento desconhecido');\n}\n\nreturn [{ json: { mensagem, assunto, evento: d.evento, link } }];\n"
+      }
+    },
+    {
+      "id": "b3",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        540,
+        -160
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "b4",
+      "name": "Avisar no Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        540,
+        0
+      ],
+      "parameters": {
+        "chatId": "COLE_AQUI_O_ID_DO_SEU_CHAT",
+        "text": "={{ $json.mensagem }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "disabled": true
+    },
+    {
+      "id": "b5",
+      "name": "Avisar por e-mail (opcional)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        540,
+        160
+      ],
+      "parameters": {
+        "sendTo": "ricardobelo1973@gmail.com",
+        "subject": "={{ $json.assunto }}",
+        "message": "={{ $json.mensagem }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Webhook Atendimento": {
+      "main": [
+        [
+          {
+            "node": "Conferir e montar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conferir e montar mensagem": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Avisar no Telegram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Avisar por e-mail (opcional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

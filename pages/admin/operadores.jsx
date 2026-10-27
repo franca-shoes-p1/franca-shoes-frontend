@@ -129,6 +129,7 @@ export default function AdminOperadores() {
             <div className="ea-mu">Fábrica Digital: ordens de produção, tarefas por setor e pagamento só de tarefa aprovada.</div>
           </div>
           <div className="ea-row">
+            <Link href="/admin/contatos" className="ea-btn ea-btn2">Atendimento</Link>
             <Link href="/admin/oficina" className="ea-btn ea-btn2">Oficina</Link>
             <Link href="/admin/calcados" className="ea-btn ea-btn2">Modelos</Link>
             {fase === 'pronto' && <button className="ea-btn ea-btn2" onClick={sair}>Sair</button>}
