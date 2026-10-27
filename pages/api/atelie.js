@@ -1,4 +1,5 @@
 // Formulários do Ateliê Sob Medida (/atelie): grava no Supabase (tabelas op_atelie_*) e avisa o n8n.
+import { registrarIndicacao } from '../../lib/ref';
 // Só aceita dois tipos: 'pedido' (cliente) e 'montador' (candidato). Nada vem do navegador sem ser limpo e limitado.
 
 const SERVICOS = [
@@ -101,6 +102,7 @@ export default async function handler(req, res) {
           prazo: txt(c.prazo, 80) || null,
         }),
       });
+      await registrarIndicacao({ req, tipo: 'pedido', pedidoId: r.id, nome, whatsapp });
       await avisarN8n({
         evento: 'atelie_pedido',
         numero: r.numero,

@@ -12,12 +12,18 @@ export default function OperadorOficina() {
   const [msg, setMsg] = useState(null);
   const [erroLogin, setErroLogin] = useState(false);
   const [ocupado, setOcupado] = useState(false);
+  const [div, setDiv] = useState(null);
+  const [copiado, setCopiado] = useState(false);
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/operador/oficina')); }
     catch (e) { if (e.status === 401) setErroLogin(true); else setMsg({ tipo: 'er', texto: e.message }); }
   }, []);
-  useEffect(() => { carregar(); }, [carregar]);
+  useEffect(() => { carregar(); api('/api/operador/oficina/divulgacao').then(setDiv).catch(() => {}); }, [carregar]);
+
+  async function copiarLink() {
+    try { await navigator.clipboard.writeText(div.link); setCopiado(true); setTimeout(() => setCopiado(false), 2000); } catch (e) { setMsg({ tipo: 'er', texto: 'Não deu para copiar. Selecione o link e use Ctrl+C.' }); }
+  }
 
   async function resgatar(b) {
     if (!confirm(`Pedir "${b.nome}" por ${b.custo_pontos} pontos?`)) return;
@@ -51,6 +57,38 @@ export default function OperadorOficina() {
               <div style={{ fontSize: 34, fontWeight: 800 }}>{d.disponivel} <span className="ea-mu" style={{ fontSize: 14, fontWeight: 400 }}>disponíveis{d.reservado ? ` (${d.reservado} reservados em pedidos)` : ''}</span></div>
               <p className="ea-mu" style={{ marginBottom: 0 }}>Pontos são benefícios (descontos, prioridade, mentoria). Valem 12 meses, não são dinheiro, não se compram e não viram participação em empresa.</p>
             </div>
+
+            {div && div.codigo && (
+              <div className="ea-card">
+                <h2 style={{ marginTop: 0 }}>Divulgação</h2>
+                <p className="ea-mu" style={{ marginTop: 0 }}>Seu link de afiliado. Quando alguém que você indicou pagar o pedido completo, você ganha 1 ponto para cada R$ 1,00.</p>
+                <div className="ea-item" style={{ gap: 10, flexWrap: 'wrap' }}>
+                  <code style={{ flex: 1, wordBreak: 'break-all' }}>{div.link}</code>
+                  <button className="ea-btn" onClick={copiarLink}>{copiado ? 'Copiado!' : 'Copiar link'}</button>
+                </div>
+                <div className="ea-row" style={{ gap: 18, margin: '10px 0', flexWrap: 'wrap' }}>
+                  <span><b>{div.resumo.clientes}</b> <span className="ea-mu">clientes indicados</span></span>
+                  <span><b>{div.resumo.pagos}</b> <span className="ea-mu">pagos</span></span>
+                  <span><b>{div.resumo.pontos}</b> <span className="ea-mu">pontos ganhos</span></span>
+                  <span><b>{div.resumo.operadores}</b> <span className="ea-mu">cadastros de operador</span></span>
+                </div>
+                <div className="ea-row" style={{ gap: 8, flexWrap: 'wrap' }}>
+                  <a className="ea-btn" href={`/afiliados/motor?ref=${div.codigo}`}>Montar meus posts</a>
+                  <a className="ea-btn ea-btn2" href="/manual-afiliado">Manual do afiliado</a>
+                </div>
+                {div.lista.length > 0 && (
+                  <>
+                    <h3>Suas indicações</h3>
+                    {div.lista.map((i) => (
+                      <div className="ea-item" key={i.id}>
+                        <span>{i.indicado} <span className="ea-mu">· {i.tipo === 'pedido' ? 'pedido' : 'cadastro de operador'} · {new Date(i.criado_em).toLocaleDateString('pt-BR')}</span></span>
+                        <span className={`ea-tag ${i.status === 'paga' ? 'ok' : 'am'}`}>{i.status === 'paga' ? `+${i.pontos} pontos` : 'Aguardando pagamento'}</span>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+            )}
 
             <div className="ea-card">
               <h2 style={{ marginTop: 0 }}>Cartões de Tarefa</h2>

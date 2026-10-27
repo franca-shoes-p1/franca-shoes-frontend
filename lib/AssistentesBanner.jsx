@@ -5,6 +5,7 @@ const PRONTOS = [
   { e: '⚙️', t: 'Motor dos assistentes', d: 'Um molde: cada produto novo vira só uma configuração.' },
   { e: '👟', t: 'Loja de calçados', d: 'Nível, categorias, nome e cor com a vitrine no celular.' },
   { e: '🌐', t: 'Site ou página de vendas', d: 'Objetivo, estilo e seções com o site ao vivo.' },
+  { e: '📣', t: 'Divulgação de afiliado', d: 'Post, roteiro e calendário de 7 dias com o seu link.' },
   { e: '🧭', t: 'Vitrine de assistentes', d: 'Um lugar só para escolher o que montar.' },
 ];
 

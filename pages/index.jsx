@@ -6,6 +6,7 @@ import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
+import AfiliadosBanner from '../lib/AfiliadosBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -170,6 +171,7 @@ export default function Home() {
         <CampanhaBanner />
         <AtelieBanner />
         <OficinaHomeBanner />
+        <AfiliadosBanner />
         <section id="calcados" className={styles.hero}>
           <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />

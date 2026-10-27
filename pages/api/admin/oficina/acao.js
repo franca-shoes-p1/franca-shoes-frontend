@@ -76,12 +76,20 @@ export default async function handler(req, res) {
         if (k.status === 'convertido') return bad(res, 'Já foi convertido.');
         if (!configurado()) return res.status(500).json({ erro: 'Falta ADMIN_SESSION_SECRET na Vercel (16+ caracteres).' });
         const codigo = novoCodigo();
-        const [op] = await sb('op_operarios', { method: 'POST', body: JSON.stringify({ nome: k.nome, whatsapp: k.whatsapp, setor: 'Testes', nivel: 'iniciante', codigo_hash: hashCodigo(codigo) }) });
+        const [op] = await sb('op_operarios', { method: 'POST', body: JSON.stringify({ nome: k.nome, whatsapp: k.whatsapp, setor: k.origem === 'afiliados' ? 'Divulgação' : 'Testes', nivel: 'iniciante', codigo_hash: hashCodigo(codigo) }) });
         await sb(`op_candidatos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'convertido', operario_id: op.id }) });
         await historico(op.id, 'operador_criado', { candidato_id: id });
         return res.json({ ok: true, codigo, nome: k.nome, whatsapp: k.whatsapp });
       }
       return bad(res, 'Ação inválida.');
+    }
+
+    if (tipo === 'indicacao') {
+      if (!UUID.test(id)) return bad(res, 'Indicação inválida.');
+      if (acao !== 'cancelar') return bad(res, 'Ação inválida.');
+      const ok = await sb(`op_indicacoes?id=eq.${id}&status=eq.registrada`, { method: 'PATCH', body: JSON.stringify({ status: 'cancelada' }) });
+      if (!ok.length) return bad(res, 'Só dá para cancelar uma indicação ainda não paga.');
+      return res.json({ ok: true });
     }
 
     if (tipo === 'resgate') {

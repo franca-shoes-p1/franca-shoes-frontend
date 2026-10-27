@@ -88,7 +88,7 @@ export default function AdminOficina() {
             )}
             <div className="ea-mu">Pontos em circulação: <b>{d.total_pontos}</b> · Em análise: <b>{emAnalise.length}</b> · Candidatos novos: <b>{d.candidatos.filter((c) => c.status === 'novo').length}</b></div>
             <div className="po-tabs">
-              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['pedidos', `Pedidos (${(d.pedidos || []).length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['resgates', `Resgates (${d.resgates.length})`], ['chamados', `Chamados (${(d.chamados || []).length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
+              {[['entregas', `Entregas (${emAnalise.length})`], ['pagar', `A pagar (${aprov.length})`], ['pedidos', `Pedidos (${(d.pedidos || []).length})`], ['candidatos', `Candidatos (${d.candidatos.length})`], ['indicacoes', `Indicações (${(d.indicacoes || []).filter((i) => i.status === 'registrada').length})`], ['resgates', `Resgates (${d.resgates.length})`], ['chamados', `Chamados (${(d.chamados || []).length})`], ['cartoes', 'Cartões'], ['vitrine', 'Vitrine']].map(([k, r]) => (
                 <button key={k} className={'po-t' + (aba === k ? ' on' : '')} onClick={() => setAba(k)}>{r}</button>
               ))}
             </div>
@@ -175,7 +175,7 @@ export default function AdminOficina() {
                 {d.candidatos.length === 0 && <div className="ea-card ea-mu">Nenhum candidato novo.</div>}
                 {d.candidatos.map((k) => (
                   <div className="ea-card" key={k.id}>
-                    <b>{k.nome}</b> <span className="ea-tag">{k.status}</span>
+                    <b>{k.nome}</b> <span className="ea-tag">{k.status}</span> {k.origem === 'afiliados' && <span className="ea-tag ok">AFILIADO</span>}
                     <div className="ea-mu">{k.whatsapp}{k.cidade ? ` · ${k.cidade}` : ''}{k.origem ? ` · origem: ${k.origem}` : ''}</div>
                     {k.interesse && <div className="po-ent">{k.interesse}</div>}
                     <div className="ea-row" style={{ marginTop: 10 }}>
@@ -184,6 +184,24 @@ export default function AdminOficina() {
                       <button className="ea-btn" disabled={ocupado} onClick={() => converter(k)}>Criar operador e gerar código</button>
                       <button className="ea-btn ea-btn-er" disabled={ocupado} onClick={() => acao({ tipo: 'candidato', id: k.id, acao: 'descartar' })}>Descartar</button>
                     </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {aba === 'indicacoes' && (
+              <div style={{ marginTop: 12 }}>
+                <div className="ea-card ea-mu">Os pontos entram sozinhos quando você marca o <b>Saldo pago</b> da ordem criada a partir do pedido. Cancele aqui só se achar que a indicação é falsa.</div>
+                {(d.indicacoes || []).length === 0 && <div className="ea-card ea-mu">Nenhuma indicação ainda.</div>}
+                {(d.indicacoes || []).map((i) => (
+                  <div className="ea-card" key={i.id}>
+                    <b>{i.indicado || 'Pessoa'}</b> <span className={`ea-tag ${i.status === 'paga' ? 'ok' : i.status === 'cancelada' ? 'er' : 'am'}`}>{i.status}</span>
+                    <div className="ea-mu">{i.tipo === 'pedido' ? 'Pedido de cliente' : 'Cadastro de operador'} · indicado por <b>{i.afiliado && i.afiliado.nome}</b> · {new Date(i.criado_em).toLocaleDateString('pt-BR')}{i.status === 'paga' ? ` · ${i.pontos} pontos` : ''}</div>
+                    {i.status === 'registrada' && (
+                      <div className="ea-row" style={{ marginTop: 8 }}>
+                        <button className="ea-btn ea-btn-er" disabled={ocupado} onClick={() => confirm('Cancelar esta indicação?') && acao({ tipo: 'indicacao', id: i.id, acao: 'cancelar' }, 'Indicação cancelada.')}>Cancelar indicação</button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

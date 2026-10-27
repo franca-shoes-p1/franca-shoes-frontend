@@ -1,6 +1,10 @@
 /* Faixa da Campanha de Inauguração para as páginas estáticas (public/). As páginas do Next usam lib/CampanhaFaixa.jsx. */
 (function () {
   try {
+    var r = new URLSearchParams(location.search).get('ref');
+    if (r && /^[a-z0-9]{6,12}$/i.test(r)) document.cookie = 'ie_ref=' + encodeURIComponent(r.toLowerCase()) + '; path=/; max-age=2592000; SameSite=Lax';
+  } catch (e) {}
+  try {
     if (document.getElementById('faixa-campanha')) return;
     var d = document.createElement('div');
     d.id = 'faixa-campanha';
