@@ -8,6 +8,8 @@ import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
+import IgrejaHero from '../lib/IgrejaHero';
+import Redes from '../lib/Redes';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -134,7 +136,7 @@ export default function Home() {
   return (
     <div className={styles.pagina} ref={raiz}>
       <Head>
-        <title>Loja de Calçados Pronta | {CONFIG.nome}</title>
+        <title>{`Loja de Calçados Pronta | ${CONFIG.nome}`}</title>
         <meta
           name="description"
           content="Criamos o seu negócio de calçados do zero e entregamos com tudo pronto e funcional: loja online com PIX e cartão, painel pelo celular, guia de fornecedores e treinamento."
@@ -170,6 +172,7 @@ export default function Home() {
       </header>
 
       <main id="topo">
+        <IgrejaHero />
         <FestaBanner />
         <CampanhaBanner />
         <AtelieBanner />
@@ -425,6 +428,7 @@ export default function Home() {
             <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
           </nav>
           <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
+          <Redes titulo="Nossas redes" />
           <Link href="/catalogo" className={styles.botaoPortal}>
             <span>Catálogo completo de produtos e serviços</span>
             <small>Tudo o que oferecemos e o que vem por aí</small>
