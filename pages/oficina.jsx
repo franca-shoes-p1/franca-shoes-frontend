@@ -148,6 +148,12 @@ export default function Oficina() {
               <p>Como pedir uma tarefa, o que acontece depois e como o trabalho chega até você.</p>
               <Link href="/manual-cliente" className={`${styles.botao} ${styles.contornoEscuro}`}>Ler o manual</Link>
             </div>
+            <div className={o.acesso} data-reveal="1">
+              <div className={styles.emoji}>📙</div>
+              <h3>Manual do afiliado</h3>
+              <p>Como divulgar com o seu link, usar o assistente de posts e ganhar pontos por pedidos pagos.</p>
+              <Link href="/manual-afiliado" className={`${styles.botao} ${styles.contornoEscuro}`}>Ler o manual</Link>
+            </div>
           </div>
           </div>
         </section>

@@ -1,0 +1,105 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manual do afiliado | Igreja Eco</title><meta name="description" content="Como divulgar com o seu link, usar o assistente de divulgação e ganhar Pontos Oficina."><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap"><style>:root{--bg:#f4f6fa;--card:#fff;--fg:#17202e;--mu:#5a6678;--line:#dbe1ec;--acc:#1d4ed8;--acc-bg:#e6edff;--op:#0f8a55;--op-bg:#dcf5e8;--am:#b45309;--am-bg:#fff0d4;--er:#c0262d;--er-bg:#fde3e3;--mock:#eef1f7;--mockline:#cfd6e4;--disp:'Bricolage Grotesque','Trebuchet MS',sans-serif;--body:'Source Sans 3','Segoe UI',Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1622;--card:#172132;--fg:#e8edf6;--mu:#9aa8bf;--line:#27344a;--acc:#7ea2ff;--acc-bg:#1a2a55;--op:#4fd391;--op-bg:#123b2a;--am:#f3b45a;--am-bg:#3d2c10;--er:#ff8a90;--er-bg:#4a1a1d;--mock:#0f1827;--mockline:#2b3a55;color-scheme:dark}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;padding:0 max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+.w{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--disp);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,46px);font-weight:800}h2{font-size:clamp(24px,4.4vw,32px);font-weight:800;margin-bottom:6px}h3{font-size:20px;font-weight:600;margin:24px 0 8px}
+p{margin:8px 0}.mu{color:var(--mu)}
+.topo{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;font-weight:700;font-size:15px}
+.topo a{color:var(--acc);text-decoration:none}
+.hero{padding-block:20px 12px}.hero p{max-width:60ch;font-size:19px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:8px;margin-bottom:6px}
+nav .w{display:flex;gap:8px;overflow-x:auto}
+nav a{white-space:nowrap;text-decoration:none;color:var(--fg);font-weight:700;font-size:14px;border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:99px}
+section{padding-block:28px 6px;scroll-margin-top:56px}
+.band{border-radius:14px;padding:14px 18px;margin:14px 0}
+.band.acc{background:var(--acc-bg)}.band.op{background:var(--op-bg)}.band.am{background:var(--am-bg)}.band.er{background:var(--er-bg)}
+.band b.t{display:block;font-family:var(--disp);font-size:18px;margin-bottom:2px}
+.band.acc b.t{color:var(--acc)}.band.op b.t{color:var(--op)}.band.am b.t{color:var(--am)}.band.er b.t{color:var(--er)}
+.step{display:grid;grid-template-columns:1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+@media(min-width:760px){.step{grid-template-columns:1fr 1fr;align-items:start}}
+.step>*{min-width:0}
+.sh{display:flex;gap:12px;align-items:flex-start}
+.n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-weight:800;color:#fff;background:var(--acc)}
+.step.op .n{background:var(--op)}
+.sh b{font-family:var(--disp);font-size:19px;display:block;line-height:1.2;margin-bottom:3px}.sh p{margin:0;font-size:16px}
+.tela{background:var(--mock);border:2px solid var(--mockline);border-radius:12px;overflow:hidden;font-size:13px;line-height:1.35}
+.bar{display:flex;gap:5px;align-items:center;padding:7px 10px;background:var(--card);border-bottom:2px solid var(--mockline)}
+.bar i{width:9px;height:9px;border-radius:50%;background:var(--mockline)}
+.bar span{margin-left:8px;font-size:11px;color:var(--mu);background:var(--mock);border-radius:99px;padding:2px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cor{padding:10px;display:grid;gap:8px}
+.bx{background:var(--card);border:1px solid var(--mockline);border-radius:8px;padding:8px 10px}
+.b{display:inline-block;font-weight:700;font-size:12px;padding:5px 11px;border-radius:7px;background:var(--acc);color:#fff;margin:2px 3px 2px 0}
+.b.ok{background:var(--op)}.b.lt{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.inp{border:1px solid var(--mockline);background:var(--bg);border-radius:6px;padding:5px 8px;color:var(--mu);margin-top:3px}
+.hl{outline:3px solid var(--am);outline-offset:2px;border-radius:8px;position:relative}
+.seta{position:absolute;right:-4px;top:-13px;background:var(--am);color:#fff;font-weight:800;font-size:11px;padding:1px 7px;border-radius:99px}
+.big{font-family:var(--disp);font-weight:800;font-size:26px}
+.ok-l{color:var(--op);font-weight:700}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.flow>div{flex:1 1 130px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;min-width:0}
+.flow>div b{display:block;font-family:var(--disp)}
+.flow .ar{flex:0 0 auto;align-self:center;background:none;border:0;padding:0;color:var(--mu);font-weight:800;font-size:20px}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--disp);font-size:14px;color:var(--mu)}
+ul.c{padding-left:20px;margin:8px 0}ul.c li{margin:4px 0}
+.cta{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;margin:30px 0 10px}
+.cta a{display:inline-block;margin:6px;padding:12px 20px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--acc);color:#fff}
+.cta a.l{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
+.aviso{margin-top:30px;color:var(--mu);font-size:14.5px;border-top:1px solid var(--line);padding-top:14px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:700}
+</style></head><body>
+<div class="w"><div class="topo"><a href="/afiliados">← Programa de Afiliados</a><a href="/manual-operador">Manual do operador →</a></div>
+<div class="hero"><h1>Manual do afiliado</h1>
+<p>Como divulgar o site e os negócios da Igreja Eco com o seu link, usar o assistente de divulgação e ganhar Pontos Oficina quando quem você indicou pagar.</p>
+<p class="mu" style="font-size:15px">Atualizado em 26/10/2026.</p></div></div>
+<nav><div class="w"><a href="#quem">O que é</a><a href="#entrar">Entrar</a><a href="#link">Seu link</a><a href="#assistente">Assistente</a><a href="#pontos">Pontos</a><a href="#regras">Regras de ouro</a><a href="#duvidas">Dúvidas</a></div></nav>
+<div class="w">
+<section id="quem"><h2>1. O que é o Programa de Afiliados</h2>
+<p>Você mostra o <b>Ateliê Sob Medida</b>, a <b>Oficina Digital</b> e a <b>Loja de Calçados Pronta</b> para quem conhece. Quando uma pessoa que chegou pelo <b>seu link</b> faz um pedido e paga o valor completo, você ganha <b>Pontos Oficina</b>.</p>
+<div class="flow"><div><b>1. Cadastro</b>você se inscreve</div><div class="ar">→</div><div><b>2. Código</b>chega no WhatsApp</div><div class="ar">→</div><div><b>3. Divulgação</b>com o seu link</div><div class="ar">→</div><div><b>4. Pedido pago</b>a coordenação confirma</div><div class="ar">→</div><div><b>5. Pontos</b>entram no extrato</div></div>
+<div class="band am"><b class="t">Parceria, não emprego</b>É uma parceria de divulgação, sem vínculo de emprego e sem promessa de renda. Pontos Oficina não são dinheiro nem participação em empresa.</div></section>
+
+<section id="entrar"><h2>2. Como entrar</h2>
+<div class="step op"><div class="sh"><span class="n">1</span><div><b>Faça o cadastro</b><p>Em <b>www.igreja.eco.br/afiliados</b>, preencha nome, WhatsApp, cidade e onde pretende divulgar. A coordenação chama você no WhatsApp.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>www.igreja.eco.br/afiliados</span></div><div class="cor"><div class="bx"><b>Quero participar</b><div class="inp">Seu nome</div><div class="inp">Seu WhatsApp</div><div style="margin-top:8px"><span class="b ok hl">Enviar cadastro</span></div></div></div></div></div>
+<div class="step op"><div class="sh"><span class="n">2</span><div><b>Receba o código e entre</b><p>Você recebe um código pessoal e entra em <b>www.igreja.eco.br/operador</b>. Aceite as regras de trabalho na primeira vez. Depois, abra a <b>Oficina</b>: o card <b>Divulgação</b> mostra o seu link.</p></div></div>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>operador/oficina</span></div><div class="cor"><div class="bx"><b>Divulgação</b><div class="inp hl">https://www.igreja.eco.br/?ref=3fa9c21b</div><span class="b ok">Copiar link</span></div></div></div></div></section>
+
+<section id="link"><h2>3. O seu link</h2>
+<p>O seu link tem o seu código no final, assim: <code>www.igreja.eco.br/?ref=SEUCODIGO</code>. Quem entra por ele fica registrado como indicado por você por <b>30 dias</b>. Se a pessoa fizer o pedido nesse período, a indicação é sua.</p>
+<div class="band op"><b class="t">Dica</b>Você pode usar o código em qualquer endereço do site. Exemplo: <code>www.igreja.eco.br/oficina?ref=SEUCODIGO</code>. O assistente já monta isso para você.</div></section>
+
+<section id="assistente"><h2>4. O assistente de divulgação</h2>
+<p>Em <b>www.igreja.eco.br/afiliados/motor</b> você monta o post em 4 passos e vê o resultado ao vivo, como num celular:</p>
+<ul><li><b>Sobre o quê:</b> Campanha de Inauguração, Oficina Digital, Ateliê ou Loja de Calçados.</li>
+<li><b>Onde publicar:</b> Instagram (post, stories ou reels), WhatsApp, Telegram ou Facebook.</li>
+<li><b>Tom:</b> simples e amigável, animado ou direto.</li>
+<li><b>Seu código:</b> o link com o seu código entra sozinho no texto.</li></ul>
+<p>Cada post traz uma <b>ideia de arte</b>, o <b>aviso obrigatório</b> e uma conferência: se você editar o texto e escrever algo que parece promessa de ganho, o assistente avisa. Há também o <b>Calendário de 7 dias</b>, com um post por dia em formatos diferentes.</p>
+<div class="tela"><div class="bar"><i></i><i></i><i></i><span>afiliados/motor</span></div><div class="cor"><div class="bx"><b>Assistente de divulgação</b><div class="mu">Texto conferido: sem promessa de ganho e com o aviso de parceria.</div><div style="margin-top:8px"><span class="b ok hl">Copiar texto</span></div></div></div></div></section>
+
+<section id="pontos"><h2>5. Quanto você ganha</h2>
+<div class="tw"><table><tr><th>Quando</th><th>Você ganha</th></tr><tr><td>O cliente indicado <b>paga o pedido completo</b> e a coordenação confirma</td><td><b>1 Ponto Oficina para cada R$ 1,00</b> do pedido</td></tr></table></div>
+<p>Exemplo: um pedido de R$ 50,00 rende 50 pontos. Na <b>Campanha de Inauguração</b>, o acessório custa 1.000 pontos e o calçado 2.500 pontos. Os pontos de divulgação somam com os pontos das tarefas da Oficina.</p>
+<ul><li>Os pontos <b>só entram</b> depois que o pagamento completo é confirmado. Um pedido apenas feito, sem pagamento, não rende pontos.</li>
+<li>Você acompanha tudo no card <b>Divulgação</b>: clientes indicados, pagos e pontos ganhos. Aparece só o primeiro nome de cada indicado.</li>
+<li>Os pontos valem <b>12 meses</b>. Para trocar por um benefício, abra a Oficina e clique em <b>Resgatar</b>.</li>
+<li>Não há pontos por cadastrar outros afiliados. Só vendas confirmadas contam.</li></ul></section>
+
+<section id="regras"><h2>6. Regras de ouro</h2>
+<div class="band op"><b class="t">Pode</b>Divulgar com o seu link nas suas redes e conversas, sempre dizendo que é uma divulgação de parceiro(a). Usar os textos do assistente. Responder com sinceridade e chamar a coordenação quando não souber.</div>
+<div class="band er"><b class="t">Não pode</b>Prometer renda, lucro, emprego, sociedade ou "dinheiro fácil". Mandar mensagem em massa para quem não conhece. Criar perfis falsos ou inventar depoimentos. Indicar a si mesmo ou combinar indicações falsas: isso cancela os pontos.</div></section>
+
+<section id="duvidas"><h2>7. Dúvidas frequentes</h2>
+<details><summary>Preciso pagar para participar?</summary><p>Não. O cadastro é gratuito.</p></details>
+<details><summary>Os pontos viram dinheiro?</summary><p>Não. Pontos Oficina são benefícios. Não são dinheiro, não se compram e valem 12 meses.</p></details>
+<details><summary>A pessoa comprou, mas meus pontos não apareceram.</summary><p>Os pontos entram quando a coordenação confirma o pagamento completo. Se já passou esse momento, fale com a coordenação pelo WhatsApp.</p></details>
+<details><summary>A pessoa entrou pelo meu link e depois pelo link de outro afiliado.</summary><p>Vale o último link usado por ela nos últimos 30 dias.</p></details>
+<details><summary>Posso divulgar em grupos?</summary><p>Pode, se o grupo permitir e se você identificar que é uma divulgação de parceiro(a). Não faça spam.</p></details>
+<div class="cta"><b style="font-family:var(--disp);font-size:20px">Pronto para divulgar?</b><br><a href="/afiliados">Quero ser afiliado</a><a class="l" href="/afiliados/motor">Montar meus posts</a></div>
+<p class="aviso">Parceria de divulgação, sem vínculo de emprego e sem promessa de renda. Pontos Oficina não são dinheiro nem participação em empresa.</p></section>
+</div>
+<script src="/campanha-faixa.js" defer></script></body></html>

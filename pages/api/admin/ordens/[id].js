@@ -1,6 +1,7 @@
 // Atualiza a ordem: confirmar entrada/saldo do cliente (a entrada libera a produção), status, nota.
 import { exigirAdmin } from '../../../../lib/adminAuth';
 import { sb, UUID, txt } from '../../../../lib/varejoServer';
+import { concederIndicacao } from '../../../../lib/ref';
 
 export default async function handler(req, res) {
   if (!exigirAdmin(req, res)) return;
@@ -29,6 +30,7 @@ export default async function handler(req, res) {
     }
     const [ordem] = await sb(`op_ordens?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(d) });
     if (!ordem) return res.status(404).json({ erro: 'Ordem não encontrada.' });
+    if (d.saldo_confirmado === true && ordem.pedido_id) await concederIndicacao(ordem);
     return res.json({ ordem });
   } catch (e) {
     console.error('admin/ordens/[id]', e.message);

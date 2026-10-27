@@ -33,3 +33,4 @@
 
 .manuais { display: grid; gap: 18px; grid-template-columns: 1fr; }
 @media (min-width: 640px) { .manuais { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .manuais { grid-template-columns: repeat(3, 1fr); } }

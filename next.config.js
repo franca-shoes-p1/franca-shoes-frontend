@@ -9,6 +9,7 @@ const nextConfig = {
       { source: '/monte-sua-oficina', destination: '/monte-sua-oficina/index.html' },
       { source: '/manual-operador', destination: '/manual-operador/index.html' },
       { source: '/manual-cliente', destination: '/manual-cliente/index.html' },
+      { source: '/manual-afiliado', destination: '/manual-afiliado/index.html' },
       { source: '/monte-seu-site', destination: '/monte-seu-site/index.html' },
       { source: '/assistentes', destination: '/assistentes/index.html' },
     ];
