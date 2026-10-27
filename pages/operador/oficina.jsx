@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
+import { nivelDe, fmt } from '../../lib/fidelidade';
 
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const ST = { entregue: ['Em análise', 'am'], ajuste: ['Ajuste pedido', 'er'], aprovada: ['Aprovada', 'ok'], paga: ['Paga', 'ok'], recusada: ['Recusada', 'er'] };
@@ -57,6 +58,20 @@ export default function OperadorOficina() {
               <div style={{ fontSize: 34, fontWeight: 800 }}>{d.disponivel} <span className="ea-mu" style={{ fontSize: 14, fontWeight: 400 }}>disponíveis{d.reservado ? ` (${d.reservado} reservados em pedidos)` : ''}</span></div>
               <p className="ea-mu" style={{ marginBottom: 0 }}>Pontos são benefícios (descontos, prioridade, mentoria). Valem 12 meses, não são dinheiro, não se compram e não viram participação em empresa.</p>
             </div>
+
+            {(() => {
+              const nv = nivelDe(d.acumulado || 0);
+              return (
+                <div className="ea-card">
+                  <h2 style={{ marginTop: 0 }}>Clube de Fidelidade</h2>
+                  <div style={{ fontSize: 22, fontWeight: 800 }}>{nv.atual.emoji} Nível {nv.atual.nome}</div>
+                  <div className="ea-mu" style={{ margin: '4px 0 8px' }}>{fmt(d.acumulado || 0)} pontos ganhos no total{nv.prox ? ` · faltam ${fmt(nv.faltam)} para o ${nv.prox.emoji} ${nv.prox.nome}` : ' · você está no nível mais alto'}</div>
+                  <div style={{ height: 10, borderRadius: 99, background: '#e3ebf8', overflow: 'hidden' }}><div style={{ width: nv.pct + '%', height: '100%', background: 'linear-gradient(90deg,#f5b301,#ff8a00)' }} /></div>
+                  <ul className="ea-mu" style={{ margin: '10px 0 0', paddingLeft: 18 }}>{nv.atual.perks.map((x) => <li key={x}>{x}</li>)}</ul>
+                  <p style={{ margin: '10px 0 0' }}><a href="/fidelidade">Ver todas as recompensas</a></p>
+                </div>
+              );
+            })()}
 
             {div && div.codigo && (
               <div className="ea-card">
