@@ -44,8 +44,9 @@ export default function Campanha() {
         </div>
         <div className={`${s.cx} ${s.am}`}>
           <b className={s.t}>Entrega</b>
-          A entrega pessoal é <b>gratuita em Franca e região</b>. Para outras cidades, combinamos conforme a rota de viagem. Se não houver como
-          levar pessoalmente, combinamos antes o melhor jeito de enviar. Nada é cobrado sem você concordar.
+          A entrega é <b>gratuita</b>. Para economizar, levamos os brindes <b>em viagem, em lotes</b>: quando juntamos de 5 a 10 brindes de
+          pessoas de várias cidades, programamos a rota. Quando você resgatar, avisamos o prazo aproximado e combinamos o ponto de entrega.
+          O prazo depende de formar o lote, por isso não prometemos uma data exata. Nada é cobrado de você.
         </div>
         <div className={s.cx}>
           <b className={s.t}>Transparência</b>

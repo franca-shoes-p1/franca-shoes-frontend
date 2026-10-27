@@ -50,7 +50,7 @@ export default function CampanhaBanner() {
           </div>
           <p className={s.nota}>
             Pontos e créditos não são dinheiro, sociedade nem participação, e valem por 12 meses. Não prometemos ganhos.
-            Entrega pessoal gratuita em Franca e região; outras cidades, combinadas conforme a minha rota.
+            Entrega gratuita: levamos em viagem, em lotes, quando juntar de 5 a 10 brindes de pessoas de várias cidades. Avisamos o prazo aproximado quando você resgatar.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export default function CampanhaBanner() {
             <span className={s.selo}>Frete<br />grátis*</span>
           </div>
           <div className={`${s.orbita} ${s.o1}`}><span>🎁</span>Brinde por pontos</div>
-          <div className={`${s.orbita} ${s.o2}`}><span>🚚</span>Entrega pessoal</div>
+          <div className={`${s.orbita} ${s.o2}`}><span>🚚</span>Entrega em lote</div>
           <div className={`${s.orbita} ${s.o3}`}><span>🏭</span>Fábrica de Franca</div>
         </div>
       </div>
