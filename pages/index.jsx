@@ -9,6 +9,7 @@ import CampanhaBanner from '../lib/CampanhaBanner';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
+import SitesVitrine from '../lib/SitesVitrine';
 import Redes from '../lib/Redes';
 
 /* ------------------------------------------------------------------
@@ -167,6 +168,7 @@ export default function Home() {
             ))}
             <a href="#campanha" className={styles.projCampanha} onClick={fechar}>🎁 Campanha</a>
             <Link href="/catalogo" className={styles.projCampanha} onClick={fechar}>📚 Catálogo</Link>
+            <Link href="/sites" className={styles.projCampanha} onClick={fechar}>🌐 Fábrica de Sites</Link>
           </nav>
         </div>
       </header>
@@ -178,6 +180,7 @@ export default function Home() {
         <AtelieBanner />
         <OficinaHomeBanner />
         <AfiliadosBanner />
+        <SitesVitrine />
         <section id="calcados" className={styles.hero}>
           <span className={`${styles.mancha} ${styles.m1}`} aria-hidden="true" />
           <span className={`${styles.mancha} ${styles.m2}`} aria-hidden="true" />
