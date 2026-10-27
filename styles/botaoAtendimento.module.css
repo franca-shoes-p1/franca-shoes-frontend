@@ -1,0 +1,7 @@
+.raiz { position: fixed; right: 16px; bottom: 16px; z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.bt { background: #1d4ed8; color: #fff; border: 0; border-radius: 999px; padding: 12px 18px; font: 700 15px system-ui, sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.25); min-width: 48px; min-height: 48px; }
+.bt:hover { background: #1e40af; }
+.menu { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.menu a { background: var(--c); color: #fff; text-decoration: none; padding: 10px 16px; border-radius: 999px; font: 700 14px system-ui, sans-serif; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+.menu a:hover { filter: brightness(1.08); }
+@media print { .raiz { display: none; } }

@@ -1,6 +1,7 @@
 // Inscrição pública de quem quer ser operador. Sem promessa de ganho; só guarda nome e WhatsApp.
 import { sb, txt } from '../../../lib/varejoServer';
 import { registrarIndicacao } from '../../../lib/ref';
+import { avisarAtendimento } from '../../../lib/avisoServer';
 
 const recentes = new Map(); // limite simples por endereço (zera quando a função reinicia)
 
@@ -20,6 +21,14 @@ export default async function handler(req, res) {
   try {
     const [novo] = await sb('op_candidatos', { method: 'POST', body: JSON.stringify({ nome, whatsapp: zap, cidade: txt(c.cidade, 80) || null, interesse: txt(c.interesse, 300) || null, origem: txt(c.origem, 60) || null }) });
     if (novo && novo.id) await registrarIndicacao({ req, tipo: 'operador', candidatoId: novo.id, nome, whatsapp: zap });
+    await avisarAtendimento({
+      evento: 'operador_candidato',
+      nome,
+      whatsapp: zap,
+      cidade: txt(c.cidade, 80),
+      interesse: txt(c.interesse, 300),
+      origem: txt(c.origem, 60),
+    });
     return res.status(201).json({ ok: true });
   } catch (e) {
     console.error('oficina/candidatar', e.message);
