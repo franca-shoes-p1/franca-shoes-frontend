@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
+import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
@@ -178,6 +179,7 @@ export default function Home() {
         <CampanhaBanner />
         <IgrejaHero />
         <AtelieBanner />
+        <LivrosBanner />
         <OficinaHomeBanner />
         <AfiliadosBanner />
         <SitesVitrine />

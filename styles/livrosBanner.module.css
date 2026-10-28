@@ -1,0 +1,88 @@
+/* Faixa da vitrine de livros na home: mesmo layout das vitrines do Ateliê e da Oficina, em tom índigo com dourado. */
+.banner { position: relative; overflow: hidden; color: #fff;
+  background:
+    radial-gradient(900px 420px at 90% 10%, rgba(255, 214, 120, 0.22), transparent 60%),
+    radial-gradient(700px 380px at 0% 110%, rgba(140, 90, 230, 0.40), transparent 60%),
+    linear-gradient(115deg, #1b1650 0%, #2e2285 50%, #5a35b8 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+.banner * { box-sizing: border-box; }
+.brilho1, .brilho2 { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+.brilho1 { width: 260px; height: 260px; right: 8%; top: -60px; background: rgba(255, 214, 120, 0.25); animation: deriva 14s ease-in-out infinite; }
+.brilho2 { width: 220px; height: 220px; left: 4%; bottom: -80px; background: rgba(150, 110, 255, 0.35); animation: deriva 18s ease-in-out -6s infinite; }
+.dentro { position: relative; max-width: 1140px; margin: 0 auto; padding: 56px 20px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+.pilula { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 999px; padding: 9px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(255, 255, 255, 0.06); }
+.pilula i { width: 8px; height: 8px; border-radius: 50%; background: #ffd98a; animation: ping 2s infinite; }
+.titulo { font-size: clamp(32px, 5vw, 56px); line-height: 1.06; font-weight: 800; letter-spacing: -0.02em; margin: 22px 0 0; text-wrap: balance; }
+.titulo em { font-style: normal; color: #ffd98a; }
+.texto { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: rgba(255, 255, 255, 0.86); margin: 20px 0 0; max-width: 36em; }
+.passos { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 0; padding: 0; list-style: none; }
+.passos li { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 14px; padding: 10px 16px; font-weight: 600; font-size: 15px; }
+.passos b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #ffcf6b, #e08a1f); color: #2a1a00; font-size: 13px; }
+.acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.botao { display: inline-block; font-weight: 700; font-size: 16px; border-radius: 999px; padding: 16px 30px; color: #fff; transition: transform 0.15s, box-shadow 0.15s; }
+.principal { background: linear-gradient(135deg, #ffcf6b, #e08a1f); color: #2a1a00; box-shadow: 0 10px 30px rgba(224, 138, 31, 0.45); }
+.contorno { border: 2px solid rgba(255, 255, 255, 0.55); background: transparent; }
+.botao:hover { transform: translateY(-2px); }
+.botao:focus-visible { outline: 3px solid #ffd98a; outline-offset: 3px; }
+.nota { margin: 16px 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.68); }
+
+.palco { position: relative; min-width: 0; padding: 18px 0; min-height: 360px; }
+.leque { position: relative; height: 300px; }
+.livro { position: absolute; bottom: 0; width: 34%; transform-origin: 50% 100%; }
+.l0 { left: 6%; transform: rotate(-9deg); animation: flutua0 7s ease-in-out infinite; }
+.l1 { left: 33%; z-index: 2; width: 38%; animation: flutua1 7s ease-in-out -2s infinite; }
+.l2 { left: 61%; transform: rotate(9deg); animation: flutua2 7s ease-in-out -4s infinite; }
+.cartao { position: absolute; right: -4px; bottom: -10px; z-index: 3; width: min(280px, 62%); background: #fff; color: #0f1b33; border-radius: 18px; padding: 14px 16px; box-shadow: 0 24px 60px rgba(10, 0, 40, 0.55); transform: rotate(2deg); animation: flutua3 6s ease-in-out infinite; }
+.cartaoTopo { margin: 0; display: flex; justify-content: space-between; gap: 8px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #55607a; padding-bottom: 8px; border-bottom: 2px dashed #dbe6f7; font-weight: 700; }
+.linha { display: grid; grid-template-columns: 1fr 44px 18px; gap: 8px; align-items: center; padding: 7px 0; border-bottom: 1px solid #eef0fb; font-size: 12px; font-weight: 600; }
+.barra { height: 6px; border-radius: 99px; background: #e6e8f7; overflow: hidden; }
+.barra span { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, #ffcf6b, #e08a1f); animation: enche 12s infinite; }
+.ok { width: 16px; height: 16px; border-radius: 50%; background: #19c37d; color: #fff; font-size: 10px; display: grid; place-items: center; opacity: 0; animation: visto 12s infinite; }
+.linha:nth-of-type(1) .barra span, .linha:nth-of-type(1) .ok { animation-delay: 0.4s; }
+.linha:nth-of-type(2) .barra span, .linha:nth-of-type(2) .ok { animation-delay: 1.8s; }
+.linha:nth-of-type(3) .barra span, .linha:nth-of-type(3) .ok { animation-delay: 3.2s; }
+.linha:nth-of-type(4) .barra span, .linha:nth-of-type(4) .ok { animation-delay: 4.6s; }
+.linha:nth-of-type(5) .barra span, .linha:nth-of-type(5) .ok { animation-delay: 6s; }
+.chip { position: absolute; z-index: 4; display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 14px; padding: 9px 14px; font-size: 14px; font-weight: 700; color: #fff; box-shadow: 0 12px 30px rgba(10, 0, 40, 0.35); }
+.c1 { top: 0; left: 2%; animation: sobe 5s ease-in-out infinite; }
+.c2 { top: 36%; right: 0; animation: sobe 6s ease-in-out -2s infinite; }
+
+.dentro > div:first-child > * { opacity: 0; transform: translateY(16px); animation: entra 0.7s ease forwards; }
+.dentro > div:first-child > *:nth-child(2) { animation-delay: 0.1s; }
+.dentro > div:first-child > *:nth-child(3) { animation-delay: 0.2s; }
+.dentro > div:first-child > *:nth-child(4) { animation-delay: 0.3s; }
+.dentro > div:first-child > *:nth-child(5) { animation-delay: 0.4s; }
+.dentro > div:first-child > *:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes entra { to { opacity: 1; transform: none; } }
+@keyframes flutua0 { 0%, 100% { transform: rotate(-9deg) translateY(0); } 50% { transform: rotate(-9deg) translateY(-9px); } }
+@keyframes flutua1 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes flutua2 { 0%, 100% { transform: rotate(9deg) translateY(0); } 50% { transform: rotate(9deg) translateY(-9px); } }
+@keyframes flutua3 { 0%, 100% { transform: rotate(2deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-8px); } }
+@keyframes sobe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes deriva { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, 20px); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255, 217, 138, 0.7); } 70%, 100% { box-shadow: 0 0 0 10px rgba(255, 217, 138, 0); } }
+@keyframes enche { 0% { width: 0; } 18%, 100% { width: 100%; } }
+@keyframes visto { 0%, 17% { opacity: 0; transform: scale(0.4); } 22%, 100% { opacity: 1; transform: scale(1); } }
+
+@media (max-width: 860px) {
+  .dentro { grid-template-columns: 1fr; gap: 30px; padding-top: 40px; padding-bottom: 40px; }
+  .palco { min-height: 330px; }
+  .leque { height: 250px; }
+  .cartao { right: 0; width: min(260px, 70%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .banner *, .banner *::before, .banner *::after { animation: none !important; }
+  .dentro > div:first-child > * { opacity: 1; transform: none; }
+  .barra span { width: 100%; }
+  .ok { opacity: 1; }
+}
+
+/* faixa de atalhos logo abaixo da vitrine (mesmo modelo da faixa da Oficina, em tom lilás claro) */
+.faixa { background: #f3effc; border-bottom: 1px solid #ddd2f5; }
+.faixaGrade { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 22px 20px; }
+@media (min-width: 800px) { .faixaGrade { grid-template-columns: repeat(4, 1fr); } }
+.faixaItem { display: flex; gap: 10px; align-items: center; font-weight: 700; font-size: 0.92rem; color: #0f1b33; border-radius: 12px; padding: 6px 8px; transition: background 0.2s; }
+.faixaItem:hover { background: #e6dcfa; }
+.faixaItem:focus-visible { outline: 3px solid #7a45d6; outline-offset: 2px; }
+.faixaItem span { font-size: 1.5rem; }
