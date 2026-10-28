@@ -4,6 +4,7 @@ import Link from 'next/link';
 import 'leaflet/dist/leaflet.css';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SEMENTE_BH, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
+import { GRUPOS } from '../../lib/mapeador';
 
 const CSS = `
 .pt-mapa{height:420px;border-radius:12px;border:1px solid var(--bd);margin-top:12px;z-index:0}
@@ -29,6 +30,10 @@ export default function AdminPontos() {
   const [ocupado, setOcupado] = useState(false);
   const [f, setF] = useState(VAZIO);
   const [texto, setTexto] = useState(null); // {id, conteudo}
+  const [grupos, setGrupos] = useState(['comercio', 'academia']);
+  const [quantos, setQuantos] = useState(40);
+  const [filtro, setFiltro] = useState('todos');
+  const [limite, setLimite] = useState(30);
   const mapaEl = useRef(null);
   const mapa = useRef(null);
   const camada = useRef(null);
@@ -65,6 +70,7 @@ export default function AdminPontos() {
   }, [fase]);
 
   const daCidade = pontos.filter((p) => p.cidade === cidade);
+  const visiveis = daCidade.filter((p) => filtro === 'todos' || p.status === filtro);
   const cidades = Array.from(new Set([...Object.keys(CIDADES), ...pontos.map((p) => p.cidade)]));
 
   useEffect(() => {
@@ -104,6 +110,11 @@ export default function AdminPontos() {
       setF(VAZIO);
     }, 'Ponto cadastrado.');
   };
+  const mapear = () =>
+    rodar(async () => {
+      const d = await api('/api/admin/pontos/mapear', { method: 'POST', body: { cidade, uf, grupos, quantos } });
+      setMsg({ tipo: 'ok', texto: `Achei ${d.encontrados} locais no mapa, ${d.novos} ainda não cadastrados. Cadastrei ${d.cadastrados} como "Mapeado". Rode de novo para trazer os próximos.` });
+    });
   const semente = () => rodar(() => api('/api/admin/pontos', { method: 'POST', body: { lote: SEMENTE_BH } }), 'Locais de exemplo de Belo Horizonte adicionados. Confira as posições no mapa.');
   const patch = (id, corpo, ok) => rodar(() => api(`/api/admin/pontos/${id}`, { method: 'PATCH', body: corpo }), ok);
   const apagar = (p) => { if (window.confirm(`Apagar "${p.nome}"?`)) rodar(() => api(`/api/admin/pontos/${p.id}`, { method: 'DELETE' }), 'Ponto apagado.'); };
@@ -172,6 +183,23 @@ export default function AdminPontos() {
               </div>
             )}
 
+            <div className="ea-card">
+              <h2>Buscar locais automaticamente em {cidade}</h2>
+              <p className="ea-mu">Procura no mapa aberto (OpenStreetMap) e cadastra como "Mapeado", com telefone ou e-mail quando o local tiver publicado. Os que têm contato vêm primeiro. Rode de novo para trazer os próximos.</p>
+              <div className="ea-row">
+                {Object.entries(GRUPOS).map(([k, g]) => (
+                  <label key={k} style={{ display: 'flex', gap: 6, alignItems: 'center', margin: 0 }}>
+                    <input type="checkbox" style={{ width: 'auto' }} checked={grupos.includes(k)} onChange={(e) => setGrupos(e.target.checked ? [...grupos, k] : grupos.filter((x) => x !== k))} />
+                    {g.nome}
+                  </label>
+                ))}
+              </div>
+              <div className="ea-row" style={{ marginTop: 12 }}>
+                <div style={{ flex: '0 0 140px' }}><label>Quantos por vez</label><input type="number" min="5" max="100" value={quantos} onChange={(e) => setQuantos(e.target.value)} /></div>
+                <button className="ea-btn" disabled={ocupado || grupos.length === 0} onClick={mapear} style={{ alignSelf: 'flex-end' }}>{ocupado ? 'Buscando… pode levar até 40 segundos' : 'Buscar locais'}</button>
+              </div>
+            </div>
+
             <form className="ea-card" onSubmit={salvar}>
               <h2>Novo ponto em {cidade}</h2>
               <div className="ea-grid">
@@ -188,9 +216,15 @@ export default function AdminPontos() {
             </form>
 
             <div className="ea-card">
-              <h2>Pontos de {cidade} ({daCidade.length})</h2>
+              <div className="ea-row" style={{ justifyContent: 'space-between' }}>
+                <h2>Pontos de {cidade} ({visiveis.length})</h2>
+                <select value={filtro} onChange={(e) => { setFiltro(e.target.value); setLimite(30); }} style={{ width: 'auto' }}>
+                  <option value="todos">Todos</option>
+                  {Object.entries(STATUS).map(([k, [n]]) => <option key={k} value={k}>{n}</option>)}
+                </select>
+              </div>
               {daCidade.length === 0 && <div className="ea-mu">Nenhum ponto ainda.</div>}
-              {daCidade.map((p) => {
+              {visiveis.slice(0, limite).map((p) => {
                 const [nomeSt, cor] = STATUS[p.status] || [p.status, '#64748b'];
                 return (
                   <div className="pt-lin" key={p.id}>
@@ -223,6 +257,7 @@ export default function AdminPontos() {
                   </div>
                 );
               })}
+              {visiveis.length > limite && <div style={{ marginTop: 12 }}><button className="ea-btn ea-btn2" onClick={() => setLimite(limite + 30)}>Mostrar mais ({visiveis.length - limite})</button></div>}
             </div>
           </>
         )}
