@@ -3,7 +3,7 @@ import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
 import {
-  brl, lerCarrinho, chaveItem, subtotalCarrinho, calcularFrete, ESTADOS, VAREJO,
+  brl, lerCarrinho, chaveItem, subtotalCarrinho, calcularFrete, ESTADOS, VAREJO, lerPonto,
 } from '../../lib/varejo';
 
 const VAZIO = {
@@ -55,6 +55,7 @@ export default function Checkout() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...f,
+          ponto: lerPonto(),
           itens: itens.map((i) => ({ id: i.id, tamanho: i.tamanho, quantidade: i.quantidade })),
         }),
       });
