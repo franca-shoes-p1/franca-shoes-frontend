@@ -82,7 +82,7 @@ export default async function handler(req, res) {
         bairro,
         cidade,
         estado,
-        observacao: txt(c.observacao, 300) || null,
+        observacao: [txt(c.observacao, 300), /^[A-Z0-9]{4,10}$/.test(String(c.ponto || '')) ? `[ponto:${c.ponto}]` : ''].filter(Boolean).join(' ') || null,
         itens,
         subtotal,
         frete,
