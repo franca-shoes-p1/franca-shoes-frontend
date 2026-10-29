@@ -16,7 +16,7 @@ function limite(ip) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ erro: 'Método não permitido.' });
   const b = req.body && typeof req.body === 'object' ? req.body : {};
-  if (b.empresa_site) return res.json({ ok: true }); // campo-isca: robôs preenchem, pessoas não veem
+  if (b.campo_extra_x || b.empresa_site) return res.json({ ok: true }); // campo-isca: robôs preenchem, pessoas não veem
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   if (!limite(ip)) return res.status(429).json({ erro: 'Muitas tentativas. Tente de novo mais tarde.' });
   if (b.aceite !== true) return res.status(400).json({ erro: 'Marque a autorização para continuar.' });

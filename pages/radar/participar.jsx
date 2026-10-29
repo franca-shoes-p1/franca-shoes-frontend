@@ -7,7 +7,7 @@ import { TIPOS, CIDADES } from '../../lib/pontos';
 import { WHATS_RADAR } from '../../lib/radarAssistente';
 
 const TIPOS_FORM = ['pessoa', 'comercio', 'grupo', 'condominio', 'igreja', 'universidade', 'mural_publico', 'outro'];
-const VAZIO = { nome: '', cidade: 'Belo Horizonte', uf: 'MG', tipo: 'pessoa', local: '', whatsapp: '', email: '', aceite: false, empresa_site: '' };
+const VAZIO = { nome: '', cidade: 'Belo Horizonte', uf: 'MG', tipo: 'pessoa', local: '', whatsapp: '', email: '', aceite: false, campo_extra_x: '' };
 
 export default function Participar() {
   const [f, setF] = useState(VAZIO);
@@ -24,6 +24,7 @@ export default function Participar() {
       const r = await fetch('/api/ponto/participar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(f) });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.erro || 'Erro ' + r.status);
+      if (!j.token) throw new Error('Não foi possível concluir. Recarregue a página e tente de novo.');
       setOk(j);
     } catch (e) { setErro(e.message); }
     setOcupado(false);
@@ -73,7 +74,7 @@ export default function Participar() {
             <label>E-mail</label>
             <input type="email" value={f.email} onChange={muda('email')} maxLength={120} />
             <small className={s.dica}>Informe pelo menos um dos dois contatos.</small>
-            <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true"><input tabIndex={-1} autoComplete="off" value={f.empresa_site} onChange={muda('empresa_site')} /></div>
+            <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true"><input tabIndex={-1} autoComplete="off" name="campo_extra_x" value={f.campo_extra_x} onChange={muda('campo_extra_x')} /></div>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontWeight: 600 }}>
               <input type="checkbox" checked={f.aceite} onChange={muda('aceite')} style={{ width: 20, marginTop: 3 }} />
               <span>Autorizo o uso do meu contato apenas para falar sobre o Radar e que o meu nome e a minha vitrine apareçam no site depois de aprovados. Posso sair quando quiser.</span>
