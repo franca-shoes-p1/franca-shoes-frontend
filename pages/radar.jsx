@@ -58,10 +58,11 @@ export default function Radar() {
       <section className={s.bloco}>
         <p className={s.rotulo}>Troca de divulgação</p>
         <h2 className={s.h2}>Qualquer pessoa pode participar</h2>
-        <p className={s.sub}>Cada um ajuda o outro a ser encontrado, sem custo e sem contrato. Você pode participar de três jeitos, juntos ou separados.</p>
+        <p className={s.sub}>Cada um ajuda o outro a ser encontrado, sem custo e sem contrato. Você pode participar de quatro jeitos, juntos ou separados.</p>
         <div className={s.grade}>
           <div className={s.cartao}><div className={s.emoji}>🧰</div><h3>Tenho um negócio, serviço ou projeto</h3><p>Ganha uma vitrine grátis no site, com logotipo, frase e contatos, que você mesmo monta num painel simples.</p></div>
           <div className={s.cartao}><div className={s.emoji}>📌</div><h3>Tenho um espaço</h3><p>Mural de condomínio, igreja, escola, associação ou comércio: você cede um cantinho para o cartaz com QR code.</p></div>
+          <div className={s.cartao}><div className={s.emoji}>📱</div><h3>Não tenho ponto físico</h3><p>Sem problema: divulgue pelo celular, no status, nos stories ou nos grupos. O painel entrega a imagem com o seu QR e uma legenda nova por semana. Você também pode propor troca de divulgação com outros parceiros da sua cidade.</p></div>
           <div className={s.cartao}><div className={s.emoji}>🗣️</div><h3>Quero indicar</h3><p>Conhece um bom local ou alguém que ia gostar? Indique pelo WhatsApp e nós fazemos o convite com respeito.</p></div>
         </div>
         <div className={s.acoes}><Link href="/radar/participar" className={`${s.botao} ${s.principal}`}>Quero participar</Link></div>

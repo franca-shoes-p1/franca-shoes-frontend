@@ -39,7 +39,7 @@ export default function Participar() {
       <div className={s.perfilPag} style={{ maxWidth: 720 }}>
         <p className={s.rotulo}>Quero participar</p>
         <h1 className={s.h2}>Qualquer pessoa pode fazer parte</h1>
-        <p className={s.sub}>Tem um negócio, um serviço ou um projeto? Ganha uma vitrine grátis no site. Tem um espaço, como um mural, condomínio, igreja ou escola? Pode ceder um cantinho para o cartaz. É uma troca de divulgação, sem custo e sem contrato.</p>
+        <p className={s.sub}>Tem um negócio, um serviço ou um projeto? Ganha uma vitrine grátis no site. Tem um espaço, como um mural, condomínio, igreja ou escola? Pode ceder um cantinho para o cartaz. Não tem espaço físico? Divulgue pelo celular, com imagem pronta toda semana. É uma troca de divulgação, sem custo e sem contrato.</p>
 
         {ok ? (
           <div className={s.cartao}>
@@ -67,7 +67,7 @@ export default function Participar() {
             </select>
             <label>Onde poderia ficar o cartaz? (opcional)</label>
             <input value={f.local} onChange={muda('local')} maxLength={200} placeholder="Ex.: mural do meu condomínio, recepção da igreja" />
-            <small className={s.dica}>Só indique um lugar onde você tem permissão para deixar o cartaz.</small>
+            <small className={s.dica}>Só indique um lugar onde você tem permissão para deixar o cartaz. Não tem espaço? Deixe em branco: você divulga pelo celular (status, stories, grupos) com a imagem e a legenda prontas que o painel entrega.</small>
             <label>WhatsApp (com DDD)</label>
             <input value={f.whatsapp} onChange={muda('whatsapp')} inputMode="tel" placeholder="31 99999-9999" />
             <label>E-mail</label>
