@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { api, STATUS_EBOOK, STATUS_CAP, ADMIN_CSS } from '../../../lib/adminClient';
+import AdminNav from '../../../lib/AdminNav';
 
 const CAMPOS = [
   ['titulo', 'Título'],
@@ -186,6 +187,7 @@ export default function AdminEbook() {
       </Head>
       <style>{ADMIN_CSS}</style>
       <div className="ea-in">
+        <AdminNav />
         <p>
           <a href="/admin/ebooks">← Todos os e-books</a>
         </p>

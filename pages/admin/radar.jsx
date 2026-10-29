@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
+import AdminNav from '../../lib/AdminNav';
 
 const CSS = `
 .rd-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px}
@@ -91,6 +92,7 @@ export default function Radar() {
       <Head><title>Painel do dia · Radar</title><meta name="robots" content="noindex" /></Head>
       <style>{ADMIN_CSS}{CSS}</style>
       <div className="ea-in">
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <div>
             <h1>Painel do dia</h1>

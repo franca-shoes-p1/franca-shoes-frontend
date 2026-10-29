@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { SETORES } from '../../lib/opModelos';
+import AdminNav from '../../lib/AdminNav';
 
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const STATUS = {
@@ -123,6 +124,7 @@ export default function AdminOperadores() {
       <Head><title>Operadores · Painel</title><meta name="robots" content="noindex" /></Head>
       <style>{ADMIN_CSS}{CSS}</style>
       <div className="ea-in">
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <div>
             <h1>Operadores e ordens</h1>

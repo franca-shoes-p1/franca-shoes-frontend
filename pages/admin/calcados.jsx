@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
+import AdminNav from '../../lib/AdminNav';
 
 const VAZIO = { titulo: '', categoria: '', material: '', tamanhos: '', descricao: '', custo: '', preco: '', foto_url: '' };
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
@@ -185,6 +186,7 @@ export default function AdminCalcados() {
         `}</style>
       </Head>
       <div className="ea-in">
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <div>
             <h1>Painel de calçados</h1>
