@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS_REGRA } from '../../lib/preavaliacao';
+import AdminNav from '../../lib/AdminNav';
 
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const CSS = `
@@ -62,6 +63,7 @@ export default function AdminOficina() {
       <Head><title>Oficina · painel</title><meta name="robots" content="noindex" /></Head>
       <style>{ADMIN_CSS + CSS}</style>
       <div className="ea-in" style={{ maxWidth: 880 }}>
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <h1>Oficina Digital</h1>
           <Link href="/admin/operadores" className="ea-btn ea-btn2">Ordens e operadores</Link>

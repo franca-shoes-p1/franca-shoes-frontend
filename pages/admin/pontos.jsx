@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SEMENTE_BH, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
 import { GRUPOS } from '../../lib/mapeador';
+import AdminNav from '../../lib/AdminNav';
 
 const CSS = `
 .pt-mapa{height:420px;border-radius:12px;border:1px solid var(--bd);margin-top:12px;z-index:0}
@@ -128,6 +129,7 @@ export default function AdminPontos() {
       <Head><title>Radar de Pontos · Painel</title><meta name="robots" content="noindex" /></Head>
       <style>{ADMIN_CSS}{CSS}</style>
       <div className="ea-in">
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <div>
             <h1>Radar de Pontos</h1>

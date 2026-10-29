@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { api, STATUS_EBOOK, ADMIN_CSS } from '../../../lib/adminClient';
+import AdminNav from '../../../lib/AdminNav';
 
 export default function AdminEbooks() {
   const [fase, setFase] = useState('carregando'); // carregando | login | pronto
@@ -81,6 +82,7 @@ export default function AdminEbooks() {
       </Head>
       <style>{ADMIN_CSS}</style>
       <div className="ea-in">
+        <AdminNav />
         <div className="ea-row" style={{ justifyContent: 'space-between' }}>
           <div>
             <h1>Painel de e-books</h1>

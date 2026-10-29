@@ -12,6 +12,7 @@ import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
 import SitesVitrine from '../lib/SitesVitrine';
 import Redes from '../lib/Redes';
+import RadarBanner from '../lib/RadarBanner';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -170,6 +171,7 @@ export default function Home() {
             <a href="#campanha" className={styles.projCampanha} onClick={fechar}>🎁 Campanha</a>
             <Link href="/catalogo" className={styles.projCampanha} onClick={fechar}>📚 Catálogo</Link>
             <Link href="/sites" className={styles.projCampanha} onClick={fechar}>🌐 Fábrica de Sites</Link>
+            <Link href="/radar" className={styles.projCampanha} onClick={fechar}>📍 Radar de Pontos</Link>
           </nav>
         </div>
       </header>
@@ -383,6 +385,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <RadarBanner />
 
         <section id="duvidas" className={styles.secao}>
           <div className={styles.contido}>
