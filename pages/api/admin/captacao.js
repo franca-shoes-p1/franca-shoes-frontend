@@ -2,6 +2,7 @@
 import { exigirAdmin } from '../../../lib/adminAuth';
 import { sb, txt, UUID } from '../../../lib/varejoServer';
 import { PRIMEIRA_FASE } from '../../../lib/pontos';
+import { codigoMaterial } from '../../../lib/material';
 import { planoSemana, QUOTA_CONVITES, CATEGORIAS, hojeSP, difDias } from '../../../lib/semanaCaptacao';
 
 const tem = (p) => /^\d{11}$/.test(String(p.contato_whatsapp || '')) || !!p.contato_email;
@@ -23,11 +24,13 @@ export default async function handler(req, res) {
       const inicio = plano.length ? plano.map((t) => t.data_prevista).sort()[0] : null;
       const dia = inicio ? difDias(hoje, inicio) + 1 : null;
       const quota = dia ? QUOTA_CONVITES[Math.min(dia, 7) - 1] : null;
+      let visMat = [];
+      try { visMat = await sb('rf_pontos_visitas?codigo=like.X*&select=codigo&limit=20000'); } catch (e) { visMat = []; }
       const cidades = Array.from(new Set([...PRIMEIRA_FASE, ...pontos.map((p) => p.cidade)])).filter((c) => PRIMEIRA_FASE.includes(c) || pontos.some((p) => p.cidade === c && p.status !== 'mapeado'));
       const funil = cidades.map((c) => {
         const l = pontos.filter((p) => p.cidade === c);
         const n = (s) => l.filter((p) => p.status === s).length;
-        return { cidade: c, total: l.length, comContato: l.filter(tem).length, convidado: n('convidado'), autorizado: n('autorizado'), ativo: n('ativo'), recusado: n('recusado') };
+        return { cidade: c, total: l.length, comContato: l.filter(tem).length, convidado: n('convidado'), autorizado: n('autorizado'), ativo: n('ativo'), recusado: n('recusado'), visitasMaterial: visMat.filter((v) => v.codigo === codigoMaterial(c, 'panfleto') || v.codigo === codigoMaterial(c, 'cartao')).length };
       });
       return res.json({ tarefas, funil, hoje, inicio, dia, quota, convitesHoje });
     }
