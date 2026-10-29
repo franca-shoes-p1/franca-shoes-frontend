@@ -68,12 +68,14 @@ export default function Radar() {
   const foco = fila[0];
   const autorizados = por('autorizado');
   const convidados = por('convidado').sort((a, b) => new Date(a.convidado_em || 0) - new Date(b.convidado_em || 0));
+  const pendentes = da.filter((p) => p.perfil_status === 'pendente');
   const ativos = por('ativo').sort((a, b) => (b.pedidos - a.pedidos) || (b.visitas - a.visitas));
   const totalPedidos = da.reduce((s, p) => s + (p.pedidos || 0), 0);
   const totalVisitas = da.reduce((s, p) => s + (p.visitas || 0), 0);
 
   let proximo;
   if (da.length === 0) proximo = <>Comece buscando locais da cidade em <Link href="/admin/pontos">Radar de Pontos</Link>.</>;
+  else if (pendentes.length) proximo = <>Há {pendentes.length} perfil(is) de parceiro esperando a sua revisão (passo 5).</>;
   else if (autorizados.length) proximo = <>Você tem {autorizados.length} ponto(s) autorizado(s): imprima os cartazes e cole (passo 2).</>;
   else if (foco) proximo = <>Convide o próximo local (passo 1): {fila.length} na fila com contato.</>;
   else if (convidados.length) proximo = <>Aguarde as respostas ({convidados.length} convite(s) enviado(s)) e acompanhe no passo 3.</>;
@@ -84,6 +86,7 @@ export default function Radar() {
     const corpo = textoConvite({ nome: p.nome, cidade: p.cidade, link: `${SITE_PUBLICO}/convite/${p.token_convite}` });
     return `mailto:${p.contato_email}?subject=${encodeURIComponent('Ponto Parceiro em ' + p.cidade)}&body=${encodeURIComponent(corpo)}`;
   };
+  const decidir = (p, decisao, ok) => rodar(() => api('/api/admin/pontos/perfil', { method: 'POST', body: { id: p.id, decisao } }), ok);
   const jaEnviei = () => { const p = foco; setAbriu(false); mudar(p, 'convidado', `"${p.nome}" marcado como convidado.`); };
   const pular = () => { setAbriu(false); setPuladas([...puladas, foco.id]); };
 
@@ -162,6 +165,7 @@ export default function Radar() {
                   <div><b>{p.nome}</b><div className="ea-mu">{TIPOS[p.tipo] || p.tipo} · código {p.codigo}</div></div>
                   <div className="ea-row">
                     <Link className="ea-btn rd-sm" href={`/admin/cartaz/${p.id}?v=4`} target="_blank">Cartaz com QR</Link>
+                    <button className="ea-btn ea-btn2 rd-sm" onClick={() => { try { navigator.clipboard.writeText(`${SITE_PUBLICO}/parceiro/${p.token_convite}`); setMsg({ tipo: 'ok', texto: 'Link do painel do parceiro copiado. Envie a ele pelo WhatsApp.' }); } catch (e) {} }}>Copiar link do painel dele</button>
                     <button className="ea-btn ea-btn-ok rd-sm" disabled={ocupado} onClick={() => mudar(p, 'ativo', `"${p.nome}" marcado como ativo.`)}>Já colei</button>
                   </div>
                 </div>
@@ -195,6 +199,28 @@ export default function Radar() {
                 <div className="rd-lin" key={p.id}>
                   <div><b>{p.nome}</b><div className="ea-mu">código {p.codigo}</div></div>
                   <div className="ea-mu">{p.visitas} visitas · {p.pedidos} pedidos</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="ea-card">
+              <h2><span className="rd-n">5</span>Revisar perfis dos parceiros ({pendentes.length})</h2>
+              {pendentes.length === 0 && <div className="ea-mu">Quando um parceiro enviar a vitrine do negócio, ela aparece aqui para você aprovar.</div>}
+              {pendentes.map((p) => (
+                <div className="rd-lin" key={p.id} style={{ alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', gap: 12, minWidth: 0, flex: '1 1 260px' }}>
+                    {p.perfil_logo ? <img src={p.perfil_logo} alt="" width={64} height={64} style={{ objectFit: 'contain', borderRadius: 10, border: '1px solid var(--bd)', background: '#fff' }} /> : <div style={{ width: 64, height: 64, display: 'grid', placeItems: 'center', fontSize: 26 }}>🏪</div>}
+                    <div style={{ minWidth: 0 }}>
+                      <b>{p.nome}</b>
+                      {p.perfil_slogan && <div>{p.perfil_slogan}</div>}
+                      {p.perfil_descricao && <div className="ea-mu">{p.perfil_descricao}</div>}
+                      <div className="ea-mu">{[p.perfil_horario, p.perfil_endereco, p.perfil_whatsapp && 'WhatsApp ' + p.perfil_whatsapp, p.perfil_instagram && '@' + p.perfil_instagram, p.perfil_site].filter(Boolean).join(' · ')}</div>
+                    </div>
+                  </div>
+                  <div className="ea-row">
+                    <button className="ea-btn ea-btn-ok rd-sm" disabled={ocupado} onClick={() => decidir(p, 'aprovar', `Perfil de "${p.nome}" publicado.`)}>Aprovar</button>
+                    <button className="ea-btn ea-btn-er rd-sm" disabled={ocupado} onClick={() => decidir(p, 'reprovar', `Perfil de "${p.nome}" devolvido para ajuste.`)}>Pedir ajuste</button>
+                  </div>
                 </div>
               ))}
             </div>

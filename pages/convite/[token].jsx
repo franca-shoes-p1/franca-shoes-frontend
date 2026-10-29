@@ -42,7 +42,15 @@ export default function Convite({ token, nome, cidade, status }) {
         <h1>Ponto Parceiro em {cidade}</h1>
         <p><b>{nome}</b>, convidamos você a deixar um cartaz pequeno com QR Code no seu mural. Em troca, o seu local aparece como Ponto Parceiro na nossa página da cidade, sem custo. Os calçados e acessórios vêm direto da fábrica de Franca-SP.</p>
         {respondido ? (
-          <p><b>{estado === 'recusado' ? 'Tudo bem, registramos que você não quer participar. Não enviaremos novos convites.' : 'Obrigado! Registramos a sua autorização.'}</b></p>
+          <>
+            <p><b>{estado === 'recusado' ? 'Tudo bem, registramos que você não quer participar. Não enviaremos novos convites.' : 'Obrigado! Registramos a sua autorização.'}</b></p>
+            {estado !== 'recusado' && (
+              <>
+                <p>Agora monte a vitrine do seu negócio: logotipo, frase e contatos. Ela aparece no nosso site, sem custo.</p>
+                <a className="b s" style={{ textAlign: 'center', textDecoration: 'none', boxSizing: 'border-box' }} href={`/parceiro/${token}`}>Montar a vitrine do meu negócio</a>
+              </>
+            )}
+          </>
         ) : (
           <>
             <button className="b s" disabled={env} onClick={() => responder('sim')}>Sim, autorizo o cartaz</button>

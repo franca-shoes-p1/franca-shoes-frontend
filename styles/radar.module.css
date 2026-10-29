@@ -116,3 +116,34 @@
   .banner *, .assist * { animation: none !important; }
   .esq > * { opacity: 1; transform: none; } .pino { opacity: 1; }
 }
+
+/* vitrine e perfil dos parceiros */
+.vitrine { background: linear-gradient(180deg, #fbf4ea, #f1e1c8); border-top: 1px solid rgba(138, 84, 41, 0.18); color: #3d2714; }
+.vitrine * { box-sizing: border-box; }
+.vitrineIn { max-width: 1140px; margin: 0 auto; padding: 60px 20px; }
+.vitrine h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 0 0 10px; font-weight: 800; letter-spacing: -0.01em; }
+.pgrade { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 26px; }
+.pcard { display: flex; flex-direction: column; gap: 10px; background: #fff; border: 1px solid rgba(138, 84, 41, 0.25); border-radius: 18px; padding: 18px; text-decoration: none; color: #3d2714 !important; box-shadow: 0 8px 22px rgba(110, 70, 30, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+.pcard:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(110, 70, 30, 0.18); }
+.pcard b { font-size: 16px; line-height: 1.25; } .pcard small { color: #6b4a2b; font-size: 13.5px; line-height: 1.4; }
+.pcard.vazio { border-style: dashed; background: rgba(255, 255, 255, 0.55); box-shadow: none; }
+.logoBox { width: 76px; height: 76px; border-radius: 16px; background: #f6e9d7; border: 1px solid rgba(138, 84, 41, 0.25); display: grid; place-items: center; overflow: hidden; font-size: 30px; flex: none; }
+.logoBox img { width: 100%; height: 100%; object-fit: contain; background: #fff; display: block; }
+.local { display: inline-block; font-size: 12px; font-weight: 700; color: #8a5429; }
+
+.painelP { max-width: 1040px; margin: 0 auto; padding: 24px 16px 70px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 22px; align-items: start; }
+.painelP label { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 4px; }
+.painelP input, .painelP textarea { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(138, 84, 41, 0.4); background: #fff; color: #3d2714; }
+.painelP textarea { min-height: 96px; resize: vertical; }
+.painelP small.dica { display: block; color: #7a5a3a; font-size: 12.5px; margin-top: 3px; }
+.status { display: inline-block; border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 800; color: #fff; }
+.aviso { border-radius: 12px; padding: 10px 14px; margin: 12px 0; font-size: 14.5px; background: #f6e9d7; border: 1px solid rgba(138, 84, 41, 0.3); }
+.aviso.ok { background: #e3f4e5; border-color: #8fcf97; } .aviso.er { background: #fde6e4; border-color: #e6a29c; color: #8c1d14; }
+.sticky { position: sticky; top: 14px; }
+.previa { background: #fff; border: 1px solid rgba(138, 84, 41, 0.3); border-radius: 22px; padding: 22px; box-shadow: 0 14px 34px rgba(110, 70, 30, 0.18); text-align: center; }
+.previa .logoBox { width: 112px; height: 112px; margin: 0 auto 12px; font-size: 44px; }
+.previa h3 { margin: 4px 0; font-size: 22px; } .previa p { margin: 6px 0; color: #55391f; font-size: 15px; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 14px; }
+.ghost { background: none; border: 0; color: #8c1d14; text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; padding: 0; }
+.perfilPag { max-width: 640px; margin: 0 auto; padding: 28px 16px 60px; }
+@media (max-width: 860px) { .painelP { grid-template-columns: minmax(0, 1fr); } .sticky { position: static; } }

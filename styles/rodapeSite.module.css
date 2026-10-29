@@ -1,0 +1,29 @@
+/* Rodapé personalizado da home: fundo azul-noite, brilho animado no topo, colunas de projetos. */
+.rodape { position: relative; background: radial-gradient(900px 300px at 85% 0%, rgba(30, 107, 255, 0.22), transparent 60%), radial-gradient(700px 260px at 0% 100%, rgba(18, 198, 232, 0.14), transparent 60%), #031024; color: #9fb5de; padding: 56px 20px 22px; overflow: hidden; }
+.rodape * { box-sizing: border-box; }
+.rodape a { color: inherit; text-decoration: none; }
+.brilho { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #12c6e8, #1e6bff, #7ff0ff, #12c6e8); background-size: 200% 100%; animation: corre 8s linear infinite; }
+.topo { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr); gap: 44px; }
+.logo { display: inline-flex; align-items: center; gap: 12px; color: #fff !important; font-weight: 800; font-size: 1.25rem; }
+.selo { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #12c6e8, #1e6bff); color: #fff; font-weight: 800; }
+.marca p { margin: 14px 0 0; line-height: 1.6; max-width: 34em; font-size: 0.95rem; }
+.contatos { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 18px; }
+.contatos a { border: 1px solid rgba(159, 181, 222, 0.35); border-radius: 999px; padding: 8px 16px; color: #fff; font-weight: 700; font-size: 0.9rem; transition: background 0.2s, transform 0.2s; }
+.contatos a:hover { background: rgba(30, 107, 255, 0.3); transform: translateY(-2px); }
+.redes > div > span:first-child { color: #9fb5de !important; }
+.colunas { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 26px; }
+.col h4 { color: #fff; margin: 0 0 12px; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.col li a { display: flex; align-items: center; gap: 9px; padding: 6px 8px; margin-left: -8px; border-radius: 10px; font-size: 0.94rem; transition: background 0.2s, color 0.2s, transform 0.2s; }
+.col li a:hover { background: rgba(30, 107, 255, 0.22); color: #fff; transform: translateX(4px); }
+.portais { max-width: 1140px; margin: 36px auto 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.portal { display: flex; flex-direction: column; gap: 2px; padding: 18px 24px; border-radius: 20px; border: 1px solid rgba(159, 181, 222, 0.3); background: rgba(255, 255, 255, 0.04); color: #fff !important; transition: transform 0.2s, box-shadow 0.2s; }
+.portal b { font-size: 1.05rem; } .portal small { color: #9fb5de; font-size: 0.85rem; }
+.portal:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35); }
+.portalDestaque { background: linear-gradient(135deg, #12c6e8, #1e6bff); border-color: transparent; box-shadow: 0 14px 36px rgba(18, 160, 255, 0.4); }
+.portalDestaque small { color: rgba(255, 255, 255, 0.9); }
+.fim { max-width: 1140px; margin: 30px auto 0; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; font-size: 0.82rem; }
+.fim a:hover { color: #fff; text-decoration: underline; }
+@keyframes corre { from { background-position: 0 0; } to { background-position: 200% 0; } }
+@media (max-width: 860px) { .topo { grid-template-columns: minmax(0, 1fr); gap: 30px; } .fim { justify-content: center; text-align: center; } }
+@media (prefers-reduced-motion: reduce) { .brilho { animation: none; } }
