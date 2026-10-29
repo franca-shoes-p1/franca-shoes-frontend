@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite, textoLembrete, assuntoEmail } from '../../lib/pontos';
 import AdminNav from '../../lib/AdminNav';
+import { CANAIS } from '../../lib/trocas';
 
 const CSS = `
 .rd-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px}
@@ -35,11 +36,13 @@ export default function Radar() {
   const [ocupado, setOcupado] = useState(false);
   const [puladas, setPuladas] = useState([]);
   const [abriu, setAbriu] = useState(false); // abriu WhatsApp/e-mail do ponto em foco
+  const [divs, setDivs] = useState({ divulgacoes: [], trocas: [] });
 
   const carregar = useCallback(async () => {
     try {
       const d = await api('/api/admin/pontos');
       setPontos(d.pontos || []);
+      api('/api/admin/pontos/divulgacoes').then((x) => setDivs({ divulgacoes: x.divulgacoes || [], trocas: x.trocas || [] })).catch(() => {});
       setFase('pronto');
     } catch (e) {
       if (e.status === 401) setFase('login');
@@ -75,6 +78,7 @@ export default function Radar() {
 
   let proximo;
   if (da.length === 0) proximo = <>Comece buscando locais da cidade em <Link href="/admin/pontos">Radar de Pontos</Link>.</>;
+  else if (divs.divulgacoes.length) proximo = <>Há {divs.divulgacoes.length} comprovação(ões) de divulgação esperando a sua conferência (passo 6).</>;
   else if (pendentes.length) proximo = <>Há {pendentes.length} perfil(is) de parceiro esperando a sua revisão (passo 5).</>;
   else if (autorizados.length) proximo = <>Você tem {autorizados.length} ponto(s) autorizado(s): imprima os cartazes e cole (passo 2).</>;
   else if (foco) proximo = <>Convide o próximo local (passo 1): {fila.length} na fila com contato.</>;
@@ -86,6 +90,8 @@ export default function Radar() {
     const corpo = textoConvite({ nome: p.nome, cidade: p.cidade, link: `${SITE_PUBLICO}/convite/${p.token_convite}` });
     return `mailto:${p.contato_email}?subject=${encodeURIComponent(assuntoEmail({ cidade: p.cidade }))}&body=${encodeURIComponent(corpo)}`;
   };
+  const nomeDe = (id) => (pontos.find((x) => x.id === id) || {}).nome || 'Parceiro';
+  const decidirDiv = (x, decisao, ok) => rodar(() => api('/api/admin/pontos/divulgacoes', { method: 'POST', body: { id: x.id, decisao } }), ok);
   const decidir = (p, decisao, ok) => rodar(() => api('/api/admin/pontos/perfil', { method: 'POST', body: { id: p.id, decisao } }), ok);
   const linkLembrete = (p) => `https://wa.me/55${p.contato_whatsapp}?text=${encodeURIComponent(textoLembrete({ nome: p.nome, link: `${SITE_PUBLICO}/convite/${p.token_convite}` }))}`;
   const jaEnviei = () => { const p = foco; setAbriu(false); mudar(p, 'convidado', `"${p.nome}" marcado como convidado.`); };
@@ -225,6 +231,24 @@ export default function Radar() {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="ea-card">
+              <h2><span className="rd-n">6</span>Conferir divulgações digitais ({divs.divulgacoes.length})</h2>
+              {divs.divulgacoes.length === 0 && <div className="ea-mu">Quando um parceiro comprovar uma publicação semanal, ela aparece aqui. Abra o link, confira que o QR ou o link do site está lá e aprove.</div>}
+              {divs.divulgacoes.map((x) => (
+                <div className="rd-lin" key={x.id}>
+                  <div style={{ minWidth: 0, flex: '1 1 260px' }}>
+                    <b>{nomeDe(x.ponto_id)}</b> <span className="ea-mu">· {CANAIS[x.canal] || x.canal} · semana {x.semana}</span>
+                    {x.link && <div><a href={x.link} target="_blank" rel="noopener noreferrer nofollow" style={{ wordBreak: 'break-all' }}>{x.link}</a></div>}
+                    {x.obs && <div className="ea-mu">{x.obs}</div>}
+                  </div>
+                  <div className="ea-row">
+                    <button className="ea-btn ea-btn-ok rd-sm" disabled={ocupado} onClick={() => decidirDiv(x, 'aprovar', 'Divulgação aprovada.')}>Aprovar</button>
+                    <button className="ea-btn ea-btn-er rd-sm" disabled={ocupado} onClick={() => decidirDiv(x, 'reprovar', 'Divulgação não aprovada.')}>Não aprovar</button>
+                  </div>
+                </div>
+              ))}
+              {divs.trocas.length > 0 && <div className="ea-mu" style={{ marginTop: 10 }}>Trocas combinadas entre parceiros: {divs.trocas.length}. {divs.trocas.slice(0, 5).map((t) => `${nomeDe(t.de_id)} ↔ ${nomeDe(t.para_id)}`).join(' · ')}</div>}
             </div>
           </>
         )}

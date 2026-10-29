@@ -7,6 +7,7 @@ import s from '../../styles/radar.module.css';
 import { reduzirFoto } from '../../lib/reduzirFoto';
 import { PERFIL_STATUS } from '../../lib/parceiro';
 import { SITE_PUBLICO } from '../../lib/pontos';
+import ParceiroTrocas from '../../lib/ParceiroTrocas';
 
 const VAZIO = { slogan: '', descricao: '', logo: '', whatsapp: '', instagram: '', site: '', horario: '', endereco: '' };
 const chamar = async (url, opts) => {
@@ -132,6 +133,7 @@ export default function PainelParceiro({ token }) {
           </div>
         </div>
       )}
+      {ponto && !fim && <div className={s.painelP} style={{ gridTemplateColumns: 'minmax(0,1fr)' }}><ParceiroTrocas token={token} ponto={ponto} /></div>}
     </div>
   );
 }
