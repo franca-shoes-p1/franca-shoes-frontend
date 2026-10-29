@@ -134,6 +134,7 @@ export default function AdminPontos() {
             <div className="ea-mu">Onde colocar cartazes com QR Code, por cidade. Só com autorização do local.</div>
           </div>
           <div className="ea-row">
+            <Link href="/admin/radar" className="ea-btn">Painel do dia</Link>
             <Link href="/admin/calcados" className="ea-btn ea-btn2">Calçados</Link>
             {fase === 'pronto' && <button className="ea-btn ea-btn2" onClick={sair}>Sair</button>}
           </div>
