@@ -5,6 +5,7 @@ import s from '../../styles/radar.module.css';
 import { sb } from '../../lib/varejoServer';
 import { CAMPOS_PUBLICOS, slugCidade } from '../../lib/parceiro';
 import { TIPOS } from '../../lib/pontos';
+import { seloDe } from '../../lib/trocas';
 
 export async function getServerSideProps({ params, res }) {
   res.setHeader('Cache-Control', 'no-store');
@@ -15,7 +16,13 @@ export async function getServerSideProps({ params, res }) {
     const [p] = await sb(`rf_pontos?codigo=eq.${codigo}&status=in.(autorizado,ativo)&select=${CAMPOS_PUBLICOS},perfil_status`);
     if (!p) return volta;
     const ok = p.perfil_status === 'aprovado';
-    return { props: { codigo, nome: p.nome, cidade: p.cidade, uf: p.uf, tipo: TIPOS[p.tipo] || '', perfil: ok ? {
+    let selo = null;
+    try {
+      const [q] = await sb(`rf_pontos?codigo=eq.${codigo}&select=id`);
+      const a = await sb(`rf_divulgacoes?ponto_id=eq.${q.id}&status=eq.aprovado&select=id`);
+      selo = seloDe(a.length);
+    } catch (e) { selo = null; }
+    return { props: { selo: ok ? selo : null, codigo, nome: p.nome, cidade: p.cidade, uf: p.uf, tipo: TIPOS[p.tipo] || '', perfil: ok ? {
       slogan: p.perfil_slogan, descricao: p.perfil_descricao, logo: p.perfil_logo, whatsapp: p.perfil_whatsapp,
       instagram: p.perfil_instagram, site: p.perfil_site, horario: p.perfil_horario, endereco: p.perfil_endereco } : null } };
   } catch (e) {
@@ -23,7 +30,7 @@ export async function getServerSideProps({ params, res }) {
   }
 }
 
-export default function PontoPublico({ codigo, nome, cidade, uf, tipo, perfil }) {
+export default function PontoPublico({ selo, codigo, nome, cidade, uf, tipo, perfil }) {
   const f = perfil || {};
   return (
     <div className={s.pagina}>
@@ -37,6 +44,7 @@ export default function PontoPublico({ codigo, nome, cidade, uf, tipo, perfil })
           <div className={s.logoBox}>{f.logo ? <img src={f.logo} alt={`Logotipo de ${nome}`} /> : '🏪'}</div>
           <span className={s.local}>Ponto Parceiro · {cidade}/{uf}</span>
           <h1 style={{ margin: '6px 0', fontSize: 26 }}>{nome}</h1>
+          {selo && <p><span className={s.status} style={{ background: selo.cor }}>{selo.nome}</span></p>}
           {f.slogan && <p><b>{f.slogan}</b></p>}
           {f.descricao && <p>{f.descricao}</p>}
           {!f.descricao && tipo && <p>{tipo}</p>}
