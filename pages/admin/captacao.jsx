@@ -20,7 +20,7 @@ const CSS = `
 .cp-tab th:first-child,.cp-tab td:first-child{text-align:left}
 .cp-wrap{overflow-x:auto}
 .cp-big{font-size:34px;font-weight:800;line-height:1}
-.ea a.ea-btn{color:#fff}
+.ea a.ea-btn{color:#fff}.ea a.ea-btn2{color:var(--ac)}
 `;
 const fmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
 
