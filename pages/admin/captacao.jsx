@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import AdminNav from '../../lib/AdminNav';
+import RadarFluxo from '../../lib/RadarFluxo';
 import { CATEGORIAS, QUOTA_CONVITES, META_POR_CIDADE, somaDias } from '../../lib/semanaCaptacao';
 import { PRIMEIRA_FASE } from '../../lib/pontos';
 
@@ -70,6 +71,7 @@ export default function Captacao() {
         <AdminNav />
         <h1>Captação: semana de parceiros</h1>
         <div className="ea-mu">Meta: formar a primeira lista de parceiros nas capitais da primeira fase em 7 dias, sem arriscar o seu WhatsApp. Depois vem a viagem.</div>
+        <RadarFluxo />
         {msg && <div className={`ea-msg ${msg.tipo}`}>{msg.texto}</div>}
         {fase === 'carregando' && <div className="ea-card">Carregando…</div>}
         {fase === 'login' && (
@@ -108,6 +110,7 @@ export default function Captacao() {
                 <div className="rd-acoes ea-row" style={{ marginTop: 12 }}>
                   <Link href="/admin/radar" className="ea-btn">Abrir o Painel do dia</Link>
                   <Link href="/admin/pontos" className="ea-btn ea-btn2">Mapa e pontos</Link>
+                  <Link href="/admin/material" className="ea-btn ea-btn2">🖨️ Materiais</Link>
                 </div>
               </div>
             )}
@@ -124,9 +127,9 @@ export default function Captacao() {
               <h2>Funil por cidade</h2>
               <div className="ea-mu">Meta ao fim da semana: {META_POR_CIDADE} locais com WhatsApp ou e-mail em cada cidade.</div>
               <div className="cp-wrap"><table className="cp-tab">
-                <thead><tr><th>Cidade</th><th>Locais</th><th>Com contato</th><th>Convidados</th><th>Autorizados</th><th>Ativos</th><th>Recusaram</th></tr></thead>
+                <thead><tr><th>Cidade</th><th>Locais</th><th>Com contato</th><th>Convidados</th><th>Autorizados</th><th>Ativos</th><th>Recusaram</th><th>Visitas panfleto e cartão</th></tr></thead>
                 <tbody>{d.funil.map((f) => (
-                  <tr key={f.cidade}><td>{f.cidade}</td><td>{f.total}</td><td style={{ fontWeight: 700, color: f.comContato >= META_POR_CIDADE ? '#16a34a' : undefined }}>{f.comContato}</td><td>{f.convidado}</td><td>{f.autorizado}</td><td>{f.ativo}</td><td>{f.recusado}</td></tr>
+                  <tr key={f.cidade}><td>{f.cidade}</td><td>{f.total}</td><td style={{ fontWeight: 700, color: f.comContato >= META_POR_CIDADE ? '#16a34a' : undefined }}>{f.comContato}</td><td>{f.convidado}</td><td>{f.autorizado}</td><td>{f.ativo}</td><td>{f.recusado}</td><td>{f.visitasMaterial}</td></tr>
                 ))}</tbody>
               </table></div>
             </div>

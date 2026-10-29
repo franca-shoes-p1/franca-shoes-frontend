@@ -6,6 +6,7 @@ import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite, textoLembrete, assu
 import AdminNav from '../../lib/AdminNav';
 import { CANAIS } from '../../lib/trocas';
 import AddContato from '../../lib/AddContato';
+import RadarFluxo from '../../lib/RadarFluxo';
 
 const CSS = `
 .rd-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px}
@@ -115,6 +116,14 @@ export default function Radar() {
           </div>
         </div>
         {msg && <div className={`ea-msg ${msg.tipo}`}>{msg.texto}</div>}
+        <RadarFluxo aberto={false} />
+        {fase === 'pronto' && (
+          <div className="ea-card" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+            <b>Atalhos da campanha:</b>
+            <Link href="/admin/captacao" className="ea-btn">🚀 Semana de captação</Link>
+            <Link href="/admin/material" className="ea-btn ea-btn2">🖨️ Materiais para imprimir</Link>
+          </div>
+        )}
         {fase === 'carregando' && <div className="ea-card">Carregando…</div>}
         {fase === 'login' && (
           <form className="ea-card" onSubmit={entrar}>
