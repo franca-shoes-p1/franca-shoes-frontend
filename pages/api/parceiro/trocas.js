@@ -1,6 +1,7 @@
 // Divulgação digital semanal e troca entre parceiros. Acesso pelo link secreto do parceiro (token).
 import { sb, UUID } from '../../../lib/varejoServer';
 import { CANAIS, semanaDe, linkValido } from '../../../lib/trocas';
+import { avisar } from '../../../lib/avisar';
 
 const corta = (v, n) => String(v == null ? '' : v).replace(/<[^>]*>/g, ' ').replace(/[\u0000-\u001f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n);
 const EU = 'id,codigo,nome,cidade,uf,status,perfil_status,troca_aberta,ramo';
@@ -64,6 +65,7 @@ export default async function handler(req, res) {
       const semana = semanaDe().chave;
       const dados = { ponto_id: p.id, semana, canal: b.canal, link: link || null, obs: obs || null, status: 'pendente', criado_em: new Date().toISOString() };
       await sb('rf_divulgacoes?on_conflict=ponto_id,semana,canal', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: JSON.stringify(dados) });
+      await avisar(`📣 ${p.nome} (${p.cidade}) comprovou uma divulgação (${CANAIS[b.canal]}). Confira no passo 6 do Painel do dia.`);
     } else if (b.acao === 'config') {
       await sb(`rf_pontos?id=eq.${p.id}`, { method: 'PATCH', body: JSON.stringify({ troca_aberta: !!b.aberta, ramo: corta(b.ramo, 60) || null }) });
       p.troca_aberta = !!b.aberta; p.ramo = corta(b.ramo, 60) || null;
@@ -79,6 +81,7 @@ export default async function handler(req, res) {
       if (!UUID.test(String(b.id || ''))) return res.status(400).json({ erro: 'Proposta inválida.' });
       const r = await sb(`rf_trocas?id=eq.${b.id}&para_id=eq.${p.id}&status=eq.proposta`, { method: 'PATCH', body: JSON.stringify({ status: b.aceitar ? 'aceita' : 'recusada' }) });
       if (!r.length) return res.status(400).json({ erro: 'Proposta não encontrada.' });
+      if (b.aceitar) await avisar(`🤝 Troca de divulgação combinada em ${p.cidade}: ${p.nome} aceitou uma proposta.`);
     } else {
       return res.status(400).json({ erro: 'Ação inválida.' });
     }

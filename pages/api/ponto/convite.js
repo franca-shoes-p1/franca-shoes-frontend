@@ -1,5 +1,6 @@
 // Resposta do dono do ponto ao convite (autorizar ou recusar). Público, protegido pelo token do convite.
 import { sb } from '../../../lib/varejoServer';
+import { avisar } from '../../../lib/avisar';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ erro: 'Método não permitido.' });
@@ -9,11 +10,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ erro: 'Link inválido.' });
   }
   try {
-    const [p] = await sb(`rf_pontos?token_convite=eq.${token}&select=id,status`);
+    const [p] = await sb(`rf_pontos?token_convite=eq.${token}&select=id,status,nome,cidade`);
     if (!p) return res.status(404).json({ erro: 'Convite não encontrado.' });
     if (['autorizado', 'ativo', 'recusado'].includes(p.status)) return res.json({ ok: true, status: p.status });
     const status = resposta === 'sim' ? 'autorizado' : 'recusado';
     await sb(`rf_pontos?id=eq.${p.id}`, { method: 'PATCH', body: JSON.stringify({ status, respondido_em: new Date().toISOString() }) });
+    await avisar(`${status === 'autorizado' ? '✅' : '❌'} ${p.nome} (${p.cidade}) respondeu ${status === 'autorizado' ? 'SIM' : 'NÃO'} ao convite.${status === 'autorizado' ? ' Já pode imprimir o cartaz (passo 2).' : ''}`);
     return res.json({ ok: true, status });
   } catch (e) {
     return res.status(500).json({ erro: 'Não foi possível registrar agora. Tente de novo.' });
