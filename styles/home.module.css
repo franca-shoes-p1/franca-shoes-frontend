@@ -210,12 +210,12 @@
 .topoMenuAberto .projTexto small { max-width: none; }
 .topoMenuAberto .projCampanha { text-align: center; margin-top: 6px; }
 /* Menu do topo: com 6 itens, a linha so cabe em telas largas. Abaixo de 1240px usa o menu de 3 tracos. */
-@media (min-width: 1240px) { .topoMenu { display: flex; flex-wrap: nowrap; gap: 6px; } .topoMenuAberto { display: flex; flex-direction: row; position: static; background: none; padding: 0; } .barra .botaoMenu { display: none; }
+@media (min-width: 1340px) { .cabecalho .contido { max-width: 1560px; } .topoMenu { display: flex; flex-wrap: nowrap; gap: 6px; } .topoMenuAberto { display: flex; flex-direction: row; position: static; background: none; padding: 0; } .barra .botaoMenu { display: none; }
   .barra { gap: 12px; } .pagina .marca { flex: none; white-space: nowrap; }
   .topoMenu .projTexto b { white-space: nowrap; font-size: 0.86rem; } .topoMenu .projTexto small { display: none; }
   .pagina .projeto { padding: 6px 12px 6px 6px; } .pagina .projCampanha { padding: 9px 14px; font-size: 0.86rem; } }
-@media (min-width: 1500px) { .topoMenu .projTexto small { display: block; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
-@media (max-width: 1239px) { .barra .botaoMenu { display: flex; } .topoMenuAberto { max-height: calc(100vh - 64px); overflow-y: auto; } }
+@media (min-width: 1900px) { .topoMenu .projTexto small { display: block; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+@media (max-width: 1339px) { .barra .botaoMenu { display: flex; } .topoMenuAberto { max-height: calc(100vh - 64px); overflow-y: auto; } }
 
 /* menu da Loja de Calçados, logo abaixo da vitrine dela */
 .subMenu { background: #fff; border-bottom: 1px solid var(--borda); position: sticky; top: 64px; z-index: 40; }
