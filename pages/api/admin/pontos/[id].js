@@ -15,7 +15,14 @@ export default async function handler(req, res) {
     if (req.method === 'PATCH') {
       const [atual] = await sb(`rf_pontos?id=eq.${id}&select=*`);
       if (!atual) return res.status(404).json({ erro: 'Ponto não encontrado.' });
-      const { erro, dados } = validar({ ...atual, ...(req.body || {}) });
+      const corpo = { ...(req.body || {}) };
+      if (typeof corpo.contato_whatsapp === 'string' && corpo.contato_whatsapp.trim()) {
+        let d = corpo.contato_whatsapp.replace(/\D/g, '');
+        if (d.startsWith('55') && d.length >= 12) d = d.slice(2);
+        if (!/^\d{2}9\d{8}$/.test(d)) return res.status(400).json({ erro: 'WhatsApp inválido. Use DDD + 9 + 8 dígitos.' });
+        corpo.contato_whatsapp = d;
+      }
+      const { erro, dados } = validar({ ...atual, ...corpo });
       if (erro) return res.status(400).json({ erro });
       if (dados.status === 'convidado' && atual.status !== 'convidado') dados.convidado_em = new Date().toISOString();
       const [novo] = await sb(`rf_pontos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(dados) });

@@ -6,6 +6,7 @@ import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SEMENTE_BH, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
 import { GRUPOS } from '../../lib/mapeador';
 import AdminNav from '../../lib/AdminNav';
+import AddContato from '../../lib/AddContato';
 
 const CSS = `
 .pt-mapa{height:420px;border-radius:12px;border:1px solid var(--bd);margin-top:12px;z-index:0}
@@ -243,6 +244,7 @@ export default function AdminPontos() {
                       </select>
                     </div>
                     <div className="pt-ac">
+                      <AddContato ponto={p} onSalvo={carregar} />
                       <button className="ea-btn ea-btn2" onClick={() => verTexto(p)}>Texto do convite</button>
                       <Link className="ea-btn" href={`/admin/cartaz/${p.id}`} target="_blank">Cartaz com QR</Link>
                       <button className="ea-btn ea-btn2" onClick={() => copiar(`${SITE_PUBLICO}/p/${p.codigo}`)}>Copiar link do QR</button>
