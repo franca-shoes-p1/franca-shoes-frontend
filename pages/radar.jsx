@@ -36,6 +36,7 @@ export default function Radar() {
             </p>
             <div className={s.acoes}>
               <a href="#assistente" className={`${s.botao} ${s.principal}`}>Perguntar ao assistente</a>
+              <Link href="/radar/participar" className={`${s.botao} ${s.contorno}`}>Quero participar</Link>
               <Link href="/calcados" className={`${s.botao} ${s.contorno}`}>Ver a loja</Link>
               <a href={WHATS_RADAR} className={`${s.botao} ${s.contorno}`} target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
             </div>
@@ -54,14 +55,26 @@ export default function Radar() {
         </div>
       </section>
 
+      <section className={s.bloco}>
+        <p className={s.rotulo}>Troca de divulgação</p>
+        <h2 className={s.h2}>Qualquer pessoa pode participar</h2>
+        <p className={s.sub}>Cada um ajuda o outro a ser encontrado, sem custo e sem contrato. Você pode participar de três jeitos, juntos ou separados.</p>
+        <div className={s.grade}>
+          <div className={s.cartao}><div className={s.emoji}>🧰</div><h3>Tenho um negócio, serviço ou projeto</h3><p>Ganha uma vitrine grátis no site, com logotipo, frase e contatos, que você mesmo monta num painel simples.</p></div>
+          <div className={s.cartao}><div className={s.emoji}>📌</div><h3>Tenho um espaço</h3><p>Mural de condomínio, igreja, escola, associação ou comércio: você cede um cantinho para o cartaz com QR code.</p></div>
+          <div className={s.cartao}><div className={s.emoji}>🗣️</div><h3>Quero indicar</h3><p>Conhece um bom local ou alguém que ia gostar? Indique pelo WhatsApp e nós fazemos o convite com respeito.</p></div>
+        </div>
+        <div className={s.acoes}><Link href="/radar/participar" className={`${s.botao} ${s.principal}`}>Quero participar</Link></div>
+      </section>
+
       <section className={s.faixaBege}>
         <div className={s.bloco}>
           <div className={s.duas}>
             <div className={s.cartao}>
               <div className={s.emoji}>🏪</div>
-              <h3>Para quem tem um comércio</h3>
+              <h3>Para quem cede um espaço ou tem um negócio</h3>
               <ul className={s.lista}>
-                <li>Cartaz pequeno com o seu nome como "Ponto Parceiro".</li>
+                <li>Cartaz pequeno com o seu nome como "Ponto Parceiro" e uma vitrine grátis no site, com a sua marca.</li>
                 <li>Sem custo e sem contrato. Você pede para retirar quando quiser.</li>
                 <li>Você responde pelo link da mensagem, no seu tempo.</li>
                 <li>Não prometemos pagamento nem comissão ao ponto.</li>

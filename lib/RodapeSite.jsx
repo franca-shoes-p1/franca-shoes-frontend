@@ -17,7 +17,7 @@ const COLUNAS = [
     ['🛠️', 'Oficina Digital', '/oficina'],
     ['📣', 'Programa de Afiliados', '/afiliados'],
     ['🎁', 'Campanha de Inauguração', '/campanha'],
-    ['🏪', 'Quero ser Ponto Parceiro', '/radar#assistente'],
+    ['🤝', 'Quero participar do Radar', '/radar/participar'],
     ['🔑', 'Sou operador', '/operador'],
   ] },
   { t: 'Ferramentas', itens: [

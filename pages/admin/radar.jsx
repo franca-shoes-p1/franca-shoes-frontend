@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
-import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
+import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite, textoLembrete, assuntoEmail } from '../../lib/pontos';
 import AdminNav from '../../lib/AdminNav';
 
 const CSS = `
@@ -84,9 +84,10 @@ export default function Radar() {
   const linkWpp = (p) => `https://wa.me/55${p.contato_whatsapp}?text=${encodeURIComponent(textoConvite({ nome: p.nome, cidade: p.cidade, link: `${SITE_PUBLICO}/convite/${p.token_convite}` }))}`;
   const linkMail = (p) => {
     const corpo = textoConvite({ nome: p.nome, cidade: p.cidade, link: `${SITE_PUBLICO}/convite/${p.token_convite}` });
-    return `mailto:${p.contato_email}?subject=${encodeURIComponent('Ponto Parceiro em ' + p.cidade)}&body=${encodeURIComponent(corpo)}`;
+    return `mailto:${p.contato_email}?subject=${encodeURIComponent(assuntoEmail({ cidade: p.cidade }))}&body=${encodeURIComponent(corpo)}`;
   };
   const decidir = (p, decisao, ok) => rodar(() => api('/api/admin/pontos/perfil', { method: 'POST', body: { id: p.id, decisao } }), ok);
+  const linkLembrete = (p) => `https://wa.me/55${p.contato_whatsapp}?text=${encodeURIComponent(textoLembrete({ nome: p.nome, link: `${SITE_PUBLICO}/convite/${p.token_convite}` }))}`;
   const jaEnviei = () => { const p = foco; setAbriu(false); mudar(p, 'convidado', `"${p.nome}" marcado como convidado.`); };
   const pular = () => { setAbriu(false); setPuladas([...puladas, foco.id]); };
 
@@ -162,7 +163,7 @@ export default function Radar() {
               {autorizados.length === 0 && <div className="ea-mu">Quando um local disser "sim", ele aparece aqui.</div>}
               {autorizados.map((p) => (
                 <div className="rd-lin" key={p.id}>
-                  <div><b>{p.nome}</b><div className="ea-mu">{TIPOS[p.tipo] || p.tipo} · código {p.codigo}</div></div>
+                  <div><b>{p.nome}</b><div className="ea-mu">{TIPOS[p.tipo] || p.tipo} · código {p.codigo}{p.origem === 'inscricao' ? ' · inscrição própria' : ''}</div>{p.origem === 'inscricao' && <div className="ea-mu">Local para o cartaz: {p.endereco || 'não informado'} · contato: {[p.contato_whatsapp, p.contato_email].filter(Boolean).join(' / ')}</div>}</div>
                   <div className="ea-row">
                     <Link className="ea-btn rd-sm" href={`/admin/cartaz/${p.id}?v=4`} target="_blank">Cartaz com QR</Link>
                     <button className="ea-btn ea-btn2 rd-sm" onClick={() => { try { navigator.clipboard.writeText(`${SITE_PUBLICO}/parceiro/${p.token_convite}`); setMsg({ tipo: 'ok', texto: 'Link do painel do parceiro copiado. Envie a ele pelo WhatsApp.' }); } catch (e) {} }}>Copiar link do painel dele</button>
@@ -184,6 +185,7 @@ export default function Radar() {
                       <div className="ea-mu">{d === null ? 'convidado' : d === 0 ? 'convidado hoje' : `convidado há ${d} dia(s)`}{d !== null && d >= 5 ? ' · sem resposta' : ''}</div>
                     </div>
                     <div className="ea-row">
+                      {d !== null && d >= 5 && NUM_OK(p.contato_whatsapp) && <a className="ea-btn ea-btn2 rd-sm" href={linkLembrete(p)} target="_blank" rel="noopener noreferrer">Lembrete (1 vez)</a>}
                       <button className="ea-btn rd-sm" disabled={ocupado} onClick={() => mudar(p, 'autorizado', `"${p.nome}" autorizado.`)}>Disse sim</button>
                       <button className="ea-btn ea-btn-er rd-sm" disabled={ocupado} onClick={() => mudar(p, 'recusado', `"${p.nome}" recusou.`)}>Disse não</button>
                     </div>
