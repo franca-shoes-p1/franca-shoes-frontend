@@ -19,15 +19,20 @@ body{margin:0;background:#e5e7eb;font-family:system-ui,Arial,sans-serif;color:#0
 .g4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
 .g10{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr)}
 .cel{box-sizing:border-box;border:1px dashed #94a3b8;display:flex}
-.pan{padding:9mm;flex-direction:column;align-items:center;text-align:center;justify-content:center;gap:3mm;width:100%}
+.arte{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.topo{width:100%}
+.pan{padding:0 9mm 6mm;flex-direction:column;align-items:center;text-align:center;justify-content:flex-start;gap:2.5mm;width:100%}
+.pan .topo{margin:0 -9mm;width:calc(100% + 18mm)}
 .pan h1{margin:0;font-size:19pt;line-height:1.1}.pan .s{font-size:11pt;font-weight:700;color:#1e40af}
-.pan img{width:56mm;height:56mm}.pan .l{font-size:9.5pt}.pan .u{font:700 9.5pt ui-monospace,Menlo,monospace}
+.pan img{width:50mm;height:50mm;padding:1.5mm;background:#fff;border:1px solid #cbd5e1}.pan .l{font-size:9.5pt}.pan .u{font:700 9.5pt ui-monospace,Menlo,monospace}
 .pan .p{font-size:7.5pt;color:#475569;border-top:1px solid #cbd5e1;padding-top:2mm;width:100%}
-.car{padding:4mm;align-items:center;gap:4mm;width:100%}
+.car{flex-direction:column;width:100%}
+.car .lin{display:flex;align-items:center;gap:4mm;padding:3mm 4mm;flex:1}
 .car img{width:34mm;height:34mm;flex:none}.car .t{text-align:left}
 .car h2{margin:0 0 1.5mm;font-size:11.5pt;line-height:1.1}.car .a{font-size:8pt;margin:0}.car .u{font:700 8pt ui-monospace,Menlo,monospace;margin-top:1.5mm}
-.cz1{padding:12mm;flex-direction:column;align-items:center;text-align:center;justify-content:center;gap:5mm;width:100%;border:0}
-.cz1 h1{margin:0;font-size:34pt;line-height:1.1}.cz1 .s{font-size:16pt;font-weight:700;color:#1e40af}.cz1 img{width:100mm;height:100mm}
+.cz1{padding:0 12mm;flex-direction:column;align-items:center;text-align:center;justify-content:space-evenly;width:100%;border:0}
+.cz1 .topo{margin:0 -12mm;width:calc(100% + 24mm)}.cz1 .topo.base{margin-bottom:0}
+.cz1 h1{margin:0;font-size:34pt;line-height:1.1}.cz1 .s{font-size:16pt;font-weight:700;color:#1e40af}.cz1 img{width:96mm;height:96mm;padding:2mm;background:#fff;border:1px solid #cbd5e1}
 .cz1 .l{font-size:13pt}.cz1 .u{font:700 14pt ui-monospace,Menlo,monospace;letter-spacing:1px}.cz1 .p{font-size:9pt;color:#475569}
 .kit{padding:16mm;font-size:11pt;line-height:1.4}
 .kit h1{font-size:26pt;margin:0 0 2mm}.kit h2{font-size:14pt;margin:8mm 0 2mm;border-bottom:2px solid #061a3a;padding-bottom:1mm}
@@ -36,6 +41,44 @@ body{margin:0;background:#e5e7eb;font-family:system-ui,Arial,sans-serif;color:#0
 .kit .nota{font-size:9pt;color:#475569}
 @media print{body{background:#fff}.bar,.aviso,.nao{display:none}.folha{margin:0;box-shadow:none}@page{size:A4;margin:0}}
 `;
+
+// Faixa ilustrada com calçados (desenho próprio, sem direitos de terceiros). Fica fora do QR para não atrapalhar a leitura.
+const CORES = ['#1e6bff', '#e11d48', '#f59e0b', '#16a34a'];
+function Tenis({ x, cor }) {
+  return (
+    <g transform={`translate(${x} 0)`}>
+      <path d="M8 44 V30 Q8 26 12 26 L30 24 Q36 30 44 30 L62 30 Q78 32 90 42 V44 Z" fill={cor} />
+      <path d="M6 44 H92 Q96 44 96 48 V50 Q96 54 92 54 H10 Q6 54 6 50 Z" fill="#fff" stroke="#0f172a" strokeWidth="1.5" />
+      <path d="M40 31 l6 -4 M48 32 l6 -4 M56 33 l6 -4" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+    </g>
+  );
+}
+function Bota({ x, cor }) {
+  return (
+    <g transform={`translate(${x} 0)`}>
+      <path d="M14 54 V8 H38 V30 Q46 34 62 38 Q82 42 90 47 V54 Z" fill={cor} />
+      <path d="M14 54 H90 V58 Q90 60 88 60 H16 Q14 60 14 58 Z" fill="#0f172a" />
+      <path d="M14 14 H38" stroke="#fff" strokeWidth="2.5" />
+    </g>
+  );
+}
+function Arte({ alto = '24mm', largura = 105 }) {
+  // O desenho se ajusta à proporção da faixa (largura em mm por altura em mm) para os calçados não saírem cortados.
+  const mm = parseFloat(alto);
+  const W = Math.round((largura / mm) * 62);
+  const k = Math.max(2, Math.round(W / 105));
+  const passo = W / k;
+  return (
+    <svg className="arte" viewBox={`0 0 ${W} 62`} preserveAspectRatio="none" style={{ width: '100%', height: alto, display: 'block' }} role="img" aria-label="Calçados">
+      <defs><linearGradient id="fundoArte" x1="0" x2="1"><stop offset="0" stopColor="#dbeafe" /><stop offset="1" stopColor="#fef3c7" /></linearGradient></defs>
+      <rect width={W} height="62" fill="url(#fundoArte)" />
+      {Array.from({ length: k }, (_, i) => {
+        const x = i * passo + (passo - 100) / 2;
+        return i % 2 === 0 ? <Tenis key={i} x={x} cor={CORES[i % 4]} /> : <Bota key={i} x={x} cor={CORES[i % 4]} />;
+      })}
+    </svg>
+  );
+}
 
 const LOJA = (cod) => `${SITE_PUBLICO}/p/${cod}`;
 
@@ -46,6 +89,7 @@ export default function Material() {
   const [parte, setParte] = useState('kit');
   const [qP, setQP] = useState(40);
   const [qC, setQC] = useState(50);
+  const [arte, setArte] = useState(true);
   const [qr, setQr] = useState({});
   const [erro, setErro] = useState('');
 
@@ -76,6 +120,7 @@ export default function Material() {
 
   const Pan = () => (
     <div className="cel pan">
+      {arte && <div className="topo"><Arte alto="24mm" largura={105} /></div>}
       <h1>Calçados direto da fábrica</h1>
       <div className="s">Entrega em {cidade} em dia marcado</div>
       {qr.P && <img src={qr.P} alt="QR Code da loja" />}
@@ -86,12 +131,15 @@ export default function Material() {
   );
   const Car = () => (
     <div className="cel car">
-      {qr.C && <img src={qr.C} alt="QR Code da loja" />}
-      <div className="t">
-        <h2>Calçados direto da fábrica</h2>
-        <p className="a">Aponte a câmera e escolha. Entrega em {cidade} em dia marcado.</p>
-        <p className="a">WhatsApp {WHATS_TXT}</p>
-        <div className="u">{LOJA(cC).replace('https://', '')}</div>
+      {arte && <div className="topo"><Arte alto="9mm" largura={105} /></div>}
+      <div className="lin">
+        {qr.C && <img src={qr.C} alt="QR Code da loja" />}
+        <div className="t">
+          <h2>Calçados direto da fábrica</h2>
+          <p className="a">Aponte a câmera e escolha. Entrega em {cidade} em dia marcado.</p>
+          <p className="a">WhatsApp {WHATS_TXT}</p>
+          <div className="u">{LOJA(cC).replace('https://', '')}</div>
+        </div>
       </div>
     </div>
   );
@@ -100,12 +148,14 @@ export default function Material() {
   const cartazes = autorizados.map((p) => (
     <div className="folha" key={p.id}>
       <div className="cel cz1">
+        {arte && <div className="topo"><Arte alto="42mm" largura={210} /></div>}
         <h1>Calçados direto da fábrica</h1>
         <div className="s">Entrega em {cidade} em dia marcado</div>
         {qr[p.id] && <img src={qr[p.id]} alt="QR Code" />}
         <div className="l">Aponte a câmera do celular e escolha o seu modelo</div>
         <div className="u">{SITE_PUBLICO.replace('https://', '')}/p/{p.codigo}</div>
         <div className="p">Ponto Parceiro: {p.nome}</div>
+        {arte && <div className="topo base"><Arte alto="28mm" largura={210} /></div>}
       </div>
     </div>
   ));
@@ -148,10 +198,11 @@ export default function Material() {
         </select>
         <label style={{ fontSize: 13 }}>Panfletos <input type="number" min="4" step="4" value={qP} onChange={(e) => setQP(Number(e.target.value) || 4)} style={{ width: 64 }} /></label>
         <label style={{ fontSize: 13 }}>Cartões <input type="number" min="10" step="10" value={qC} onChange={(e) => setQC(Number(e.target.value) || 10)} style={{ width: 64 }} /></label>
+        <label style={{ fontSize: 13 }}><input type="checkbox" checked={arte} onChange={(e) => setArte(e.target.checked)} /> Com ilustração</label>
         <button onClick={() => window.print()}>Imprimir ou salvar PDF</button>
       </div>
       <div className="aviso nao">
-        Cada página abaixo é uma folha A4. Na impressora da copiadora, imprima o PDF e tire as cópias indicadas. As visitas dos panfletos ({cP}) e dos cartões ({cC}) são contadas no painel Captação.
+        Cada página abaixo é uma folha A4. No diálogo de impressão do Chrome, marque "Gráficos de segundo plano" para sair colorido; sem a ilustração (caixa acima desmarcada) economiza tinta e sai bem em preto e branco. Na impressora da copiadora, imprima o PDF e tire as cópias indicadas. As visitas dos panfletos ({cP}) e dos cartões ({cC}) são contadas no painel Captação.
       </div>
       {(parte === 'kit') && capa}
       {(parte === 'kit' || parte === 'panfleto') && folhaPan}
