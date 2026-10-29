@@ -44,6 +44,7 @@ export default function Convite({ token, nome, cidade, status }) {
         <ul style={{ paddingLeft: 20, lineHeight: 1.6 }}>
           <li>Você deixa um cartaz pequeno com QR Code no seu espaço.</li>
           <li>Em troca, divulgamos o seu negócio ou projeto <b>de graça</b> na Vitrine dos Parceiros do nosso site, com o logotipo, a frase e os contatos que você escolher.</li>
+          <li>Se preferir não deixar cartaz, você pode divulgar pelo celular (status, stories ou grupos), com imagem e legenda prontas no seu painel.</li>
           <li>Sem custo, sem contrato. Você pode sair quando quiser.</li>
         </ul>
         <p>Os calçados e acessórios divulgados vêm direto da fábrica de Franca-SP.</p>
