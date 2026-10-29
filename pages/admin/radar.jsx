@@ -5,6 +5,7 @@ import { api, ADMIN_CSS } from '../../lib/adminClient';
 import { TIPOS, STATUS, CIDADES, SITE_PUBLICO, textoConvite, textoLembrete, assuntoEmail } from '../../lib/pontos';
 import AdminNav from '../../lib/AdminNav';
 import { CANAIS } from '../../lib/trocas';
+import AddContato from '../../lib/AddContato';
 
 const CSS = `
 .rd-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:16px}
@@ -143,6 +144,22 @@ export default function Radar() {
             <div className="ea-card">
               <h2><span className="rd-n">1</span>Convidar ({fila.length} na fila)</h2>
               {!foco && <div className="ea-mu">Ninguém na fila com WhatsApp ou e-mail. {semContato.length > 0 && `${semContato.length} local(is) sem contato ficam para depois (veja a observação de cada um no Radar de Pontos).`}</div>}
+              {semContato.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <div><b>Sem contato ({semContato.length})</b> <span className="ea-mu">· achou o WhatsApp ou o e-mail (por exemplo no Google Maps)? Adicione e o local entra na fila.</span></div>
+                  {semContato.slice(0, 8).map((p) => (
+                    <div className="rd-lin" key={p.id} style={{ flexWrap: 'wrap' }}>
+                      <div style={{ minWidth: 0, flex: '1 1 240px' }}>
+                        <b>{p.nome}</b>
+                        <div className="ea-mu">{TIPOS[p.tipo] || p.tipo} · movimento {p.nota}/5{p.endereco ? ' · ' + p.endereco : ''}</div>
+                        {p.observacao && <div className="ea-mu">{p.observacao}</div>}
+                      </div>
+                      <AddContato ponto={p} pequeno onSalvo={carregar} />
+                    </div>
+                  ))}
+                  {semContato.length > 8 && <div className="ea-mu" style={{ marginTop: 6 }}>Mostrando 8 de {semContato.length}. Os demais estão em Mapa e pontos.</div>}
+                </div>
+              )}
               {foco && (
                 <div className="rd-foco">
                   <h3>{foco.nome}</h3>
