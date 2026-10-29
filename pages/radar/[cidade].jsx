@@ -5,7 +5,6 @@ import s from '../../styles/radar.module.css';
 import { sb } from '../../lib/varejoServer';
 import { CIDADES, TIPOS } from '../../lib/pontos';
 import { slugCidade } from '../../lib/parceiro';
-import { WHATS_RADAR } from '../../lib/radarAssistente';
 
 export async function getServerSideProps({ params, res }) {
   const nome = Object.keys(CIDADES).find((c) => slugCidade(c) === String(params.cidade || ''));
@@ -48,9 +47,9 @@ export default function CidadeRadar({ nome, uf, parceiros }) {
               <small>{p.slogan || p.tipo}</small>
             </Link>
           ))}
-          <a className={`${s.pcard} ${s.vazio}`} href={WHATS_RADAR} target="_blank" rel="noopener noreferrer">
-            <div className={s.logoBox}>➕</div><b>O seu negócio aqui</b><small>Grátis. Chame no WhatsApp e peça o convite.</small>
-          </a>
+          <Link className={`${s.pcard} ${s.vazio}`} href="/radar/participar">
+            <div className={s.logoBox}>➕</div><b>Você também pode</b><small>Grátis. Divulgue o seu trabalho ou ceda um espaço.</small>
+          </Link>
         </div>
       </section>
 

@@ -13,3 +13,6 @@ alter table rf_pontos add column if not exists perfil_atualizado_em timestamptz;
 do $$ begin
   alter table rf_pontos add constraint rf_pontos_perfil_status_chk check (perfil_status in ('rascunho','pendente','aprovado','reprovado'));
 exception when duplicate_object then null; end $$;
+
+-- Quem se inscreveu sozinho pelo site (/radar/participar) fica marcado como 'inscricao'.
+alter table rf_pontos add column if not exists origem text not null default 'radar';

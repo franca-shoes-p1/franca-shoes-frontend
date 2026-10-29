@@ -40,7 +40,13 @@ export default function Convite({ token, nome, cidade, status }) {
       <style>{css}</style>
       <div className="k">
         <h1>Ponto Parceiro em {cidade}</h1>
-        <p><b>{nome}</b>, convidamos você a deixar um cartaz pequeno com QR Code no seu mural. Em troca, o seu local aparece como Ponto Parceiro na nossa página da cidade, sem custo. Os calçados e acessórios vêm direto da fábrica de Franca-SP.</p>
+        <p><b>{nome}</b>, propomos uma <b>troca de divulgação</b>:</p>
+        <ul style={{ paddingLeft: 20, lineHeight: 1.6 }}>
+          <li>Você deixa um cartaz pequeno com QR Code no seu espaço.</li>
+          <li>Em troca, divulgamos o seu negócio ou projeto <b>de graça</b> na Vitrine dos Parceiros do nosso site, com o logotipo, a frase e os contatos que você escolher.</li>
+          <li>Sem custo, sem contrato. Você pode sair quando quiser.</li>
+        </ul>
+        <p>Os calçados e acessórios divulgados vêm direto da fábrica de Franca-SP.</p>
         {respondido ? (
           <>
             <p><b>{estado === 'recusado' ? 'Tudo bem, registramos que você não quer participar. Não enviaremos novos convites.' : 'Obrigado! Registramos a sua autorização.'}</b></p>
