@@ -246,6 +246,7 @@ export default function AdminPontos() {
                       <button className="ea-btn ea-btn2" onClick={() => verTexto(p)}>Texto do convite</button>
                       <Link className="ea-btn" href={`/admin/cartaz/${p.id}`} target="_blank">Cartaz com QR</Link>
                       <button className="ea-btn ea-btn2" onClick={() => copiar(`${SITE_PUBLICO}/p/${p.codigo}`)}>Copiar link do QR</button>
+                      {['autorizado', 'ativo'].includes(p.status) && <button className="ea-btn ea-btn2" onClick={() => copiar(`${SITE_PUBLICO}/parceiro/${p.token_convite}`)}>Copiar link do painel do parceiro</button>}
                       <button className="ea-btn ea-btn-er" onClick={() => apagar(p)}>Apagar</button>
                     </div>
                     {texto && texto.id === p.id && (

@@ -1,4 +1,4 @@
-// Destino do QR Code: conta a visita do ponto e leva o cliente para a loja.
+// Destino do QR Code: conta a visita do ponto e leva à página do parceiro (que, se o ponto não estiver ativo, segue para a loja).
 import { sb } from '../../lib/varejoServer';
 
 export async function getServerSideProps({ params, res }) {
@@ -10,7 +10,7 @@ export async function getServerSideProps({ params, res }) {
     } catch (e) {}
   }
   res.setHeader('Cache-Control', 'no-store');
-  return { redirect: { destination: valido ? `/calcados?ponto=${codigo}` : '/calcados', permanent: false } };
+  return { redirect: { destination: valido ? `/ponto/${codigo}` : '/calcados', permanent: false } };
 }
 
 export default function Ir() {

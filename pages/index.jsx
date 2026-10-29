@@ -11,8 +11,9 @@ import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
 import SitesVitrine from '../lib/SitesVitrine';
-import Redes from '../lib/Redes';
 import RadarBanner from '../lib/RadarBanner';
+import ParceirosPainel from '../lib/ParceirosPainel';
+import RodapeSite from '../lib/RodapeSite';
 
 /* ------------------------------------------------------------------
    HOME: Loja de Calçados Pronta
@@ -417,40 +418,10 @@ export default function Home() {
         </section>
 
         <AssistentesBanner />
+        <ParceirosPainel />
       </main>
 
-      <footer className={styles.rodape}>
-        <div className={styles.contido + ' ' + styles.rodapeCentro}>
-          <a href="#topo" className={styles.marca} onClick={fechar}>
-            <span className={styles.selo}>IE</span>
-            <span>{CONFIG.nome}</span>
-          </a>
-          <button className={styles.botaoMenu} aria-label="Abrir menu" aria-expanded={menu} onClick={() => setMenu(!menu)}>
-            <span /><span /><span />
-          </button>
-          <nav className={`${styles.menu} ${menu ? styles.menuAberto : ''}`}>
-            <a href="#recebe" onClick={fechar}>O que você recebe</a>
-            <a href="#como" onClick={fechar}>Como funciona</a>
-            <a href="#niveis" onClick={fechar}>Níveis</a>
-            <a href="#duvidas" onClick={fechar}>Dúvidas</a>
-            <Link href="/calcados" onClick={fechar}>Loja de exemplo</Link>
-            <a href={LINK_WHATS} className={styles.menuCta} target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
-          </nav>
-          <p>Loja de Calçados Pronta: criamos o seu negócio do zero e entregamos com tudo pronto e funcional.</p>
-          <Redes titulo="Nossas redes" />
-          <Link href="/catalogo" className={styles.botaoPortal}>
-            <span>Catálogo completo de produtos e serviços</span>
-            <small>Tudo o que oferecemos e o que vem por aí</small>
-          </Link>
-          <Link href="/portal" className={styles.botaoPortal}>
-            <span>Entrar no portal completo</span>
-            <small>Escola, serviços de IA, loja, calculadora e mais</small>
-          </Link>
-        </div>
-        <div className={styles.contido + ' ' + styles.rodapeFim}>
-          <p>© 2026 {CONFIG.nome}. Todos os direitos reservados.</p>
-        </div>
-      </footer>
+      <RodapeSite nome={CONFIG.nome} whatsapp={CONFIG.whatsapp} email={CONFIG.email} />
     </div>
   );
 }
