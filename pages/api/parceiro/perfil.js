@@ -1,6 +1,7 @@
 // Painel do parceiro: o acesso é pelo link secreto do convite (token). Lê e salva o perfil; qualquer alteração vai para análise.
 import { sb } from '../../../lib/varejoServer';
 import { limparPerfil } from '../../../lib/parceiro';
+import { avisar } from '../../../lib/avisar';
 
 const COLS_LISTA = ['id','codigo','nome','cidade','uf','tipo','status','perfil_status','perfil_slogan','perfil_descricao','perfil_logo','perfil_whatsapp','perfil_instagram','perfil_site','perfil_horario','perfil_endereco'];
 const so = (o) => Object.fromEntries(COLS_LISTA.map((k) => [k, o[k]]));
@@ -31,6 +32,7 @@ export default async function handler(req, res) {
       const { erro, dados } = limparPerfil(b.perfil, process.env.SUPABASE_URL);
       if (erro) return res.status(400).json({ erro });
       const [novo] = await sb(`rf_pontos?id=eq.${p.id}`, { method: 'PATCH', body: JSON.stringify({ ...dados, perfil_status: 'pendente', perfil_atualizado_em: new Date().toISOString() }) });
+      await avisar(`📝 ${p.nome} (${p.cidade}) enviou a vitrine para análise. Confira no passo 5 do Painel do dia.`);
       return res.json({ ponto: so({ ...p, ...novo }) });
     }
     res.setHeader('Allow', 'GET, POST');

@@ -2,6 +2,7 @@
 // A pessoa se cadastra já autorizando; o perfil público só aparece depois da revisão.
 import crypto from 'crypto';
 import { sb } from '../../../lib/varejoServer';
+import { avisar } from '../../../lib/avisar';
 import { validar, sigla, aleatorio } from '../../../lib/pontosServer';
 
 const tentativas = new Map(); // limite simples por IP (reinicia quando a instância reinicia)
@@ -47,6 +48,7 @@ export default async function handler(req, res) {
       ...dados, origem: 'inscricao', respondido_em: new Date().toISOString(),
       codigo: sigla(dados.cidade) + aleatorio(4), token_convite: token,
     }]) });
+    await avisar(`🆕 Nova inscrição: ${dados.nome} (${dados.cidade}). Já aparece no passo 2 do Painel do dia.`);
     return res.status(201).json({ ok: true, token, codigo: criado.codigo });
   } catch (e) {
     console.error('ponto/participar', e.message);

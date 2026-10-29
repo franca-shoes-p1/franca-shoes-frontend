@@ -7,7 +7,7 @@ import { TIPOS, CIDADES } from '../../lib/pontos';
 import { WHATS_RADAR } from '../../lib/radarAssistente';
 
 const TIPOS_FORM = ['pessoa', 'comercio', 'grupo', 'condominio', 'igreja', 'universidade', 'mural_publico', 'outro'];
-const VAZIO = { nome: '', cidade: 'Belo Horizonte', uf: 'MG', tipo: 'pessoa', local: '', whatsapp: '', email: '', aceite: false };
+const VAZIO = { nome: '', cidade: '', uf: '', tipo: 'pessoa', local: '', whatsapp: '', email: '', aceite: false };
 
 export default function Participar() {
   const [f, setF] = useState(VAZIO);
@@ -62,7 +62,7 @@ export default function Participar() {
               <input value={f.uf} onChange={muda('uf')} maxLength={2} placeholder="UF" required aria-label="Estado (UF)" />
             </div>
             <datalist id="cidades">{cidades.map((c) => <option key={c} value={c} />)}</datalist>
-            <small className={s.dica}>Começamos por Belo Horizonte. Se a sua cidade ainda não está ativa, entramos na lista de espera.</small>
+            <small className={s.dica}>Estamos abrindo as capitais do Brasil, uma por vez. Se a sua cidade ainda não está ativa, entramos na lista de espera.</small>
             <label>Quem é você?</label>
             <select value={f.tipo} onChange={muda('tipo')} style={{ width: '100%', font: 'inherit', padding: '10px 12px', borderRadius: 12, border: '1px solid rgba(138,84,41,.4)', background: '#fff' }}>
               {TIPOS_FORM.map((t) => <option key={t} value={t}>{TIPOS[t]}</option>)}

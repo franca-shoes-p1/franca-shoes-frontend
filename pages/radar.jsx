@@ -17,7 +17,7 @@ export default function Radar() {
     <div className={s.pagina}>
       <Head>
         <title>Radar de Pontos · Calçados de fábrica por cidade</title>
-        <meta name="description" content="Cartazes com QR code em locais autorizados, cidade por cidade, que levam à loja de calçados e acessórios de fábrica. Começando por Belo Horizonte." />
+        <meta name="description" content="Cartazes com QR code em locais autorizados, cidade por cidade, que levam à loja de calçados e acessórios de fábrica. Começando pelas capitais: Rio de Janeiro, Goiânia, Curitiba, Campo Grande, Vitória, Salvador, Florianópolis, São Paulo e Belo Horizonte." />
       </Head>
 
       <div className={s.barra}>
@@ -109,8 +109,8 @@ export default function Radar() {
       <section className={s.faixaBege}>
         <div className={s.bloco}>
           <p className={s.rotulo}>Cidades</p>
-          <h2 className={s.h2}>Começamos por Belo Horizonte (MG)</h2>
-          <p className={s.sub}>Abrimos uma cidade de cada vez, para cuidar bem de cada ponto. A sua cidade é a próxima? Chame no WhatsApp.</p>
+          <h2 className={s.h2}>Abrindo as capitais do Brasil, uma por uma</h2>
+          <p className={s.sub}>Começamos por Rio de Janeiro, Goiânia, Curitiba, Campo Grande, Vitória, Salvador, Florianópolis, São Paulo e Belo Horizonte, pelas rodoviárias e pelos comércios do entorno. Depois seguimos para as demais capitais. A sua cidade é a próxima? Chame no WhatsApp.</p>
           <a href={WHATS_RADAR} className={`${s.botao} ${s.principal}`} target="_blank" rel="noopener noreferrer">Pedir a minha cidade</a>
         </div>
       </section>

@@ -28,7 +28,7 @@ export default function RadarBanner() {
           <h2 className={s.titulo}>Seu calçado de fábrica, <em>a um QR de distância</em></h2>
           <p className={s.texto}>
             Cartazes com QR code em locais que autorizaram, cidade por cidade. Aponte o celular, veja a loja e compre por PIX ou cartão.
-            A entrega é em mãos, em dia marcado. Começamos por Belo Horizonte.
+            A entrega é em mãos, em dia marcado. Estamos abrindo as capitais do Brasil, começando por Rio, Goiânia, Curitiba, Campo Grande, Vitória, Salvador, Florianópolis, São Paulo e Belo Horizonte.
           </p>
           <ul className={s.passos}>
             <li><b>1</b>Veja o cartaz</li>
@@ -46,7 +46,7 @@ export default function RadarBanner() {
         <div className={s.palco}>
           <div className={s.mapa} aria-hidden="true">
             {PONTOS.map((p) => (<span key={p.t} className={`${s.pino} ${p.c}`}><b /><em>{p.t}</em></span>))}
-            <span className={s.cidade}>Belo Horizonte · MG</span>
+            <span className={s.cidade}>Capitais do Brasil</span>
           </div>
           <div className={s.faixa} aria-hidden="true">
             <span className={s.fio} />
