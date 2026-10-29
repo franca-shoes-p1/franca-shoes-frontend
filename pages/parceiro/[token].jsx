@@ -8,6 +8,7 @@ import { reduzirFoto } from '../../lib/reduzirFoto';
 import { PERFIL_STATUS } from '../../lib/parceiro';
 import { SITE_PUBLICO } from '../../lib/pontos';
 import ParceiroTrocas from '../../lib/ParceiroTrocas';
+import ParceiroManual from '../../lib/ParceiroManual';
 
 const VAZIO = { slogan: '', descricao: '', logo: '', whatsapp: '', instagram: '', site: '', horario: '', endereco: '' };
 const chamar = async (url, opts) => {
@@ -78,6 +79,7 @@ export default function PainelParceiro({ token }) {
       {carregou && !ponto && <div className={s.painelP} style={{ gridTemplateColumns: 'minmax(0,1fr)' }}><div className={s.cartao}><h3>Link não disponível</h3><p>{msg ? msg.x : 'Confira o link recebido.'}</p></div></div>}
       {fim && <div className={s.painelP} style={{ gridTemplateColumns: 'minmax(0,1fr)' }}><div className={s.cartao}><h3>Tudo certo</h3><p>Você saiu do programa. O seu local não aparece mais no site e não enviaremos novas mensagens.</p></div></div>}
 
+      {ponto && !fim && <div className={s.painelP} style={{ gridTemplateColumns: 'minmax(0,1fr)', paddingBottom: 0 }}><ParceiroManual abertoInicio={ponto.perfil_status === 'rascunho'} /></div>}
       {ponto && !fim && (
         <div className={s.painelP}>
           <form className={s.cartao} onSubmit={salvar}>
