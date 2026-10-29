@@ -2,6 +2,7 @@
 import { exigirRadarToken } from '../../../lib/radarToken';
 import { sb } from '../../../lib/varejoServer';
 import { SITE_PUBLICO } from '../../../lib/pontos';
+import { QUOTA_CONVITES, hojeSP, difDias } from '../../../lib/semanaCaptacao';
 
 const tenta = async (caminho) => { try { return await sb(caminho); } catch (e) { return []; } };
 
@@ -11,11 +12,19 @@ export default async function handler(req, res) {
   try {
     const pontos = await sb('rf_pontos?select=status,contato_whatsapp,contato_email,convidado_em,perfil_status&limit=5000');
     const desde = encodeURIComponent(new Date(Date.now() - 86400000).toISOString());
-    const [divs, trocas, visitas] = await Promise.all([
+    const hoje = hojeSP();
+    const [divs, trocas, visitas, tarefas] = await Promise.all([
       tenta('rf_divulgacoes?status=eq.pendente&select=id&limit=1000'),
       tenta('rf_trocas?status=eq.proposta&select=id&limit=1000'),
       tenta(`rf_pontos_visitas?em=gte.${desde}&select=id&limit=5000`),
+      tenta('rf_tarefas?select=titulo,status,origem,data_prevista&order=data_prevista.asc&limit=600'),
     ]);
+    const plano = tarefas.filter((t) => t.origem === 'plano').map((t) => t.data_prevista).sort();
+    const dia = plano.length ? difDias(hoje, plano[0]) + 1 : null;
+    const quota = dia >= 1 ? QUOTA_CONVITES[Math.min(dia, 7) - 1] : null;
+    const iniHoje = new Date(hoje + 'T00:00:00-03:00').getTime();
+    const convitesHoje = pontos.filter((p) => p.convidado_em && new Date(p.convidado_em).getTime() >= iniHoje).length;
+    const tarefasHoje = tarefas.filter((t) => t.data_prevista <= hoje && t.status === 'pendente');
     const tem = (p) => /^\d{11}$/.test(String(p.contato_whatsapp || '')) || p.contato_email;
     const dias = (iso) => (iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : 0);
     const n = {
@@ -28,6 +37,7 @@ export default async function handler(req, res) {
       divulgacoes: divs.length,
       trocas: trocas.length,
       visitas_24h: visitas.length,
+      tarefas_pendentes: tarefasHoje.length,
     };
     const linhas = [];
     const add = (v, t) => { if (v > 0) linhas.push(`• ${t}: ${v}`); };
@@ -39,6 +49,8 @@ export default async function handler(req, res) {
     add(n.aguardando, 'Aguardando resposta');
     add(n.trocas, 'Propostas de troca abertas entre parceiros');
     add(n.sem_contato, 'Locais sem contato (adicione o WhatsApp)');
+    if (dia >= 1 && dia <= 7) linhas.unshift(`• Semana de captação, dia ${dia} de 7: convites de hoje ${convitesHoje} de ${quota}`);
+    if (tarefasHoje.length) linhas.push(`• Tarefas pendentes da captação: ${tarefasHoje.length} (ex.: ${tarefasHoje[0].titulo})`);
     const corpo = linhas.length ? linhas.join('\n') : 'Nada pendente hoje.';
     const texto = `📍 Radar de Pontos: resumo de hoje\n\n${corpo}\n\n📈 Visitas pelos QR nas últimas 24h: ${n.visitas_24h}\n\n👉 ${SITE_PUBLICO}/admin/radar`;
     return res.json({ ...n, texto });
