@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import 'leaflet/dist/leaflet.css';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
-import { TIPOS, STATUS, CIDADES, SEMENTE_BH, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
+import { TIPOS, STATUS, CIDADES, SEMENTES, SITE_PUBLICO, textoConvite } from '../../lib/pontos';
 import { GRUPOS } from '../../lib/mapeador';
 import AdminNav from '../../lib/AdminNav';
 import AddContato from '../../lib/AddContato';
@@ -25,8 +25,8 @@ const VAZIO = { nome: '', tipo: 'comercio', endereco: '', lat: '', lng: '', cont
 export default function AdminPontos() {
   const [fase, setFase] = useState('carregando');
   const [pontos, setPontos] = useState([]);
-  const [cidade, setCidade] = useState('Belo Horizonte');
-  const [uf, setUf] = useState('MG');
+  const [cidade, setCidade] = useState('Rio de Janeiro');
+  const [uf, setUf] = useState('RJ');
   const [senha, setSenha] = useState('');
   const [msg, setMsg] = useState(null);
   const [ocupado, setOcupado] = useState(false);
@@ -117,7 +117,7 @@ export default function AdminPontos() {
       const d = await api('/api/admin/pontos/mapear', { method: 'POST', body: { cidade, uf, grupos, quantos } });
       setMsg({ tipo: 'ok', texto: `Achei ${d.encontrados} locais no mapa, ${d.novos} ainda não cadastrados. Cadastrei ${d.cadastrados} como "Mapeado". Rode de novo para trazer os próximos.` });
     });
-  const semente = () => rodar(() => api('/api/admin/pontos', { method: 'POST', body: { lote: SEMENTE_BH } }), 'Locais de exemplo de Belo Horizonte adicionados. Confira as posições no mapa.');
+  const semente = () => rodar(() => api('/api/admin/pontos', { method: 'POST', body: { lote: SEMENTES[cidade] } }), `Rodoviárias de ${cidade} adicionadas. Confira as posições no mapa.`);
   const patch = (id, corpo, ok) => rodar(() => api(`/api/admin/pontos/${id}`, { method: 'PATCH', body: corpo }), ok);
   const apagar = (p) => { if (window.confirm(`Apagar "${p.nome}"?`)) rodar(() => api(`/api/admin/pontos/${p.id}`, { method: 'DELETE' }), 'Ponto apagado.'); };
   const verTexto = (p) => setTexto({ id: p.id, conteudo: textoConvite({ nome: p.nome, cidade: p.cidade, link: `${SITE_PUBLICO}/convite/${p.token_convite}` }) });
@@ -179,11 +179,11 @@ export default function AdminPontos() {
               <div className="ea-mu" style={{ marginTop: 8 }}>Clique no mapa para preencher a posição do novo ponto. O tamanho da bolinha mostra o movimento (1 a 5).</div>
             </div>
 
-            {daCidade.length === 0 && cidade === 'Belo Horizonte' && (
+            {daCidade.length === 0 && SEMENTES[cidade] && (
               <div className="ea-card">
-                <h2>Começar por Belo Horizonte</h2>
-                <p className="ea-mu">Adiciona 8 locais públicos de grande movimento (rodoviária, mercados, faculdades, praças). Eles entram como "Mapeado": nenhum contato é inventado e as posições são aproximadas.</p>
-                <button className="ea-btn" disabled={ocupado} onClick={semente}>Adicionar locais de exemplo</button>
+                <h2>Começar por {cidade}: rodoviárias</h2>
+                <p className="ea-mu">Adiciona as rodoviárias e terminais principais da cidade (entrar e sair rápido). Eles entram como "Mapeado": nenhum contato é inventado e as posições são aproximadas.</p>
+                <button className="ea-btn" disabled={ocupado} onClick={semente}>Adicionar rodoviárias de {cidade}</button>
               </div>
             )}
 

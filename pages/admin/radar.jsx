@@ -31,7 +31,7 @@ const dias = (iso) => (iso ? Math.floor((Date.now() - new Date(iso).getTime()) /
 export default function Radar() {
   const [fase, setFase] = useState('carregando');
   const [pontos, setPontos] = useState([]);
-  const [cidade, setCidade] = useState('Belo Horizonte');
+  const [cidade, setCidade] = useState('Rio de Janeiro');
   const [senha, setSenha] = useState('');
   const [msg, setMsg] = useState(null);
   const [ocupado, setOcupado] = useState(false);

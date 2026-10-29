@@ -34,7 +34,7 @@ export default function ParceirosPainel() {
         <div className={s.acoes}>
           <Link href="/radar/participar" className={`${s.botao} ${s.principal}`}>Quero participar</Link>
           <Link href="/radar" className={`${s.botao} ${s.contorno}`}>Como funciona</Link>
-          <Link href="/radar/belo-horizonte" className={`${s.botao} ${s.contorno}`}>Ver parceiros de Belo Horizonte</Link>
+          <Link href="/radar" className={`${s.botao} ${s.contorno}`}>Ver as cidades do Radar</Link>
         </div>
       </div>
     </section>

@@ -31,7 +31,7 @@
         0
       ],
       "parameters": {
-        "jsCode": "// Troque pela(s) sua(s) cidade(s). Cada cidade roda uma vez por semana, um tipo de local por semana, em rodízio.\nconst CIDADES = [\n  { cidade: 'Belo Horizonte', uf: 'MG' },\n];\nconst RODIZIO = [['academia', 'faculdade'], ['comercio'], ['igreja'], ['terminal']];\nconst semana = Math.floor(Date.now() / (7 * 86400000));\nconst grupos = RODIZIO[semana % RODIZIO.length];\nreturn CIDADES.map((c) => ({ json: { cidade: c.cidade, uf: c.uf, grupos, quantos: 100 } }));"
+        "jsCode": "// Primeira fase: capitais abaixo, começando pelas rodoviárias. Para incluir outra capital, acrescente uma linha.\nconst CIDADES = [\n  { cidade: 'Rio de Janeiro', uf: 'RJ' },\n  { cidade: 'Goiânia', uf: 'GO' },\n  { cidade: 'Curitiba', uf: 'PR' },\n  { cidade: 'Campo Grande', uf: 'MS' },\n  { cidade: 'Vitória', uf: 'ES' },\n  { cidade: 'Salvador', uf: 'BA' },\n  { cidade: 'Florianópolis', uf: 'SC' },\n  { cidade: 'São Paulo', uf: 'SP' },\n  { cidade: 'Belo Horizonte', uf: 'MG' },\n];\n// Rodízio semanal de tipos de local (terminais/rodoviárias sempre entram nas semanas 1 e 4).\nconst RODIZIO = [['terminal', 'comercio'], ['academia', 'faculdade'], ['igreja'], ['terminal']];\nconst semana = Math.floor(Date.now() / (7 * 86400000));\nconst grupos = RODIZIO[semana % RODIZIO.length];\nreturn CIDADES.map((c) => ({ json: { cidade: c.cidade, uf: c.uf, grupos, quantos: 100 } }));"
       }
     },
     {
@@ -56,7 +56,13 @@
           ]
         },
         "options": {
-          "timeout": 60000
+          "timeout": 60000,
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 8000
+            }
+          }
         },
         "sendBody": true,
         "specifyBody": "json",
@@ -74,7 +80,7 @@
         0
       ],
       "parameters": {
-        "jsCode": "const j = $input.first().json || {};\nreturn [{ json: { texto: j.texto || ('⚠️ A busca semanal de locais não funcionou: ' + (j.error && j.error.message || j.erro || 'sem resposta')) } }];"
+        "jsCode": "return $input.all().map((it) => { const j = it.json || {}; return { json: { texto: j.texto || ('⚠️ Uma busca semanal de locais não funcionou: ' + ((j.error && j.error.message) || j.erro || 'sem resposta')) } }; });"
       }
     },
     {
