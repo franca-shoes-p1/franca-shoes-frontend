@@ -1,6 +1,8 @@
 // Painel do dono: aprovar fornecedores e modelos, acompanhar pedidos (coleta e envio) e fazer o acerto semanal.
 import { exigirAdmin } from '../../../lib/adminAuth';
 import { sb, txt, UUID } from '../../../lib/varejoServer';
+import { avisar } from '../../../lib/avisar';
+import { RODOVIARIAS } from '../../../lib/rodoviarias';
 import { COLS_EMPRESA, COLS_PRODUTO, recalcularPrecos } from '../../../lib/fornecedoresServer';
 import { numeroBR } from '../../../lib/produtosAdmin';
 import { r2 } from '../../../lib/fornecedores';
@@ -19,7 +21,8 @@ async function carregar() {
     const postagem = r2(l.reduce((s, p) => s + Number(p.custo_postagem || 0), 0));
     return { fornecedor_id: e.id, pedidos: l.length, semCusto: l.filter((p) => p.modo_entrega !== 'rota' && p.custo_postagem == null).length, comissao, postagem, total: r2(comissao + postagem) };
   }).filter((a) => a.pedidos > 0);
-  return { empresas, produtos, pedidos, acertos };
+  const registros = await sb('entrega_registros?select=pedido_id,criado_em,quem,texto&order=criado_em.asc&limit=1000').catch(() => []);
+  return { empresas, produtos, pedidos, acertos, registros };
 }
 
 export default async function handler(req, res) {
@@ -55,7 +58,7 @@ export default async function handler(req, res) {
       await sb(`rf_produtos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ revisao: ok ? 'aprovado' : 'reprovado', publicado: ok, ativo: ok }) });
     } else if (b.acao === 'pedido') {
       if (!UUID.test(id)) return res.status(400).json({ erro: 'Dados inválidos.' });
-      const [p] = await sb(`forn_pedidos?id=eq.${id}&select=id,status,modo_entrega`);
+      const [p] = await sb(`forn_pedidos?id=eq.${id}&select=id,numero,status,modo_entrega`);
       if (!p) return res.status(404).json({ erro: 'Pedido não encontrado.' });
       let patch = null;
       if (b.passo === 'coletado' && p.status === 'pronto_coleta') patch = { status: 'coletado', coletado_em: agora };
@@ -74,6 +77,27 @@ export default async function handler(req, res) {
         if (!['a_definir', 'rota', 'correios'].includes(b.modo)) return res.status(400).json({ erro: 'Modo de entrega inválido.' });
         patch = { modo_entrega: b.modo, local_entrega: txt(b.local, 250) || null };
         if (b.modo === 'rota' && !patch.local_entrega) return res.status(400).json({ erro: 'Informe o local de entrega (rodoviária ou endereço do revendedor) que vai na nota.' });
+      } else if (b.passo === 'dia') {
+        const rod = RODOVIARIAS.find((r) => r.id === b.rodoviaria);
+        const quando = new Date(b.quando);
+        if (!rod) return res.status(400).json({ erro: 'Escolha a rodoviária.' });
+        if (isNaN(quando) || quando < new Date()) return res.status(400).json({ erro: 'Informe um dia e hora no futuro.' });
+        const fmt = quando.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Sao_Paulo' });
+        patch = { modo_entrega: 'rota', local_entrega: `Rodoviária de ${rod.nome}`, entrega_rodoviaria: rod.nome, entrega_dia: quando.toISOString(), nao_compareceu_em: null, lembrete_em: null };
+        await sb(`forn_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(patch) });
+        await sb('entrega_registros', { method: 'POST', body: JSON.stringify({ pedido_id: id, quem: 'loja', texto: `Entrega marcada: ${rod.nome}, ${fmt} (hora marcada, sem espera).` }) });
+        await avisar(`📍 Pedido ${p.numero || ''} marcado: ${rod.nome}, ${fmt}. Revendedor deve avisar o cliente.`);
+        return res.json(await carregar());
+      } else if (b.passo === 'lembrete') {
+        await sb(`forn_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ lembrete_em: agora }) });
+        await sb('entrega_registros', { method: 'POST', body: JSON.stringify({ pedido_id: id, quem: 'sistema', texto: 'Lembrete enviado ao revendedor e ao cliente sobre o dia e a hora da entrega.' }) });
+        await avisar(`⏰ Lembrete: pedido com entrega marcada. Confirme o dia e a hora com o cliente.`);
+        return res.json(await carregar());
+      } else if (b.passo === 'naocompareceu') {
+        await sb(`forn_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ nao_compareceu_em: agora, modo_entrega: 'correios' }) });
+        await sb('entrega_registros', { method: 'POST', body: JSON.stringify({ pedido_id: id, quem: 'loja', texto: 'Cliente não apareceu no dia e na hora marcados. A mercadoria segue pelos Correios, com o frete por conta do cliente.' }) });
+        await avisar(`🚫 Cliente não apareceu na entrega. Pedido segue pelos Correios, frete por conta do cliente.`);
+        return res.json(await carregar());
       } else if (b.passo === 'nota') patch = { nota_interna: txt(b.texto, 500) || null };
       else return res.status(400).json({ erro: 'Esse passo não está disponível para a situação atual do pedido.' });
       await sb(`forn_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(patch) });
