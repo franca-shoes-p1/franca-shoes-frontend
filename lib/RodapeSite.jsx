@@ -72,7 +72,7 @@ export default function RodapeSite({ nome, whatsapp, email }) {
 
       <div className={s.fim}>
         <span>© 2026 {nome}. Todos os direitos reservados.</span>
-        <span><Link href="/calcados/politicas">Políticas</Link> · <Link href="/radar">Radar de Pontos</Link> · <Link href="/admin/radar">Área do responsável</Link></span>
+        <span><Link href="/calcados/politicas">Políticas</Link> · <Link href="/calcados/regulamento">Regulamento</Link> · <Link href="/radar">Radar de Pontos</Link> · <Link href="/admin/radar">Área do responsável</Link></span>
       </div>
     </footer>
   );

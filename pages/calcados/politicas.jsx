@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
 import { VAREJO } from '../../lib/varejo';
@@ -8,6 +9,7 @@ export default function Politicas() {
     <VarejoLayout titulo="Trocas, devoluções e entrega">
       <div className={styles.texto}>
         <h1>Trocas, devoluções e entrega</h1>
+        <p><Link href="/calcados/regulamento">Leia também o regulamento completo</Link>, com a política de troca de cada fábrica.</p>
 
         <h2>Como funciona o pedido</h2>
         <p>
