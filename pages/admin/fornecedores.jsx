@@ -5,6 +5,7 @@ import { api, ADMIN_CSS } from '../../lib/adminClient';
 import AdminNav from '../../lib/AdminNav';
 import { SITE_PUBLICO } from '../../lib/pontos';
 import { brl } from '../../lib/varejo';
+import { RODOVIARIAS, modoSugerido } from '../../lib/rodoviarias';
 import { STATUS_EMPRESA, STATUS_PEDIDO, REVISAO, MODOS_ENTREGA, fmtCpf } from '../../lib/fornecedores';
 
 const CSS = `
@@ -32,6 +33,7 @@ export default function AdminFornecedores() {
   const [env, setEnv] = useState({});
   const [canc, setCanc] = useState({});
   const [ent, setEnt] = useState({});
+  const [dia, setDia] = useState({});
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/fornecedores')); setFase('pronto'); }
@@ -157,7 +159,7 @@ export default function AdminFornecedores() {
                       </div>
                       <div className="ea-mu">{data(p.criado_em)} · cliente {p.cliente_nome} ({p.whatsapp}) · {p.cidade}/{p.estado}</div>
                       <div>{(p.itens || []).map((i, k) => <div key={k}>{i.quantidade}× {i.titulo}{i.tamanho ? ` (nº ${i.tamanho})` : ''}</div>)}</div>
-                      <div className="ea-mu">Total do cliente {brl(p.total)} · PIX 1 fornecedor {brl(p.preco_fornecedor_total)} · <b>PIX 2 (você) {brl(Number(p.total) - Number(p.preco_fornecedor_total))}</b>{p.pix2_pago_em ? ' ✓ recebido' : ' (a confirmar em Revendedores)'}{p.custo_postagem != null ? ` · postagem ${brl(p.custo_postagem)}` : ''}{p.comissao_acertada_em ? ' · ✓ acertado' : ''}</div>
+                      <div className="ea-mu">Total do cliente {brl(p.total)} · PIX 1 fornecedor {brl(p.preco_fornecedor_total)} · <b>PIX 2 (você) {brl(Number(p.total) - Number(p.preco_fornecedor_total))}</b>{p.pix2_pago_em ? ' ✓ recebido' : ' (a confirmar em Revendedores)'}{p.custo_postagem != null ? ` · postagem ${brl(p.custo_postagem)} (frete cobrado ${brl(p.frete)}, diferença ${brl(Number(p.frete) - Number(p.custo_postagem))})` : ''}{p.comissao_acertada_em ? ' · ✓ acertado' : ''}</div>
                       <div className="ea-mu">CPF para a nota: <b>{fmtCpf(p.cliente_cpf) || 'não informado'}</b> · autorização {p.aceite_autorizacao_em ? `aceita em ${data(p.aceite_autorizacao_em)}` : 'sem aceite registrado'}</div>
                       {!['entregue', 'cancelado'].includes(p.status) && (
                         <div className="fa-row" style={{ marginTop: 6 }}>
@@ -167,6 +169,25 @@ export default function AdminFornecedores() {
                           </select>
                           <input className="fa-in" style={{ minWidth: 260 }} placeholder="Local que vai na nota (rodoviária ou endereço do revendedor)" value={(ent[p.id] || {}).local ?? p.local_entrega ?? ''} onChange={(ev) => setEnt({ ...ent, [p.id]: { ...(ent[p.id] || {}), local: ev.target.value } })} />
                           <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'entrega', modo: (ent[p.id] || {}).modo ?? p.modo_entrega ?? 'a_definir', local: (ent[p.id] || {}).local ?? p.local_entrega ?? '' }, 'Entrega registrada.')}>Salvar entrega</button>
+                        </div>
+                      )}
+                      {!['entregue', 'cancelado'].includes(p.status) && (
+                        <div className="ea-card" style={{ margin: '8px 0', padding: 10 }}>
+                          <b>Dia de entrega (hora marcada, sem espera)</b>
+                          {p.entrega_dia && <div>Marcado: <b>{p.entrega_rodoviaria}, {data(p.entrega_dia)}</b>{p.cliente_avisado_em ? ` · cliente avisado em ${data(p.cliente_avisado_em)}` : ' · cliente ainda não avisado'}{p.nao_compareceu_em ? ' · NÃO COMPARECEU, segue por Correios' : ''}</div>}
+                          {!p.revendedor_id && <div className="ea-mu">Pedido sem revendedor.</div>}
+                          <div className="fa-row" style={{ marginTop: 6 }}>
+                            <select className="fa-in" style={{ width: 230 }} value={(dia[p.id] || {}).rod ?? ''} onChange={(ev) => setDia({ ...dia, [p.id]: { ...(dia[p.id] || {}), rod: ev.target.value } })}>
+                              <option value="">Rodoviária…</option>
+                              {RODOVIARIAS.map((r) => <option key={r.id} value={r.id}>{r.nome}</option>)}
+                            </select>
+                            <input type="datetime-local" className="fa-in" style={{ width: 210 }} value={(dia[p.id] || {}).quando ?? ''} onChange={(ev) => setDia({ ...dia, [p.id]: { ...(dia[p.id] || {}), quando: ev.target.value } })} />
+                            <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'dia', rodoviaria: (dia[p.id] || {}).rod, quando: (dia[p.id] || {}).quando }, 'Dia de entrega marcado.')}>Marcar dia</button>
+                            {p.entrega_dia && <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'lembrete' }, 'Lembrete registrado.')}>Enviar lembrete</button>}
+                            {p.entrega_dia && !p.nao_compareceu_em && <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => { if (window.confirm('Cliente não apareceu? O pedido segue pelos Correios, com o frete por conta do cliente.')) post({ acao: 'pedido', id: p.id, passo: 'naocompareceu' }, 'Registrado: segue pelos Correios.'); }}>Cliente não apareceu</button>}
+                          </div>
+                          <div className="ea-mu">Sugestão pela cidade do cliente ({p.cidade}/{p.estado}): {modoSugerido(p.cidade, p.estado) === 'rota' ? 'rota (rodoviária atendida)' : 'Correios'}.</div>
+                          {(d.registros || []).filter((x) => x.pedido_id === p.id).map((x, i) => <div key={i} className="ea-mu">• {data(x.criado_em)} ({x.quem}): {x.texto}</div>)}
                         </div>
                       )}
                       <div className="ea-mu">Endereço do cliente: {p.rua}, {p.numero_casa}{p.complemento ? ` ${p.complemento}` : ''}, {p.bairro}, {p.cidade}/{p.estado}, CEP {p.cep}</div>

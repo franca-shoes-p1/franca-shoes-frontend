@@ -6,7 +6,7 @@ import { TOKEN } from '../../../lib/fornecedoresServer';
 import { pixCopiaECola } from '../../../lib/pixCopiaCola';
 import { lerConfig } from '../../../lib/revendedoresServer';
 
-const COLS = 'id,numero,status,criado_em,itens,subtotal,frete,total,preco_fornecedor_total,pix2_pago_em,cliente_pagou_em,codigo_rastreio,motivo_cancelamento,fornecedor_id';
+const COLS = 'id,numero,status,criado_em,itens,subtotal,frete,total,preco_fornecedor_total,pix2_pago_em,entrega_dia,entrega_rodoviaria,nao_compareceu_em,cliente_pagou_em,codigo_rastreio,motivo_cancelamento,fornecedor_id';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -39,6 +39,7 @@ export default async function handler(req, res) {
       pedido: {
         numero: p.numero,
         status: p.status,
+        entregaDia: p.entrega_dia, entregaRodoviaria: p.entrega_rodoviaria, naoCompareceu: !!p.nao_compareceu_em,
         itens: (p.itens || []).map((i) => ({ titulo: i.titulo, tamanho: i.tamanho, quantidade: i.quantidade, preco: i.preco })),
         subtotal: Number(p.subtotal),
         frete: Number(p.frete),

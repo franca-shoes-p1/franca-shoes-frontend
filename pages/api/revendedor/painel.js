@@ -8,7 +8,7 @@ import { pixCopiaECola } from '../../../lib/pixCopiaCola';
 import { numeroBR } from '../../../lib/produtosAdmin';
 
 const COLS_PEDIDO =
-  'numero,criado_em,status,cliente_nome,whatsapp,cidade,estado,itens,total,modo_entrega,local_entrega,margem_revendedor_total,pix2_pago_em,repassado_em,entregue_em';
+  'id,numero,criado_em,entrega_dia,entrega_rodoviaria,cliente_avisado_em,nao_compareceu_em,status,cliente_nome,whatsapp,cidade,estado,itens,total,modo_entrega,local_entrega,margem_revendedor_total,pix2_pago_em,repassado_em,entregue_em';
 
 async function carregar(r) {
   const [pedidos, cfg] = await Promise.all([
@@ -23,6 +23,9 @@ async function carregar(r) {
     ? pixCopiaECola({ tipo: cfg.pix_tipo || 'cpf', chave: cfg.pix_chave, nome: cfg.pix_nome || 'RICARDO BELLO', cidade: 'FRANCA', valor: MENSALIDADE, txid: 'ASS' + r.codigo })
     : '';
   const { id, ...resto } = r;
+  const ids = pedidos.map((p) => p.id).filter(Boolean);
+  const regs = ids.length ? await sb(`entrega_registros?pedido_id=in.(${ids.join(',')})&select=pedido_id,criado_em,quem,texto&order=criado_em.asc`).catch(() => []) : [];
+  pedidos.forEach((p) => { p.registros = regs.filter((x) => x.pedido_id === p.id); delete p.id; });
   return {
     revendedor: resto,
     assinatura: { status: statusAssinatura(r.assinatura_ate), ate: r.assinatura_ate, valor: MENSALIDADE, pix, titular: cfg.pix_nome || '' },
@@ -64,6 +67,13 @@ export default async function handler(req, res) {
       await sb('rev_loja_pedidos', { method: 'POST', body: JSON.stringify({ revendedor_id: r.id, pacote: pacote.id, mensagem: mensagem || null }) });
       await avisar(`🏪 ${r.nome} (${r.cidade}/${r.estado}) quer a ${pacote.nome}. WhatsApp ${r.whatsapp}. ${mensagem}`);
       return res.json({ ...(await carregar(r)), lojaEnviada: true });
+    }
+    if (b.acao === 'avisei') {
+      const [p] = await sb(`forn_pedidos?numero=eq.${Number(b.numero) || 0}&revendedor_id=eq.${r.id}&select=id`);
+      if (!p) return res.status(404).json({ erro: 'Pedido não encontrado.' });
+      await sb(`forn_pedidos?id=eq.${p.id}`, { method: 'PATCH', body: JSON.stringify({ cliente_avisado_em: new Date().toISOString() }) });
+      await sb('entrega_registros', { method: 'POST', body: JSON.stringify({ pedido_id: p.id, quem: 'revendedor', texto: `${r.nome} avisou o cliente sobre o dia e a hora da entrega.` }) });
+      return res.json(await carregar(r));
     }
     return res.status(400).json({ erro: 'Ação desconhecida.' });
   } catch (err) {

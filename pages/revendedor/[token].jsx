@@ -132,6 +132,15 @@ export default function PainelRevendedor() {
                 </div>
                 <div className="fo-mu">{(p.itens || []).map((i) => `${i.quantidade}× ${i.titulo || i.nome || 'par'}${i.tamanho ? ' ' + i.tamanho : ''}`).join(', ')} · {p.cidade}/{p.estado} · total do cliente {brl(p.total)}</div>
                 <div>{ANDA[p.status] || p.status} · sua margem <b>{brl(p.margem_revendedor_total)}</b>{p.repassado_em ? ' · ✓ recebida' : p.status === 'entregue' && p.pix2_pago_em ? ' · a receber' : ''}</div>
+                {p.entrega_dia && (
+                  <div style={{ margin: '6px 0', padding: 8, border: '1px solid var(--bd)', borderRadius: 8 }}>
+                    📍 <b>Entrega: {p.entrega_rodoviaria}, {new Date(p.entrega_dia).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</b> (hora marcada, sem espera)
+                    {p.nao_compareceu_em && <div>O cliente não apareceu. A mercadoria segue pelos Correios, com o frete por conta do cliente.</div>}
+                    {!p.cliente_avisado_em && !p.nao_compareceu_em && <p style={{ margin: '6px 0 0' }}><button className="fo-btn" disabled={ocupado} onClick={() => agir({ acao: 'avisei', numero: p.numero }, 'Registrado que você avisou o cliente.')}>Avisei o cliente</button></p>}
+                    {p.cliente_avisado_em && <div className="fo-mu">Você avisou o cliente em {data(p.cliente_avisado_em)}.</div>}
+                  </div>
+                )}
+                {(p.registros || []).map((x, i) => <div key={i} className="fo-mu">• {new Date(x.criado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}: {x.texto}</div>)}
                 {p.whatsapp && <a href={`https://wa.me/${String(p.whatsapp).replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">WhatsApp do cliente</a>}
               </div>
             ))}

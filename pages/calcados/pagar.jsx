@@ -82,6 +82,12 @@ export default function Pagar() {
         <h1>Pedido nº {p.numero}</h1>
         <p className={styles.ok} style={{ marginTop: 10 }}>{and[1]}</p>
         {erro && <div className={styles.erro}>{erro}</div>}
+        {p.entregaDia && (
+          <p className={styles.ok} style={{ marginTop: 10 }}>
+            📍 Retirada marcada: <b>{p.entregaRodoviaria}, {new Date(p.entregaDia).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</b>. A hora é marcada e não há espera: se você não aparecer, o pedido segue pelos Correios com o frete por sua conta.
+            {p.naoCompareceu && ' Você não compareceu; o pedido segue pelos Correios.'}
+          </p>
+        )}
         {p.status === 'cancelado' && p.motivo && <p style={{ marginTop: 10 }}>Motivo informado pelo fornecedor: {p.motivo}. Se você já pagou, peça o estorno do PIX ao fornecedor pelo WhatsApp abaixo.</p>}
         {p.rastreio && <p style={{ marginTop: 10 }}>Código de rastreio dos Correios: <b>{p.rastreio}</b></p>}
 
