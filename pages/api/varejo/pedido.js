@@ -4,7 +4,9 @@ import { sb, UUID, txt, siteUrl } from '../../../lib/varejoServer';
 import { calcularFrete, ESTADOS, brl } from '../../../lib/varejo';
 import { avisar } from '../../../lib/avisar';
 import { novoToken } from '../../../lib/fornecedoresServer';
-import { precoCliente, r2, cpfValido } from '../../../lib/fornecedores';
+import { r2, cpfValido } from '../../../lib/fornecedores';
+import { revPorCodigo } from '../../../lib/revendedoresServer';
+import { podeVender, precoComMargem, margemUnitaria } from '../../../lib/revendedores';
 
 const so_digitos = (v) => String(v ?? '').replace(/\D/g, '');
 
@@ -163,6 +165,10 @@ async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
   if (!emp || emp.status !== 'ativo' || !emp.pix_chave) {
     return res.status(400).json({ erro: 'Este fornecedor não está recebendo pedidos agora. Escolha outro modelo ou fale com a loja.' });
   }
+  // Revendedor (link ?rev=): se estiver ativo e com a assinatura em dia, o preço inclui a margem dele. Senão, preço normal.
+  const rev = c.rev ? await revPorCodigo(c.rev).catch(() => null) : null;
+  const revOk = rev && podeVender(rev) ? rev : null;
+  const margemPct = revOk ? Number(revOk.margem_pct) || 0 : 0;
   const porId = new Map(produtos.map((p) => [p.id, p]));
   const itens = [];
   for (const l of linhas.values()) {
@@ -170,7 +176,8 @@ async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
     if (!p || p.revisao !== 'aprovado' || p.estoque_status === 'esgotado' || !(Number(p.preco_fornecedor) > 0)) {
       return res.status(400).json({ erro: 'Um dos produtos não está mais disponível. Atualize o carrinho.' });
     }
-    const preco = precoCliente(p.preco_fornecedor, emp.comissao_pct);
+    const preco = precoComMargem(p.preco_fornecedor, emp.comissao_pct, margemPct);
+    const margem_unit = margemUnitaria(p.preco_fornecedor, margemPct);
     itens.push({
       id: p.id,
       titulo: p.titulo_publico || p.nome,
@@ -178,11 +185,13 @@ async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
       quantidade: l.quantidade,
       preco,
       preco_fornecedor: r2(p.preco_fornecedor),
-      comissao_unit: r2(preco - p.preco_fornecedor),
+      margem_unit,
+      comissao_unit: r2(preco - p.preco_fornecedor - margem_unit),
     });
   }
   const subtotal = r2(itens.reduce((s, i) => s + i.preco * i.quantidade, 0));
   const pfTotal = r2(itens.reduce((s, i) => s + i.preco_fornecedor * i.quantidade, 0));
+  const margemTotal = r2(itens.reduce((s, i) => s + i.margem_unit * i.quantidade, 0));
   const frete = calcularFrete(dados.estado, subtotal);
   const total = r2(subtotal + frete);
   const token = novoToken();
@@ -207,11 +216,14 @@ async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
       itens,
       subtotal,
       preco_fornecedor_total: pfTotal,
-      comissao_total: r2(subtotal - pfTotal),
+      comissao_total: r2(subtotal - pfTotal - margemTotal),
+      margem_revendedor_total: margemTotal,
+      revendedor_id: revOk ? revOk.id : null,
+      local_entrega: revOk ? revOk.local_entrega || null : null,
       frete,
       total,
     }),
   });
-  await avisar(`🛒 Novo pedido #${pedido.numero} para ${emp.nome_fantasia}: ${brl(total)} (sua comissão ${brl(subtotal - pfTotal)}). Aguardando o PIX do cliente.`);
+  await avisar(`🛒 Novo pedido #${pedido.numero} para ${emp.nome_fantasia}${revOk ? ` via ${revOk.nome}` : ''}: ${brl(total)} (PIX 1 fornecedor ${brl(pfTotal)}; PIX 2 para você ${brl(total - pfTotal)}, sendo margem do revendedor ${brl(margemTotal)}). Aguardando o pagamento.`);
   return res.json({ ok: true, numero: pedido.numero, url: `/calcados/pagar?t=${token}` });
 }

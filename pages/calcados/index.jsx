@@ -2,18 +2,22 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
-import { brl, VAREJO } from '../../lib/varejo';
+import { brl, VAREJO, guardarRevDaUrl, lerRev } from '../../lib/varejo';
 
 export default function Vitrine() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoria, setCategoria] = useState('');
   const [busca, setBusca] = useState('');
+  const [rev, setRev] = useState(null);
+  const [revInativo, setRevInativo] = useState(false);
 
   useEffect(() => {
-    fetch('/api/varejo/catalogo')
+    guardarRevDaUrl();
+    const codigo = lerRev();
+    fetch('/api/varejo/catalogo' + (codigo ? `?rev=${codigo}` : ''))
       .then((r) => r.json())
-      .then((j) => setProdutos(j.produtos || []))
+      .then((j) => { setProdutos(j.produtos || []); setRev(j.revendedor || null); setRevInativo(!!j.revInativo); })
       .catch(() => setProdutos([]))
       .finally(() => setLoading(false));
   }, []);
@@ -28,6 +32,8 @@ export default function Vitrine() {
 
   return (
     <VarejoLayout>
+      {rev && <div className={styles.faixa}>🤝 Você está sendo atendido por <strong>{rev.nome}</strong>{rev.cidade ? ` (${rev.cidade}/${rev.estado})` : ''}. Os preços já são os dele.</div>}
+      {revInativo && <div className={styles.erro}>Este link de revendedor está inativo no momento. Os preços abaixo são os preços normais do site.</div>}
       <div className={styles.faixa}>
         🏭 Calçados e acessórios direto das fábricas de Franca. Pague com <strong>PIX ou cartão</strong>. Seu pedido é separado na
         fábrica em {VAREJO.prazoPreparoDias} e enviado para você.
