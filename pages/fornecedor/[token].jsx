@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { FORN_CSS } from '../../lib/FornecedorCss';
 import { reduzirFoto } from '../../lib/reduzirFoto';
 import { brl } from '../../lib/varejo';
-import { STATUS_PEDIDO, REVISAO, PIX_TIPOS, ESTOQUE, precoCliente, comissaoUnitaria, r2 } from '../../lib/fornecedores';
+import { STATUS_PEDIDO, REVISAO, PIX_TIPOS, ESTOQUE, precoCliente, comissaoUnitaria, r2, fmtCpf } from '../../lib/fornecedores';
 
 const chamar = async (corpo) => {
   const r = await fetch('/api/fornecedor/painel', corpo ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) } : undefined);
@@ -13,7 +13,7 @@ const chamar = async (corpo) => {
   return j;
 };
 
-const MODELO_VAZIO = { id: '', titulo: '', categoria: '', material: '', tamanhos: '', descricao: '', foto_url: '', preco: '', estoque_status: 'disponivel', prazo_postagem_dias: '' };
+const MODELO_VAZIO = { id: '', titulo: '', categoria: '', material: '', tamanhos: '', descricao: '', foto_url: '', preco: '', estoque_status: 'disponivel', prazo_postagem_dias: '', prazo_confeccao_dias: '' };
 const CATEGORIAS = ['Sandália', 'Sapatilha', 'Tênis', 'Bota', 'Sapato social', 'Chinelo', 'Mocassim', 'Bolsa', 'Cinto', 'Carteira', 'Infantil'];
 const preco_br = (n) => String(n ?? '').replace('.', ',');
 const data = (s) => (s ? new Date(s).toLocaleDateString('pt-BR') : '');
@@ -33,7 +33,7 @@ export default function PainelFornecedor({ token }) {
     try {
       const j = await fetch('/api/fornecedor/painel?token=' + token).then(async (r) => { const x = await r.json().catch(() => ({})); if (!r.ok) throw new Error(x.erro || 'Erro'); return x; });
       setD(j);
-      setPerfil((p) => p || { nome_fantasia: j.empresa.nome_fantasia || '', responsavel: j.empresa.responsavel || '', whatsapp: (j.empresa.whatsapp || '').replace(/^55/, ''), email: j.empresa.email || '', documento: j.empresa.documento || '', endereco_coleta: j.empresa.endereco_coleta || '', emite_nota: !!j.empresa.emite_nota, pix_tipo: j.empresa.pix_tipo || 'cnpj', pix_chave: j.empresa.pix_chave || '', pix_nome: j.empresa.pix_nome || '' });
+      setPerfil((p) => p || { nome_fantasia: j.empresa.nome_fantasia || '', responsavel: j.empresa.responsavel || '', whatsapp: (j.empresa.whatsapp || '').replace(/^55/, ''), email: j.empresa.email || '', documento: j.empresa.documento || '', endereco_coleta: j.empresa.endereco_coleta || '', emite_nota: !!j.empresa.emite_nota, pix_tipo: j.empresa.pix_tipo || 'cnpj', pix_chave: j.empresa.pix_chave || '', pix_nome: j.empresa.pix_nome || '', troca_defeito_dias: j.empresa.troca_defeito_dias || 30, troca_vontade: !!j.empresa.troca_vontade, troca_vontade_dias: j.empresa.troca_vontade_dias || '', troca_frete_vontade: j.empresa.troca_frete_vontade || 'comprador', troca_obs: j.empresa.troca_obs || '' });
     } catch (e) { setErro(e.message); }
   }, [token]);
   useEffect(() => { carrega(); }, [carrega]);
@@ -69,7 +69,7 @@ export default function PainelFornecedor({ token }) {
     if (ok) setM(MODELO_VAZIO);
   }
 
-  const editar = (p) => { setM({ id: p.id, titulo: p.titulo_publico || '', categoria: p.categoria || '', material: p.material || '', tamanhos: p.tamanhos || '', descricao: p.descricao || '', foto_url: p.foto_url || '', preco: preco_br(p.preco_fornecedor), estoque_status: p.estoque_status || 'disponivel', prazo_postagem_dias: p.prazo_postagem_dias || '' }); setAba('modelos'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const editar = (p) => { setM({ id: p.id, titulo: p.titulo_publico || '', categoria: p.categoria || '', material: p.material || '', tamanhos: p.tamanhos || '', descricao: p.descricao || '', foto_url: p.foto_url || '', preco: preco_br(p.preco_fornecedor), estoque_status: p.estoque_status || 'disponivel', prazo_postagem_dias: p.prazo_postagem_dias || '', prazo_confeccao_dias: p.prazo_confeccao_dias || '' }); setAba('modelos'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   if (!d && !erro) return <div className="fo"><style>{FORN_CSS}</style><div className="fo-w"><p>Carregando…</p></div></div>;
   if (!d) return <div className="fo"><style>{FORN_CSS}</style><div className="fo-w"><div className="fo-card"><h2>Link não disponível</h2><p>{erro}</p></div></div></div>;
@@ -115,6 +115,13 @@ export default function PainelFornecedor({ token }) {
                     <span className="fo-tag" style={{ background: st[1] }}>{st[0]}</span>
                   </div>
                   <p style={{ margin: '8px 0 4px' }}>{(p.itens || []).map((i, k) => <span key={k} style={{ display: 'block' }}>{i.quantidade}× {i.titulo}{i.tamanho ? ` (nº ${i.tamanho})` : ''}</span>)}</p>
+                  {['pago', 'pronto_coleta', 'coletado'].includes(p.status) && (
+                    <div className="fo-am" style={{ margin: '6px 0' }}>
+                      <b>Dados para a nota fiscal (no nome do cliente final):</b><br />
+                      {p.cliente_nome} · CPF {fmtCpf(p.cliente_cpf) || 'não informado'}<br />
+                      {p.local_entrega ? <>Local de entrega que vai na nota: <b>{p.local_entrega}</b></> : <>Local de entrega: a loja vai informar pelo WhatsApp antes da coleta. Se não chegar, pergunte.</>}
+                    </div>
+                  )}
                   <p className="fo-mu" style={{ margin: '4px 0' }}>
                     Cliente: {p.cliente_nome} · WhatsApp {p.whatsapp}<br />
                     Entrega: {p.rua}, {p.numero_casa}{p.complemento ? ` ${p.complemento}` : ''} · {p.bairro} · {p.cidade}/{p.estado} · CEP {p.cep}
@@ -190,6 +197,10 @@ export default function PainelFornecedor({ token }) {
                   </div>
                 )}
                 <div className="fo-grid2">
+                  <div><label htmlFor="mf">Dias de confecção (fazer o par depois do pedido)</label><input id="mf" value={m.prazo_confeccao_dias} onChange={(ev) => setM({ ...m, prazo_confeccao_dias: ev.target.value })} inputMode="numeric" placeholder="Ex.: 10" /></div>
+                  <div className="fo-mu" style={{ alignSelf: 'end', fontSize: 14 }}>O cliente vê este prazo na vitrine. Seja realista: prazo cumprido vende mais do que prazo curto.</div>
+                </div>
+                <div className="fo-grid2">
                   <div><label htmlFor="me">Estoque</label><select id="me" value={m.estoque_status} onChange={(ev) => setM({ ...m, estoque_status: ev.target.value })}>{ESTOQUE.map(([k, t]) => <option key={k} value={k}>{t}</option>)}</select></div>
                   <div><label htmlFor="mj">Dias para separar o pedido</label><input id="mj" value={m.prazo_postagem_dias} onChange={(ev) => setM({ ...m, prazo_postagem_dias: ev.target.value })} inputMode="numeric" placeholder="Ex.: 2" /></div>
                 </div>
@@ -230,6 +241,16 @@ export default function PainelFornecedor({ token }) {
             <label htmlFor="pd">CNPJ ou CPF (só números)</label><input id="pd" value={perfil.documento} onChange={(ev) => setPerfil({ ...perfil, documento: ev.target.value })} inputMode="numeric" />
             <label htmlFor="pc">Endereço de coleta dos pedidos</label><input id="pc" value={perfil.endereco_coleta} onChange={(ev) => setPerfil({ ...perfil, endereco_coleta: ev.target.value })} />
             <label className="fo-chk" style={{ display: 'flex', gap: 8 }}><input type="checkbox" style={{ width: 'auto' }} checked={perfil.emite_nota} onChange={(ev) => setPerfil({ ...perfil, emite_nota: ev.target.checked })} /> Eu consigo emitir nota fiscal para o cliente</label>
+            <h3 style={{ marginTop: 16 }}>Política de troca</h3>
+            <p className="fo-mu">Quem vende é você, então a regra de troca é sua. Ela aparece para o cliente na vitrine, antes de comprar, e no regulamento do site.</p>
+            <div className="fo-grid2">
+              <div><label htmlFor="td">Troca por defeito: prazo em dias (mínimo recomendado: 30)</label><input id="td" value={perfil.troca_defeito_dias} onChange={(ev) => setPerfil({ ...perfil, troca_defeito_dias: ev.target.value })} inputMode="numeric" /></div>
+              <div><label htmlFor="tf">Se o cliente trocar por tamanho/vontade, quem paga o frete?</label><select id="tf" value={perfil.troca_frete_vontade} onChange={(ev) => setPerfil({ ...perfil, troca_frete_vontade: ev.target.value })}><option value="comprador">O comprador</option><option value="fornecedor">Eu (fornecedor)</option></select></div>
+            </div>
+            <label className="fo-chk" style={{ display: 'flex', gap: 8 }}><input type="checkbox" style={{ width: 'auto' }} checked={perfil.troca_vontade} onChange={(ev) => setPerfil({ ...perfil, troca_vontade: ev.target.checked })} /> Aceito troca por tamanho ou vontade do cliente</label>
+            {perfil.troca_vontade && (<><label htmlFor="tv">Prazo para pedir essa troca (dias)</label><input id="tv" value={perfil.troca_vontade_dias} onChange={(ev) => setPerfil({ ...perfil, troca_vontade_dias: ev.target.value })} inputMode="numeric" placeholder="Ex.: 7" /></>)}
+            {!perfil.troca_vontade && <p className="fo-mu">Sem troca por tamanho: o site avisa o cliente antes da compra para ele conferir a tabela de medidas.</p>}
+            <label htmlFor="to">Outras regras (opcional)</label><input id="to" value={perfil.troca_obs} onChange={(ev) => setPerfil({ ...perfil, troca_obs: ev.target.value })} maxLength={300} placeholder="Ex.: produto sem uso e com a caixa original" />
             <h3 style={{ marginTop: 16 }}>Chave PIX</h3>
             <div className="fo-grid2">
               <div><label htmlFor="pt">Tipo da chave</label><select id="pt" value={perfil.pix_tipo} onChange={(ev) => setPerfil({ ...perfil, pix_tipo: ev.target.value })}>{PIX_TIPOS.map(([k, t]) => <option key={k} value={k}>{t}</option>)}</select></div>
@@ -243,7 +264,7 @@ export default function PainelFornecedor({ token }) {
         {aba === 'acerto' && (
           <div className="fo-card">
             <h2>Acerto com a loja</h2>
-            <p className="fo-mu">Toda semana você paga por PIX a comissão e o custo real da postagem dos pedidos que já foram enviados. A loja manda o valor e a chave PIX pelo WhatsApp.</p>
+            <p className="fo-mu">Toda semana você paga por PIX a comissão (e o custo da postagem, nos pedidos enviados pelos Correios). A loja manda o valor e a chave PIX pelo WhatsApp.</p>
             <div className="fo-calc">
               <div><span>Pedidos enviados a acertar</span><b>{d.extrato.pedidos}</b></div>
               <div><span>Comissão da loja</span><b>{brl(d.extrato.comissao)}</b></div>
@@ -269,8 +290,8 @@ export default function PainelFornecedor({ token }) {
               <li>Na aba <b>Meus modelos</b>, cadastre cada modelo com foto, números e o seu preço. O painel mostra quanto o cliente vai pagar.</li>
               <li>Quando o modelo for aprovado, ele aparece na vitrine do site.</li>
               <li>Quando chegar um pedido, confira o PIX no seu banco e clique <b>Recebi o PIX</b>.</li>
-              <li>Separe o pedido, coloque a nota fiscal dentro da embalagem e clique <b>Pedido pronto para coleta</b>.</li>
-              <li>A loja coleta com você e envia pelos Correios. O rastreio aparece no pedido.</li>
+              <li>Faça o pedido (confecção), emita a nota fiscal no nome e CPF do cliente final, com o local de entrega que aparecer no pedido, coloque a nota na embalagem e clique <b>Pedido pronto para coleta</b>.</li>
+              <li>A loja coleta com você, com a nota no nome do cliente final, e leva até o cliente por rota de entrega ou pelos Correios.</li>
               <li>Toda semana, faça o acerto da comissão e da postagem na aba <b>Acerto</b>.</li>
             </ol>
             <p className="fo-mu">Se faltar estoque, cancele o pedido e devolva o PIX ao cliente. Dúvidas? Fale com a loja pelo WhatsApp.</p>

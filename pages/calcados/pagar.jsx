@@ -12,7 +12,7 @@ const ANDAMENTO = {
   cliente_pagou: ['2', 'O fornecedor está conferindo o seu pagamento'],
   pago: ['3', 'Pagamento confirmado. O fornecedor está separando o seu pedido'],
   pronto_coleta: ['3', 'Pedido separado. Em breve será coletado para envio'],
-  coletado: ['4', 'Pedido coletado. Preparando o envio pelos Correios'],
+  coletado: ['4', 'Pedido coletado na fábrica. A entrega será combinada com você'],
   enviado: ['5', 'Pedido enviado pelos Correios'],
   entregue: ['6', 'Pedido entregue'],
   cancelado: ['x', 'Pedido cancelado'],
@@ -102,7 +102,7 @@ export default function Pagar() {
           <Link className={styles.botaoSecundario} href="/calcados">Continuar comprando</Link>
         </p>
         <p className={styles.itemMeta} style={{ marginTop: 14 }}>
-          {f.nome} é quem vende, recebe o pagamento e emite a nota fiscal. A {VAREJO.nomeLoja} intermedeia o pedido, coleta e envia pelos Correios. Guarde este link para acompanhar.
+          {f.nome} é quem vende, recebe o pagamento e emite a nota fiscal. A {VAREJO.nomeLoja} intermedeia o pedido e faz a coleta e a entrega, por rota ou pelos Correios. O prazo inclui a confecção. Guarde este link para acompanhar.
         </p>
       </div>
     </VarejoLayout>

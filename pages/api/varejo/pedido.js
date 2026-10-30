@@ -4,7 +4,7 @@ import { sb, UUID, txt, siteUrl } from '../../../lib/varejoServer';
 import { calcularFrete, ESTADOS, brl } from '../../../lib/varejo';
 import { avisar } from '../../../lib/avisar';
 import { novoToken } from '../../../lib/fornecedoresServer';
-import { precoCliente, r2 } from '../../../lib/fornecedores';
+import { precoCliente, r2, cpfValido } from '../../../lib/fornecedores';
 
 const so_digitos = (v) => String(v ?? '').replace(/\D/g, '');
 
@@ -64,7 +64,9 @@ export default async function handler(req, res) {
       if (doForn.length !== produtos.length || new Set(doForn.map((p) => p.fornecedor_id)).size > 1) {
         return res.status(400).json({ erro: 'Cada pedido pode ter modelos de um só fornecedor. Faça um pedido para cada fornecedor.' });
       }
-      return await pedidoFornecedor({ res, c, linhas, produtos, dados: { nome, email, whatsapp, cep, rua, numero, complemento, bairro, cidade, estado } });
+      if (!cpfValido(c.cpf)) return res.status(400).json({ erro: 'Informe um CPF válido: a nota fiscal sai no seu nome.' });
+      if (c.autorizo !== true) return res.status(400).json({ erro: 'Marque a autorização de retirada e transporte para continuar.' });
+      return await pedidoFornecedor({ res, c, linhas, produtos, dados: { nome, cpf: so_digitos(c.cpf), email, whatsapp, cep, rua, numero, complemento, bairro, cidade, estado } });
     }
     if (semMP) return res.status(503).json({ erro: 'Pagamento ainda não configurado. Fale com a loja pelo WhatsApp.' });
     const porId = new Map(produtos.map((p) => [p.id, p]));
@@ -190,6 +192,8 @@ async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
       token,
       fornecedor_id: emp.id,
       cliente_nome: dados.nome,
+      cliente_cpf: dados.cpf,
+      aceite_autorizacao_em: new Date().toISOString(),
       email: dados.email,
       whatsapp: dados.whatsapp,
       cep: dados.cep,

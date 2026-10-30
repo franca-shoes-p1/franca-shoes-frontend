@@ -35,6 +35,22 @@ export default function Politicas() {
         <h2>Produto com defeito</h2>
         <p>Se chegar com defeito de fabricação, trocamos ou devolvemos o valor. Mande fotos pelo WhatsApp.</p>
 
+        <h2>Modelos de fornecedores (loja de fábrica)</h2>
+        <p>
+          Alguns modelos são vendidos por fornecedores de Franca. Nesses casos o fornecedor é quem vende: ele recebe o seu PIX, faz o par
+          depois do pedido (por isso existe o prazo de confecção, mostrado em cada modelo) e emite a nota fiscal no seu nome e CPF. A{' '}
+          {VAREJO.nomeLoja} faz a intermediação, a coleta e a entrega, por rota de entrega ou pelos Correios.
+        </p>
+        <p>
+          A política de troca é a de cada fornecedor e aparece em cada modelo antes da compra: prazo para defeito, se aceita troca por tamanho
+          ou vontade, e quem paga o frete. Troca por defeito não tem custo para o cliente. A desistência de 7 dias da compra pela internet segue o
+          Código de Defesa do Consumidor. O pedido de troca é feito pelo WhatsApp dentro do prazo, e a peça é recolhida na próxima entrega.
+        </p>
+        <p>
+          Para a nota fiscal pedimos o seu CPF e a autorização de retirada e transporte, que você aceita ao comprar. Os dados são usados só
+          para o pedido, a nota e a entrega.
+        </p>
+
         <h2>Contato</h2>
         <p>
           WhatsApp:{' '}

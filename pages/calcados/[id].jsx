@@ -73,7 +73,18 @@ export default function Produto() {
             <>
               <span className={styles.parcela}>Vendido e enviado por <b>{p.vendedor}</b>. Pagamento por PIX direto ao fornecedor. Frete calculado no carrinho.</span>
               {p.sobConsulta && <span className={styles.parcela} style={{ display: 'block' }}>O fornecedor confirma o seu número antes de separar o pedido.</span>}
-              {p.prazoPostagem > 0 && <span className={styles.parcela} style={{ display: 'block' }}>Preparo: até {p.prazoPostagem} dia(s) útil(eis) depois do pagamento.</span>}
+              <span className={styles.parcela} style={{ display: 'block' }}>
+                Loja de fábrica: o seu par é feito e separado depois do pedido.{' '}
+                {p.prazoConfeccao > 0 ? <>Confecção: <b>{p.prazoConfeccao} dia(s)</b>. </> : null}
+                {p.prazoPostagem > 0 ? <>Separação: até {p.prazoPostagem} dia(s) útil(eis) depois do pagamento. </> : null}
+                A entrega acontece depois, por rota de entrega ou pelos Correios, e o prazo é confirmado no pedido.
+              </span>
+              {p.troca && (
+                <details style={{ marginTop: 8 }}>
+                  <summary style={{ cursor: 'pointer' }}>Política de troca deste vendedor</summary>
+                  {p.troca.map((t, k) => <span key={k} className={styles.parcela} style={{ display: 'block' }}>{t}</span>)}
+                </details>
+              )}
             </>
           ) : (
             <span className={styles.parcela}>Pague no PIX ou cartão. Frete calculado no carrinho.</span>

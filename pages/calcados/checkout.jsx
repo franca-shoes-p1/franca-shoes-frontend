@@ -7,7 +7,7 @@ import {
 } from '../../lib/varejo';
 
 const VAZIO = {
-  nome: '', email: '', whatsapp: '', cep: '', rua: '', numero: '', complemento: '', bairro: '', cidade: '', estado: '', observacao: '', site: '',
+  nome: '', cpf: '', autorizo: false, email: '', whatsapp: '', cep: '', rua: '', numero: '', complemento: '', bairro: '', cidade: '', estado: '', observacao: '', site: '',
 };
 
 export default function Checkout() {
@@ -22,7 +22,7 @@ export default function Checkout() {
     setPronto(true);
   }, []);
 
-  const mudar = (e) => setF((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const mudar = (e) => setF((p) => ({ ...p, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
   const subtotal = subtotalCarrinho(itens);
   const frete = f.estado ? calcularFrete(f.estado, subtotal) : null;
   const total = subtotal + (frete || 0);
@@ -92,6 +92,10 @@ export default function Checkout() {
             <div className={`${styles.grupo} ${styles.cheio}`}>
               <label>Nome completo *</label>
               <input className={styles.campo} name="nome" value={f.nome} onChange={mudar} required autoComplete="name" />
+            </div>
+            <div className={styles.grupo}>
+              <label>CPF * (a nota fiscal sai no seu nome)</label>
+              <input className={styles.campo} name="cpf" value={f.cpf} onChange={mudar} inputMode="numeric" maxLength={14} placeholder="000.000.000-00" autoComplete="off" />
             </div>
             <div className={styles.grupo}>
               <label>E-mail *</label>
@@ -181,12 +185,19 @@ export default function Checkout() {
             <span>Total</span>
             <span>{brl(total)}</span>
           </div>
+          <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginTop: 12, fontSize: '0.88rem' }}>
+            <input type="checkbox" name="autorizo" checked={f.autorizo} onChange={mudar} style={{ marginTop: 3 }} />
+            <span>
+              Para modelos de fornecedores: autorizo a retirada na fábrica e o transporte da minha mercadoria por quem faz a entrega, com a nota fiscal no meu nome.
+              Li o <Link href="/calcados/politicas">regulamento</Link>.
+            </span>
+          </label>
           <button type="submit" className={styles.botaoPrincipal} disabled={enviando || frete === null}>
             {enviando ? 'Abrindo pagamento…' : 'Pagar com PIX ou cartão'}
           </button>
           <p className={styles.parcela} style={{ marginTop: 10 }}>
-            Você será levado ao Mercado Pago para pagar com segurança. Seu pedido é separado na fábrica em {VAREJO.prazoPreparoDias} após
-            a confirmação do pagamento.
+            Modelos da própria loja: você paga no Mercado Pago (PIX ou cartão) e o pedido sai em {VAREJO.prazoPreparoDias}.
+            Modelos de fornecedores: o PIX vai direto ao fornecedor, que faz o par depois do pedido; a página seguinte mostra o código.
           </p>
           <p style={{ marginTop: 10 }}>
             <Link href="/calcados/carrinho">← Voltar ao carrinho</Link>
