@@ -8,15 +8,16 @@ export default async function handler(req, res) {
   const chave = process.env.SUPABASE_SERVICE_KEY;
   if (!base || !chave) return res.status(200).json({ modelos: [] });
   try {
-    const r = await fetch(
-      `${base}/rest/v1/rf_produtos?select=${CAMPOS}&publicado=eq.true&ativo=eq.true&order=criado_em.desc&limit=200`,
-      {
+    const pedir = (extra) =>
+      fetch(`${base}/rest/v1/rf_produtos?select=${CAMPOS}&publicado=eq.true&ativo=eq.true${extra}&order=criado_em.desc&limit=200`, {
         headers: {
           apikey: chave,
           ...(chave.startsWith('eyJ') ? { Authorization: `Bearer ${chave}` } : {}),
         },
-      }
-    );
+      });
+    // Modelos de fornecedores têm vitrine própria (/calcados): ficam fora deste catálogo de lotes.
+    let r = await pedir('&fornecedor_id=is.null');
+    if (!r.ok) r = await pedir('');
     if (!r.ok) return res.status(200).json({ modelos: [] });
     const linhas = await r.json();
     const modelos = linhas.map((p) => ({

@@ -1,7 +1,10 @@
 // Cria o pedido de varejo e o link de pagamento do Mercado Pago (PIX e cartão).
 // Os preços e o frete são SEMPRE calculados aqui no servidor, nunca vêm do navegador.
 import { sb, UUID, txt, siteUrl } from '../../../lib/varejoServer';
-import { calcularFrete, ESTADOS } from '../../../lib/varejo';
+import { calcularFrete, ESTADOS, brl } from '../../../lib/varejo';
+import { avisar } from '../../../lib/avisar';
+import { novoToken } from '../../../lib/fornecedoresServer';
+import { precoCliente, r2 } from '../../../lib/fornecedores';
 
 const so_digitos = (v) => String(v ?? '').replace(/\D/g, '');
 
@@ -10,10 +13,7 @@ export default async function handler(req, res) {
   const c = req.body && typeof req.body === 'object' ? req.body : {};
   if (c.site) return res.json({ ok: true }); // campo-armadilha para robôs
 
-  if (!process.env.MP_ACCESS_TOKEN) {
-    return res.status(503).json({ erro: 'Pagamento ainda não configurado. Fale com a loja pelo WhatsApp.' });
-  }
-
+  const semMP = !process.env.MP_ACCESS_TOKEN; // só é exigido para modelos da própria loja; fornecedor recebe por PIX direto
   const nome = txt(c.nome, 120);
   const email = txt(c.email, 120).toLowerCase();
   const whatsapp = so_digitos(c.whatsapp).slice(0, 15);
@@ -48,9 +48,25 @@ export default async function handler(req, res) {
 
   try {
     const ids = [...new Set([...linhas.values()].map((l) => l.id))].join(',');
-    const produtos = await sb(
-      `rf_produtos?select=id,nome,titulo_publico,preco_venda_sugerido&publicado=eq.true&ativo=eq.true&preco_venda_sugerido=gt.0&id=in.(${ids})`
-    );
+    let produtos;
+    try {
+      produtos = await sb(
+        `rf_produtos?select=id,nome,titulo_publico,preco_venda_sugerido,fornecedor_id,preco_fornecedor,estoque_status,revisao&publicado=eq.true&ativo=eq.true&preco_venda_sugerido=gt.0&id=in.(${ids})`
+      );
+    } catch (e) {
+      // SQL de fornecedores ainda não rodado: segue como antes (só modelos da própria loja)
+      produtos = await sb(
+        `rf_produtos?select=id,nome,titulo_publico,preco_venda_sugerido&publicado=eq.true&ativo=eq.true&preco_venda_sugerido=gt.0&id=in.(${ids})`
+      );
+    }
+    const doForn = produtos.filter((p) => p.fornecedor_id);
+    if (doForn.length) {
+      if (doForn.length !== produtos.length || new Set(doForn.map((p) => p.fornecedor_id)).size > 1) {
+        return res.status(400).json({ erro: 'Cada pedido pode ter modelos de um só fornecedor. Faça um pedido para cada fornecedor.' });
+      }
+      return await pedidoFornecedor({ res, c, linhas, produtos, dados: { nome, email, whatsapp, cep, rua, numero, complemento, bairro, cidade, estado } });
+    }
+    if (semMP) return res.status(503).json({ erro: 'Pagamento ainda não configurado. Fale com a loja pelo WhatsApp.' });
     const porId = new Map(produtos.map((p) => [p.id, p]));
     const itens = [];
     for (const l of linhas.values()) {
@@ -137,4 +153,61 @@ export default async function handler(req, res) {
     console.error('varejo/pedido', e.message);
     return res.status(500).json({ erro: 'Não foi possível iniciar o pagamento agora. Tente de novo ou fale pelo WhatsApp.' });
   }
+}
+
+// Pedido de modelos de UM fornecedor: o cliente paga por PIX direto a ele. Preços sempre calculados aqui.
+async function pedidoFornecedor({ res, c, linhas, produtos, dados }) {
+  const [emp] = await sb(`forn_empresas?id=eq.${produtos[0].fornecedor_id}&select=id,nome_fantasia,status,pix_chave,comissao_pct`);
+  if (!emp || emp.status !== 'ativo' || !emp.pix_chave) {
+    return res.status(400).json({ erro: 'Este fornecedor não está recebendo pedidos agora. Escolha outro modelo ou fale com a loja.' });
+  }
+  const porId = new Map(produtos.map((p) => [p.id, p]));
+  const itens = [];
+  for (const l of linhas.values()) {
+    const p = porId.get(l.id);
+    if (!p || p.revisao !== 'aprovado' || p.estoque_status === 'esgotado' || !(Number(p.preco_fornecedor) > 0)) {
+      return res.status(400).json({ erro: 'Um dos produtos não está mais disponível. Atualize o carrinho.' });
+    }
+    const preco = precoCliente(p.preco_fornecedor, emp.comissao_pct);
+    itens.push({
+      id: p.id,
+      titulo: p.titulo_publico || p.nome,
+      tamanho: l.tamanho,
+      quantidade: l.quantidade,
+      preco,
+      preco_fornecedor: r2(p.preco_fornecedor),
+      comissao_unit: r2(preco - p.preco_fornecedor),
+    });
+  }
+  const subtotal = r2(itens.reduce((s, i) => s + i.preco * i.quantidade, 0));
+  const pfTotal = r2(itens.reduce((s, i) => s + i.preco_fornecedor * i.quantidade, 0));
+  const frete = calcularFrete(dados.estado, subtotal);
+  const total = r2(subtotal + frete);
+  const token = novoToken();
+  const [pedido] = await sb('forn_pedidos', {
+    method: 'POST',
+    body: JSON.stringify({
+      token,
+      fornecedor_id: emp.id,
+      cliente_nome: dados.nome,
+      email: dados.email,
+      whatsapp: dados.whatsapp,
+      cep: dados.cep,
+      rua: dados.rua,
+      numero_casa: dados.numero,
+      complemento: dados.complemento || null,
+      bairro: dados.bairro,
+      cidade: dados.cidade,
+      estado: dados.estado,
+      observacao: txt(c.observacao, 300) || null,
+      itens,
+      subtotal,
+      preco_fornecedor_total: pfTotal,
+      comissao_total: r2(subtotal - pfTotal),
+      frete,
+      total,
+    }),
+  });
+  await avisar(`🛒 Novo pedido #${pedido.numero} para ${emp.nome_fantasia}: ${brl(total)} (sua comissão ${brl(subtotal - pfTotal)}). Aguardando o PIX do cliente.`);
+  return res.json({ ok: true, numero: pedido.numero, url: `/calcados/pagar?t=${token}` });
 }

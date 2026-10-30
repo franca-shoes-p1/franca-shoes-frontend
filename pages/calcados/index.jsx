@@ -65,7 +65,7 @@ export default function Vitrine() {
                 {p.categoria && <span className={styles.cardCategoria}>{p.categoria}</span>}
                 <span className={styles.cardTitulo}>{p.titulo}</span>
                 <span className={styles.preco}>{brl(p.preco)}</span>
-                <span className={styles.parcela}>no PIX ou cartão</span>
+                <span className={styles.parcela}>{p.vendedor ? `por ${p.vendedor}` : 'no PIX ou cartão'}</span>
               </div>
             </Link>
           ))}

@@ -43,6 +43,7 @@ export default function VarejoLayout({ titulo, children }) {
       <footer className={styles.rodape}>
         <span>© {new Date().getFullYear()} {VAREJO.nomeLoja} — Franca, SP</span>
         <Link href="/calcados/politicas">Trocas, devoluções e entrega</Link>
+        <Link href="/fornecedor">Sou fornecedor: quero vender aqui</Link>
         <Link href="/">Portal</Link>
       </footer>
     </div>
