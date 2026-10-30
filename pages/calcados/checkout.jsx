@@ -190,7 +190,7 @@ export default function Checkout() {
             <input type="checkbox" name="autorizo" checked={f.autorizo} onChange={mudar} style={{ marginTop: 3 }} />
             <span>
               Para modelos de fornecedores: autorizo a retirada na fábrica e o transporte da minha mercadoria por quem faz a entrega, com a nota fiscal no meu nome.
-              Li o <Link href="/calcados/politicas">regulamento</Link>.
+              Li o <Link href="/calcados/regulamento">regulamento</Link>.
             </span>
           </label>
           <button type="submit" className={styles.botaoPrincipal} disabled={enviando || frete === null}>
