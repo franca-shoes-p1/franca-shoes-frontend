@@ -81,3 +81,22 @@ create index if not exists forn_pedidos_status_idx on public.forn_pedidos (statu
 -- Trava de segurança: ninguém de fora lê ou grava. Só o servidor (chave de serviço).
 alter table public.forn_empresas enable row level security;
 alter table public.forn_pedidos enable row level security;
+
+-- ===== Parte 1 (30/10): CPF do cliente, autorização, entrega por rota ou Correios, política de troca, prazo de confecção =====
+-- Pode rodar de novo sem problema.
+
+-- Política de troca de cada fornecedor (aparece na vitrine e no Regulamento)
+alter table public.forn_empresas add column if not exists troca_defeito_dias int default 30;          -- prazo para pedir troca por defeito
+alter table public.forn_empresas add column if not exists troca_vontade boolean default false;         -- aceita troca por tamanho/vontade?
+alter table public.forn_empresas add column if not exists troca_vontade_dias int;                       -- prazo, se aceitar
+alter table public.forn_empresas add column if not exists troca_frete_vontade text default 'comprador'; -- comprador | fornecedor
+alter table public.forn_empresas add column if not exists troca_obs text;                               -- regras extras escritas pelo fornecedor
+
+-- Prazo de confecção (loja de fábrica: o produto é feito/separado depois do pedido)
+alter table public.rf_produtos add column if not exists prazo_confeccao_dias int;
+
+-- Dados do pedido para a nota fiscal e para a entrega
+alter table public.forn_pedidos add column if not exists cliente_cpf text;                  -- só números; vai na nota fiscal
+alter table public.forn_pedidos add column if not exists aceite_autorizacao_em timestamptz; -- cliente autorizou a retirada/transporte
+alter table public.forn_pedidos add column if not exists modo_entrega text not null default 'a_definir'; -- a_definir | rota | correios
+alter table public.forn_pedidos add column if not exists local_entrega text;                -- rodoviária / endereço do revendedor que vai na nota

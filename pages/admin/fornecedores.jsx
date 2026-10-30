@@ -5,7 +5,7 @@ import { api, ADMIN_CSS } from '../../lib/adminClient';
 import AdminNav from '../../lib/AdminNav';
 import { SITE_PUBLICO } from '../../lib/pontos';
 import { brl } from '../../lib/varejo';
-import { STATUS_EMPRESA, STATUS_PEDIDO, REVISAO } from '../../lib/fornecedores';
+import { STATUS_EMPRESA, STATUS_PEDIDO, REVISAO, MODOS_ENTREGA, fmtCpf } from '../../lib/fornecedores';
 
 const CSS = `
 .fa-tag{display:inline-block;color:#fff;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700}
@@ -31,6 +31,7 @@ export default function AdminFornecedores() {
   const [pct, setPct] = useState({});
   const [env, setEnv] = useState({});
   const [canc, setCanc] = useState({});
+  const [ent, setEnt] = useState({});
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/fornecedores')); setFase('pronto'); }
@@ -157,16 +158,28 @@ export default function AdminFornecedores() {
                       <div className="ea-mu">{data(p.criado_em)} · cliente {p.cliente_nome} ({p.whatsapp}) · {p.cidade}/{p.estado}</div>
                       <div>{(p.itens || []).map((i, k) => <div key={k}>{i.quantidade}× {i.titulo}{i.tamanho ? ` (nº ${i.tamanho})` : ''}</div>)}</div>
                       <div className="ea-mu">Total do cliente {brl(p.total)} · fornecedor recebe {brl(Number(p.preco_fornecedor_total) + Number(p.frete))} · <b>sua comissão {brl(p.comissao_total)}</b>{p.custo_postagem != null ? ` · postagem ${brl(p.custo_postagem)}` : ''}{p.comissao_acertada_em ? ' · ✓ acertado' : ''}</div>
-                      <div className="ea-mu">Endereço: {p.rua}, {p.numero_casa}{p.complemento ? ` ${p.complemento}` : ''}, {p.bairro}, {p.cidade}/{p.estado}, CEP {p.cep}</div>
+                      <div className="ea-mu">CPF para a nota: <b>{fmtCpf(p.cliente_cpf) || 'não informado'}</b> · autorização {p.aceite_autorizacao_em ? `aceita em ${data(p.aceite_autorizacao_em)}` : 'sem aceite registrado'}</div>
+                      {!['entregue', 'cancelado'].includes(p.status) && (
+                        <div className="fa-row" style={{ marginTop: 6 }}>
+                          <label style={{ margin: 0 }}>Entrega</label>
+                          <select className="fa-in" value={(ent[p.id] || {}).modo ?? p.modo_entrega ?? 'a_definir'} onChange={(ev) => setEnt({ ...ent, [p.id]: { ...(ent[p.id] || {}), modo: ev.target.value } })}>
+                            {Object.entries(MODOS_ENTREGA).map(([k, v]) => <option key={k} value={k}>{v[0]}</option>)}
+                          </select>
+                          <input className="fa-in" style={{ minWidth: 260 }} placeholder="Local que vai na nota (rodoviária ou endereço do revendedor)" value={(ent[p.id] || {}).local ?? p.local_entrega ?? ''} onChange={(ev) => setEnt({ ...ent, [p.id]: { ...(ent[p.id] || {}), local: ev.target.value } })} />
+                          <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'entrega', modo: (ent[p.id] || {}).modo ?? p.modo_entrega ?? 'a_definir', local: (ent[p.id] || {}).local ?? p.local_entrega ?? '' }, 'Entrega registrada.')}>Salvar entrega</button>
+                        </div>
+                      )}
+                      <div className="ea-mu">Endereço do cliente: {p.rua}, {p.numero_casa}{p.complemento ? ` ${p.complemento}` : ''}, {p.bairro}, {p.cidade}/{p.estado}, CEP {p.cep}</div>
                       {e.endereco_coleta && ['pronto_coleta', 'coletado'].includes(p.status) && <div className="ea-mu">Coletar em: {e.endereco_coleta}</div>}
                       {p.codigo_rastreio && <div>Rastreio: <b>{p.codigo_rastreio}</b></div>}
                       <div className="fa-row" style={{ marginTop: 8 }}>
                         {p.status === 'pronto_coleta' && <button className="ea-btn" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'coletado' }, 'Marcado como coletado.')}>Coletei com o fornecedor</button>}
                         {p.status === 'enviado' && <button className="ea-btn" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'entregue' }, 'Marcado como entregue.')}>Cliente recebeu</button>}
+                        {p.status === 'coletado' && p.modo_entrega === 'rota' && <button className="ea-btn" disabled={ocupado} onClick={() => post({ acao: 'pedido', id: p.id, passo: 'entregue' }, 'Entrega ao revendedor registrada.')}>Entreguei na rota</button>}
                         {e.whatsapp && ['aguardando_pagamento', 'cliente_pagou', 'pago', 'pronto_coleta'].includes(p.status) && <a className="ea-btn ea-btn2" href={zap(e.whatsapp, `Olá! Pedido nº ${p.numero} no Franca Calçados. Situação: ${st[0]}.`)} target="_blank" rel="noopener noreferrer">Falar com o fornecedor</a>}
                         <a className="ea-btn ea-btn2" href={zap(p.whatsapp, `Olá, ${p.cliente_nome}! Sobre o seu pedido nº ${p.numero} no Franca Calçados.`)} target="_blank" rel="noopener noreferrer">Falar com o cliente</a>
                       </div>
-                      {['pronto_coleta', 'coletado'].includes(p.status) && (
+                      {['pronto_coleta', 'coletado'].includes(p.status) && p.modo_entrega !== 'rota' && (
                         <div className="fa-row" style={{ marginTop: 10 }}>
                           <input placeholder="Rastreio dos Correios" value={x.rastreio} onChange={(ev) => setEnv({ ...env, [p.id]: { ...x, rastreio: ev.target.value } })} style={{ maxWidth: 220 }} />
                           <input placeholder="Custo da postagem (R$)" value={x.custo} onChange={(ev) => setEnv({ ...env, [p.id]: { ...x, custo: ev.target.value } })} style={{ maxWidth: 240 }} inputMode="decimal" />

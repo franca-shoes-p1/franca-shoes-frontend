@@ -17,7 +17,7 @@ async function carregar() {
     const l = pedidos.filter((p) => p.fornecedor_id === e.id && ['enviado', 'entregue'].includes(p.status) && !p.comissao_acertada_em);
     const comissao = r2(l.reduce((s, p) => s + Number(p.comissao_total || 0), 0));
     const postagem = r2(l.reduce((s, p) => s + Number(p.custo_postagem || 0), 0));
-    return { fornecedor_id: e.id, pedidos: l.length, semCusto: l.filter((p) => p.custo_postagem == null).length, comissao, postagem, total: r2(comissao + postagem) };
+    return { fornecedor_id: e.id, pedidos: l.length, semCusto: l.filter((p) => p.modo_entrega !== 'rota' && p.custo_postagem == null).length, comissao, postagem, total: r2(comissao + postagem) };
   }).filter((a) => a.pedidos > 0);
   return { empresas, produtos, pedidos, acertos };
 }
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       await sb(`rf_produtos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ revisao: ok ? 'aprovado' : 'reprovado', publicado: ok, ativo: ok }) });
     } else if (b.acao === 'pedido') {
       if (!UUID.test(id)) return res.status(400).json({ erro: 'Dados inválidos.' });
-      const [p] = await sb(`forn_pedidos?id=eq.${id}&select=id,status`);
+      const [p] = await sb(`forn_pedidos?id=eq.${id}&select=id,status,modo_entrega`);
       if (!p) return res.status(404).json({ erro: 'Pedido não encontrado.' });
       let patch = null;
       if (b.passo === 'coletado' && p.status === 'pronto_coleta') patch = { status: 'coletado', coletado_em: agora };
@@ -65,11 +65,15 @@ export default async function handler(req, res) {
         if (rastreio.length < 8) return res.status(400).json({ erro: 'Informe o código de rastreio dos Correios.' });
         if (!(custo >= 0 && custo < 1000)) return res.status(400).json({ erro: 'Informe o custo real da postagem (pode ser 0).' });
         patch = { status: 'enviado', enviado_em: agora, codigo_rastreio: rastreio, custo_postagem: r2(custo), ...(p.status === 'pronto_coleta' ? { coletado_em: agora } : {}) };
-      } else if (b.passo === 'entregue' && p.status === 'enviado') patch = { status: 'entregue', entregue_em: agora };
+      } else if (b.passo === 'entregue' && (p.status === 'enviado' || (p.status === 'coletado' && p.modo_entrega === 'rota'))) patch = { status: 'entregue', entregue_em: agora };
       else if (b.passo === 'cancelar' && p.status !== 'entregue' && p.status !== 'cancelado') {
         const motivo = txt(b.motivo, 200);
         if (motivo.length < 5) return res.status(400).json({ erro: 'Escreva o motivo do cancelamento.' });
         patch = { status: 'cancelado', motivo_cancelamento: motivo };
+      } else if (b.passo === 'entrega') {
+        if (!['a_definir', 'rota', 'correios'].includes(b.modo)) return res.status(400).json({ erro: 'Modo de entrega inválido.' });
+        patch = { modo_entrega: b.modo, local_entrega: txt(b.local, 250) || null };
+        if (b.modo === 'rota' && !patch.local_entrega) return res.status(400).json({ erro: 'Informe o local de entrega (rodoviária ou endereço do revendedor) que vai na nota.' });
       } else if (b.passo === 'nota') patch = { nota_interna: txt(b.texto, 500) || null };
       else return res.status(400).json({ erro: 'Esse passo não está disponível para a situação atual do pedido.' });
       await sb(`forn_pedidos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify(patch) });

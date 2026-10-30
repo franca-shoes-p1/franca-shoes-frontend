@@ -5,7 +5,7 @@ import { acharEmpresa, validarEmpresaBasica, validarModeloFornecedor, COLS_PRODU
 import { r2 } from '../../../lib/fornecedores';
 
 const COLS_PEDIDO =
-  'id,numero,criado_em,status,cliente_nome,whatsapp,cep,rua,numero_casa,complemento,bairro,cidade,estado,observacao,itens,subtotal,preco_fornecedor_total,comissao_total,frete,total,cliente_pagou_em,pago_em,nota_na_embalagem,pronto_em,coletado_em,enviado_em,entregue_em,codigo_rastreio,custo_postagem,motivo_cancelamento,comissao_acertada_em';
+  'id,numero,criado_em,status,cliente_nome,cliente_cpf,modo_entrega,local_entrega,aceite_autorizacao_em,whatsapp,cep,rua,numero_casa,complemento,bairro,cidade,estado,observacao,itens,subtotal,preco_fornecedor_total,comissao_total,frete,total,cliente_pagou_em,pago_em,nota_na_embalagem,pronto_em,coletado_em,enviado_em,entregue_em,codigo_rastreio,custo_postagem,motivo_cancelamento,comissao_acertada_em';
 
 async function carregar(e) {
   const [produtos, pedidos] = await Promise.all([

@@ -1,9 +1,10 @@
 // Catálogo PÚBLICO do varejo. Mostra só modelos publicados que tenham preço de venda ao consumidor.
 // Nunca devolve o custo de fábrica, o fornecedor nem o nome da fábrica.
 import { sb, UUID } from '../../../lib/varejoServer';
+import { textoTroca } from '../../../lib/fornecedores';
 
 const CAMPOS = 'id,nome,titulo_publico,descricao,categoria,material,tamanhos,foto_url,preco_venda_sugerido';
-const CAMPOS_F = CAMPOS + ',fornecedor_id,estoque_status,prazo_postagem_dias';
+const CAMPOS_F = CAMPOS + ',fornecedor_id,estoque_status,prazo_postagem_dias,prazo_confeccao_dias';
 // Modelos de fornecedor só aparecem depois de aprovados e quando não estão esgotados.
 const FILTRO_F = 'and=(or(fornecedor_id.is.null,revisao.eq.aprovado),or(estoque_status.is.null,estoque_status.neq.esgotado))';
 
@@ -20,6 +21,8 @@ const formatar = (p) => ({
   fornecedorId: p.fornecedor_id || '',
   sobConsulta: p.estoque_status === 'sob_consulta',
   prazoPostagem: p.prazo_postagem_dias || 0,
+  prazoConfeccao: p.prazo_confeccao_dias || 0,
+  troca: p.troca || null,
 });
 
 // Tenta com os campos de fornecedor; se o SQL de fornecedores ainda não foi rodado, volta ao jeito antigo.
@@ -27,13 +30,18 @@ async function buscar(filtro, extra) {
   try {
     const linhas = await sb(`rf_produtos?select=${CAMPOS_F}&${filtro}&${FILTRO_F}${extra}`);
     const ids = [...new Set(linhas.map((p) => p.fornecedor_id).filter(Boolean))];
-    let nomes = new Map();
+    let empresas = new Map();
     if (ids.length) {
-      const emp = await sb(`forn_empresas?select=id,nome_fantasia&status=eq.ativo&id=in.(${ids.join(',')})`);
-      nomes = new Map(emp.map((e) => [e.id, e.nome_fantasia]));
+      const emp = await sb(`forn_empresas?select=id,nome_fantasia,troca_defeito_dias,troca_vontade,troca_vontade_dias,troca_frete_vontade,troca_obs&status=eq.ativo&id=in.(${ids.join(',')})`);
+      empresas = new Map(emp.map((e) => [e.id, e]));
     }
     // modelo de fornecedor cuja empresa não está ativa não aparece
-    return linhas.filter((p) => !p.fornecedor_id || nomes.has(p.fornecedor_id)).map((p) => ({ ...p, vendedor: nomes.get(p.fornecedor_id) || '' }));
+    return linhas
+      .filter((p) => !p.fornecedor_id || empresas.has(p.fornecedor_id))
+      .map((p) => {
+        const e = empresas.get(p.fornecedor_id);
+        return { ...p, vendedor: e ? e.nome_fantasia : '', troca: e ? textoTroca(e) : null };
+      });
   } catch (e) {
     return sb(`rf_produtos?select=${CAMPOS}&${filtro}${extra}`);
   }
