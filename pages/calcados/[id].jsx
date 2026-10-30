@@ -69,7 +69,15 @@ export default function Produto() {
           <h1>{p.titulo}</h1>
           {p.material && <span className={styles.itemMeta}>Material: {p.material}</span>}
           <div className={styles.precoGrande}>{brl(p.preco)}</div>
-          <span className={styles.parcela}>Pague no PIX ou cartão. Frete calculado no carrinho.</span>
+          {p.vendedor ? (
+            <>
+              <span className={styles.parcela}>Vendido e enviado por <b>{p.vendedor}</b>. Pagamento por PIX direto ao fornecedor. Frete calculado no carrinho.</span>
+              {p.sobConsulta && <span className={styles.parcela} style={{ display: 'block' }}>O fornecedor confirma o seu número antes de separar o pedido.</span>}
+              {p.prazoPostagem > 0 && <span className={styles.parcela} style={{ display: 'block' }}>Preparo: até {p.prazoPostagem} dia(s) útil(eis) depois do pagamento.</span>}
+            </>
+          ) : (
+            <span className={styles.parcela}>Pague no PIX ou cartão. Frete calculado no carrinho.</span>
+          )}
 
           <div className={styles.rotulo}>Número</div>
           {tamanhos.length > 0 ? (
