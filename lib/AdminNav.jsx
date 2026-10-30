@@ -10,6 +10,7 @@ const ITENS = [
   { href: '/admin/material', t: '🖨️ Materiais' },
   { href: '/admin/calcados', t: '👟 Calçados' },
   { href: '/admin/fornecedores', t: '🏭 Fornecedores' },
+  { href: '/admin/guia', t: '🧭 Guia fornecedores' },
   { href: '/admin/revendedores', t: '🤝 Revendedores' },
   { href: '/admin/lote', t: '🧾 Lote do dia' },
   { href: '/admin/operadores', t: '👥 Operadores' },
