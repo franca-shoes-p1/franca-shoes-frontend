@@ -61,7 +61,7 @@ export default function AdminFornecedores() {
       <div className="ea-in">
         <AdminNav />
         <h1>Fornecedores de Franca</h1>
-        <div className="ea-mu">Os fornecedores cadastram os modelos e recebem o pagamento. Você aprova, coleta, envia pelos Correios e recebe a comissão no acerto semanal.</div>
+        <div className="ea-mu">Os fornecedores cadastram os modelos e recebem o pagamento. Você aprova, coleta, envia pelos Correios e recebe a comissão e o frete no PIX 2 (aba Revendedores).</div>
         {msg && <div className={`ea-msg ${msg.tipo}`}>{msg.texto}</div>}
         {fase === 'carregando' && <div className="ea-card">Carregando…</div>}
         {fase === 'login' && (
@@ -81,10 +81,10 @@ export default function AdminFornecedores() {
               <div className="ea-card" style={{ flex: '1 1 150px' }}><div className="ea-mu">Fornecedores a aprovar</div><b style={{ fontSize: 26 }}>{pendentesEmp.length}</b></div>
               <div className="ea-card" style={{ flex: '1 1 150px' }}><div className="ea-mu">Modelos a conferir</div><b style={{ fontSize: 26 }}>{pendentesProd.length}</b></div>
               <div className="ea-card" style={{ flex: '1 1 150px' }}><div className="ea-mu">Pedidos para coletar/enviar</div><b style={{ fontSize: 26 }}>{pedAbertos.length}</b></div>
-              <div className="ea-card" style={{ flex: '1 1 150px' }}><div className="ea-mu">A receber (acertos)</div><b style={{ fontSize: 26 }}>{brl(d.acertos.reduce((s, a) => s + a.total, 0))}</b></div>
+              <div className="ea-card" style={{ flex: '1 1 150px' }}><div className="ea-mu">Acertos antigos em aberto</div><b style={{ fontSize: 26 }}>{brl(d.acertos.reduce((s, a) => s + a.total, 0))}</b></div>
             </div>
             <div className="fa-tabs">
-              {[['fornecedores', '🏭 Fornecedores'], ['modelos', '👟 Modelos'], ['pedidos', '📦 Pedidos'], ['acertos', '💰 Acertos']].map(([k, t]) => <button key={k} className={aba === k ? 'on' : ''} onClick={() => setAba(k)}>{t}</button>)}
+              {[['fornecedores', '🏭 Fornecedores'], ['modelos', '👟 Modelos'], ['pedidos', '📦 Pedidos'], ['acertos', '💰 Acertos antigos']].map(([k, t]) => <button key={k} className={aba === k ? 'on' : ''} onClick={() => setAba(k)}>{t}</button>)}
             </div>
 
             {aba === 'fornecedores' && (
@@ -157,7 +157,7 @@ export default function AdminFornecedores() {
                       </div>
                       <div className="ea-mu">{data(p.criado_em)} · cliente {p.cliente_nome} ({p.whatsapp}) · {p.cidade}/{p.estado}</div>
                       <div>{(p.itens || []).map((i, k) => <div key={k}>{i.quantidade}× {i.titulo}{i.tamanho ? ` (nº ${i.tamanho})` : ''}</div>)}</div>
-                      <div className="ea-mu">Total do cliente {brl(p.total)} · fornecedor recebe {brl(Number(p.preco_fornecedor_total) + Number(p.frete))} · <b>sua comissão {brl(p.comissao_total)}</b>{p.custo_postagem != null ? ` · postagem ${brl(p.custo_postagem)}` : ''}{p.comissao_acertada_em ? ' · ✓ acertado' : ''}</div>
+                      <div className="ea-mu">Total do cliente {brl(p.total)} · PIX 1 fornecedor {brl(p.preco_fornecedor_total)} · <b>PIX 2 (você) {brl(Number(p.total) - Number(p.preco_fornecedor_total))}</b>{p.pix2_pago_em ? ' ✓ recebido' : ' (a confirmar em Revendedores)'}{p.custo_postagem != null ? ` · postagem ${brl(p.custo_postagem)}` : ''}{p.comissao_acertada_em ? ' · ✓ acertado' : ''}</div>
                       <div className="ea-mu">CPF para a nota: <b>{fmtCpf(p.cliente_cpf) || 'não informado'}</b> · autorização {p.aceite_autorizacao_em ? `aceita em ${data(p.aceite_autorizacao_em)}` : 'sem aceite registrado'}</div>
                       {!['entregue', 'cancelado'].includes(p.status) && (
                         <div className="fa-row" style={{ marginTop: 6 }}>

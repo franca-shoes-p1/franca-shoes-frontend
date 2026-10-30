@@ -94,11 +94,11 @@ export default function PainelFornecedor({ token }) {
         <div className="fo-row" style={{ margin: '0 0 12px' }}>
           <div className="fo-card" style={{ margin: 0, flex: '1 1 150px' }}><div className="fo-mu">Pedidos para atender</div><b style={{ fontSize: 26 }}>{pedidosAbertos.length}</b></div>
           <div className="fo-card" style={{ margin: 0, flex: '1 1 150px' }}><div className="fo-mu">Modelos no site</div><b style={{ fontSize: 26 }}>{d.produtos.filter((p) => p.revisao === 'aprovado' && p.ativo).length}</b></div>
-          <div className="fo-card" style={{ margin: 0, flex: '1 1 150px' }}><div className="fo-mu">Acerto em aberto</div><b style={{ fontSize: 26 }}>{brl(d.extrato.total)}</b></div>
+          <div className="fo-card" style={{ margin: 0, flex: '1 1 150px' }}><div className="fo-mu">Vendas confirmadas</div><b style={{ fontSize: 26 }}>{brl(d.vendas)}</b></div>
         </div>
 
         <div className="fo-tabs" role="tablist">
-          {[['pedidos', '📦 Pedidos'], ['modelos', '👟 Meus modelos'], ['empresa', '🏭 Minha empresa'], ['acerto', '💰 Acerto'], ['ajuda', '❓ Como funciona']].map(([k, t]) => (
+          {[['pedidos', '📦 Pedidos'], ['modelos', '👟 Meus modelos'], ['empresa', '🏭 Minha empresa'], ['acerto', '💰 Como você recebe'], ['ajuda', '❓ Como funciona']].map(([k, t]) => (
             <button key={k} className={aba === k ? 'on' : ''} onClick={() => { setAba(k); setMsg(null); }}>{t}</button>
           ))}
         </div>
@@ -127,7 +127,7 @@ export default function PainelFornecedor({ token }) {
                     Entrega: {p.rua}, {p.numero_casa}{p.complemento ? ` ${p.complemento}` : ''} · {p.bairro} · {p.cidade}/{p.estado} · CEP {p.cep}
                     {p.observacao && <><br />Observação do cliente: {p.observacao}</>}
                   </p>
-                  <p style={{ margin: '4px 0' }}>Você recebe pelo PIX: <b>{brl(Number(p.preco_fornecedor_total) + Number(p.frete))}</b> (produtos {brl(p.preco_fornecedor_total)} + frete {brl(p.frete)}). O cliente paga {brl(p.total)} no total; a diferença é a comissão da loja.</p>
+                  <p style={{ margin: '4px 0' }}>Você recebe pelo PIX: <b>{brl(p.preco_fornecedor_total)}</b> (o seu preço dos produtos). O cliente paga a comissão da loja, a margem do revendedor e o frete em outro PIX, para a loja. Você não paga comissão nem postagem.</p>
                   {p.codigo_rastreio && <p style={{ margin: '4px 0' }}>Rastreio: <b>{p.codigo_rastreio}</b></p>}
                   {p.status === 'cancelado' && p.motivo_cancelamento && <p className="fo-mu">Motivo: {p.motivo_cancelamento}</p>}
 
@@ -263,20 +263,13 @@ export default function PainelFornecedor({ token }) {
 
         {aba === 'acerto' && (
           <div className="fo-card">
-            <h2>Acerto com a loja</h2>
-            <p className="fo-mu">Toda semana você paga por PIX a comissão (e o custo da postagem, nos pedidos enviados pelos Correios). A loja manda o valor e a chave PIX pelo WhatsApp.</p>
-            <div className="fo-calc">
-              <div><span>Pedidos enviados a acertar</span><b>{d.extrato.pedidos}</b></div>
-              <div><span>Comissão da loja</span><b>{brl(d.extrato.comissao)}</b></div>
-              <div><span>Custo dos Correios</span><b>{brl(d.extrato.postagem)}</b></div>
-              <div><span>Total a pagar</span><b>{brl(d.extrato.total)}</b></div>
-            </div>
-            <p className="fo-mu">Vendas já confirmadas (produtos + frete que você recebeu): {brl(d.vendas)}</p>
-            {d.pedidos.filter((p) => ['enviado', 'entregue'].includes(p.status)).slice(0, 30).map((p) => (
+            <h2>Como você recebe</h2>
+            <p className="fo-mu">O cliente paga em dois PIX. O <b>PIX 1</b> é o seu preço dos produtos e cai direto na sua conta. O <b>PIX 2</b> (comissão, margem do revendedor e frete) vai para a loja. Você não paga comissão nem postagem, não existe acerto semanal.</p>
+            <p className="fo-mu">Vendas já confirmadas (seu preço dos produtos): <b>{brl(d.vendas)}</b></p>
+            {d.pedidos.filter((p) => !['cancelado', 'aguardando_pagamento'].includes(p.status)).slice(0, 30).map((p) => (
               <div key={p.id} className="fo-row" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--bd)', padding: '8px 0' }}>
-                <span>Pedido {p.numero} · {data(p.enviado_em)}</span>
-                <span className="fo-mu">comissão {brl(p.comissao_total)} + correios {brl(p.custo_postagem || 0)}</span>
-                <b>{p.comissao_acertada_em ? '✓ acertado' : brl(r2(Number(p.comissao_total) + Number(p.custo_postagem || 0)))}</b>
+                <span>Pedido {p.numero} · {data(p.criado_em)}</span>
+                <b>{brl(p.preco_fornecedor_total)}</b>
               </div>
             ))}
           </div>
@@ -292,7 +285,7 @@ export default function PainelFornecedor({ token }) {
               <li>Quando chegar um pedido, confira o PIX no seu banco e clique <b>Recebi o PIX</b>.</li>
               <li>Faça o pedido (confecção), emita a nota fiscal no nome e CPF do cliente final, com o local de entrega que aparecer no pedido, coloque a nota na embalagem e clique <b>Pedido pronto para coleta</b>.</li>
               <li>A loja coleta com você, com a nota no nome do cliente final, e leva até o cliente por rota de entrega ou pelos Correios.</li>
-              <li>Toda semana, faça o acerto da comissão e da postagem na aba <b>Acerto</b>.</li>
+              <li>O PIX do seu preço cai direto na sua conta. A comissão e o frete ficam por conta do cliente, em outro PIX para a loja.</li>
             </ol>
             <p className="fo-mu">Se faltar estoque, cancele o pedido e devolva o PIX ao cliente. Dúvidas? Fale com a loja pelo WhatsApp.</p>
           </div>

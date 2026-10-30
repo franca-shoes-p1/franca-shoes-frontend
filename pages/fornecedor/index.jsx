@@ -50,16 +50,16 @@ export default function CadastroFornecedor() {
             <li><b>2. Catálogo</b>Você coloca fotos, números e o seu preço. Você vê na hora quanto o cliente vai pagar.</li>
             <li><b>3. Pedido</b>O cliente compra no site e paga por PIX direto para você.</li>
             <li><b>4. Nota, coleta e entrega</b>Você faz o pedido, emite a nota fiscal no nome e CPF do cliente final e coloca na embalagem. Nós coletamos com você e levamos ao cliente, por rota de entrega ou pelos Correios.</li>
-            <li><b>5. Acerto</b>Toda semana você acerta a nossa comissão (e a postagem, nos envios pelos Correios).</li>
+            <li><b>5. Recebimento</b>O cliente paga o seu preço direto na sua conta (PIX 1). A comissão e o frete vão em outro PIX para a loja: você não faz acerto.</li>
           </ul>
-          <p className="fo-mu" style={{ margin: 0 }}>O site ainda está em fase de testes e não prometemos volume de vendas. Você só paga comissão quando vender.</p>
+          <p className="fo-mu" style={{ margin: 0 }}>O site ainda está em fase de testes e não prometemos volume de vendas. Você não paga nada para estar no site: a comissão é cobrada do cliente, em outro PIX.</p>
         </div>
 
         <div className="fo-card">
           <h2>Regras para o fornecedor</h2>
           <details open><summary>Quem vende é você</summary><p>Você define preço, estoque e prazo de confecção, recebe o PIX do cliente na sua conta e emite a nota fiscal no nome do cliente final. Sem nota fiscal não conseguimos transportar a mercadoria, então só trabalhamos com quem emite. Nós não recebemos nem guardamos o dinheiro das vendas.</p></details>
           <details><summary>Comissão e preço</summary><p>Você digita o seu preço (o que quer receber por par). O site soma a nossa comissão e mostra o total ao cliente. A comissão padrão inicial é de 15% sobre o seu preço, por exemplo: R$ 100 vira R$ 115 para o cliente. Pode ser combinada de outra forma com cada fornecedor.</p></details>
-          <details><summary>Nota, coleta, entrega e acerto</summary><p>Cada pedido traz o nome, o CPF e o local de entrega que devem constar na nota. Quando você marca o pedido como pronto, nós coletamos no seu endereço, na janela de horário combinada, levamos ao cliente por rota de entrega ou postamos pelos Correios. O frete pago pelo cliente vai junto no PIX que você recebe. Toda semana você paga por PIX a comissão, mais o custo real da postagem dos envios pelos Correios.</p></details>
+          <details><summary>Nota, coleta, entrega e recebimento</summary><p>Cada pedido traz o nome, o CPF e o local de entrega que devem constar na nota. Quando você marca o pedido como pronto, nós coletamos no seu endereço, na janela de horário combinada, levamos ao cliente por rota de entrega ou postamos pelos Correios. O frete e a comissão são pagos pelo cliente à loja, em outro PIX. Você recebe só o seu preço e não faz acerto semanal.</p></details>
           <details><summary>Trocas, devoluções e cancelamentos</summary><p>Seguem o Código de Defesa do Consumidor, inclusive o direito de arrependimento de 7 dias em compra pela internet. Como vendedor, você é responsável por troca, defeito e reembolso. Se faltar estoque, cancele o pedido no painel e devolva o PIX ao cliente.</p></details>
           <details><summary>Fotos, textos e qualidade</summary><p>Use só fotos e textos seus ou autorizados. Cada modelo novo é conferido antes de aparecer no site. Se você mudar foto ou descrição, ele volta para conferência.</p></details>
           <details><summary>Seus dados</summary><p>Usamos os seus dados só para operar o cadastro e os pedidos. O nome da sua empresa aparece no site como vendedor. O CNPJ aparece na página de pagamento. Os seus contatos internos não são divulgados.</p></details>

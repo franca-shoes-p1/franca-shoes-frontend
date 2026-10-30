@@ -4,8 +4,9 @@ import { sb } from '../../../lib/varejoServer';
 import { avisar } from '../../../lib/avisar';
 import { TOKEN } from '../../../lib/fornecedoresServer';
 import { pixCopiaECola } from '../../../lib/pixCopiaCola';
+import { lerConfig } from '../../../lib/revendedoresServer';
 
-const COLS = 'id,numero,status,criado_em,itens,subtotal,frete,total,cliente_pagou_em,codigo_rastreio,motivo_cancelamento,fornecedor_id';
+const COLS = 'id,numero,status,criado_em,itens,subtotal,frete,total,preco_fornecedor_total,pix2_pago_em,cliente_pagou_em,codigo_rastreio,motivo_cancelamento,fornecedor_id';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -30,6 +31,10 @@ export default async function handler(req, res) {
     }
 
     const aPagar = ['aguardando_pagamento', 'cliente_pagou'].includes(p.status);
+    // PIX 1: preço do fornecedor, direto a ele. PIX 2: o restante (comissão, margem do revendedor e frete), para o dono da loja.
+    const valor1 = Number(p.preco_fornecedor_total);
+    const valor2 = Math.round((Number(p.total) - valor1) * 100) / 100;
+    const cfg = valor2 > 0 && aPagar ? await lerConfig() : {};
     return res.json({
       pedido: {
         numero: p.numero,
@@ -47,8 +52,13 @@ export default async function handler(req, res) {
         whatsapp: f.whatsapp,
       },
       pix: aPagar && f.pix_chave
-        ? { copiaecola: pixCopiaECola({ tipo: f.pix_tipo, chave: f.pix_chave, nome: f.pix_nome || f.nome_fantasia, cidade: 'FRANCA', valor: Number(p.total), txid: 'PED' + p.numero }), titular: f.pix_nome || f.nome_fantasia }
+        ? { valor: valor1, copiaecola: pixCopiaECola({ tipo: f.pix_tipo, chave: f.pix_chave, nome: f.pix_nome || f.nome_fantasia, cidade: 'FRANCA', valor: valor1, txid: 'PED' + p.numero }), titular: f.pix_nome || f.nome_fantasia }
         : null,
+      pix2: aPagar && valor2 > 0 && cfg.pix_chave
+        ? { valor: valor2, copiaecola: pixCopiaECola({ tipo: cfg.pix_tipo || 'cpf', chave: cfg.pix_chave, nome: cfg.pix_nome || 'FRANCA CALCADOS', cidade: 'FRANCA', valor: valor2, txid: 'PED' + p.numero + 'B' }), titular: cfg.pix_nome || '' }
+        : null,
+      pix2Falta: aPagar && valor2 > 0 && !cfg.pix_chave,
+      pix2Pago: !!p.pix2_pago_em,
     });
   } catch (e) {
     console.error('varejo/pagamento', e.message);

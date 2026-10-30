@@ -20,7 +20,7 @@ async function carregar(e) {
     postagem: r2(aberto.reduce((s, p) => s + Number(p.custo_postagem || 0), 0)),
   };
   extrato.total = r2(extrato.comissao + extrato.postagem);
-  const vendas = r2(pedidos.filter((p) => !['cancelado', 'aguardando_pagamento'].includes(p.status)).reduce((s, p) => s + Number(p.preco_fornecedor_total || 0) + Number(p.frete || 0), 0));
+  const vendas = r2(pedidos.filter((p) => !['cancelado', 'aguardando_pagamento'].includes(p.status)).reduce((s, p) => s + Number(p.preco_fornecedor_total || 0), 0));
   return { empresa: (({ id, ...r }) => r)(e), produtos, pedidos, extrato, vendas };
 }
 

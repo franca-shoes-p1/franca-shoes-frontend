@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
-import { brl, VAREJO, parseTamanhos, adicionarAoCarrinho } from '../../lib/varejo';
+import { brl, VAREJO, parseTamanhos, adicionarAoCarrinho, guardarRevDaUrl, lerRev } from '../../lib/varejo';
 
 export default function Produto() {
   const { query, isReady } = useRouter();
@@ -16,7 +16,9 @@ export default function Produto() {
 
   useEffect(() => {
     if (!isReady) return;
-    fetch(`/api/varejo/catalogo?id=${encodeURIComponent(query.id)}`)
+    guardarRevDaUrl();
+    const codigo = lerRev();
+    fetch(`/api/varejo/catalogo?id=${encodeURIComponent(query.id)}${codigo ? `&rev=${codigo}` : ''}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((j) => {
         setP(j.produto);

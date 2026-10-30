@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import styles from '../styles/varejo.module.css';
-import { VAREJO, lerCarrinho, totalPares, guardarPontoDaUrl } from './varejo';
+import { VAREJO, lerCarrinho, totalPares, guardarPontoDaUrl, guardarRevDaUrl } from './varejo';
 
 export default function VarejoLayout({ titulo, children }) {
   const [qtd, setQtd] = useState(0);
   useEffect(() => {
     guardarPontoDaUrl();
+    guardarRevDaUrl();
     setQtd(totalPares(lerCarrinho()));
     const atualizar = () => setQtd(totalPares(lerCarrinho()));
     window.addEventListener('carrinho-varejo', atualizar);
