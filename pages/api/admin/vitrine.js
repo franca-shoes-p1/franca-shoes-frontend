@@ -1,10 +1,12 @@
 // Painel do departamento Vitrine: achados da IA, fila de divulgação e fontes de busca.
 import { exigirAdmin } from '../../../lib/adminAuth';
 import { sb, txt, UUID } from '../../../lib/varejoServer';
-import { garimpar, textoGarimpo, gerarDivulgacao, textoDivulgacao, siteBloqueado, normalizarUrl } from '../../../lib/vitrineServer';
+import { garimpar, textoGarimpo, gerarDivulgacao, textoDivulgacao, siteBloqueado, normalizarUrl, apurarFundo, textoFundo } from '../../../lib/vitrineServer';
 
 export const config = { maxDuration: 60 };
 
+const CONFIG_LIMITES = { fundo_pct: [0, 100], carencia_dias: [0, 60], peso_validacao: [0, 100], peso_cadastro: [0, 100], peso_divulgacao: [0, 100] };
+const TIPOS = ['validacao', 'cadastro', 'divulgacao'];
 const STATUS = ['novo', 'em_validacao', 'validado', 'aprovado', 'rejeitado'];
 const httpsOk = (u) => { try { const x = new URL(u); return x.protocol === 'https:' && !x.username && !x.password; } catch (e) { return false; } };
 const num = (v) => { const n = Number(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : NaN; };
@@ -27,7 +29,19 @@ async function carregar() {
   }
   const desde = new Date(Date.now() - 7 * 86400000).toISOString();
   const leads = await sb(`cal_leads?criado_em=gte.${desde}&select=utm_source&limit=2000`).catch(() => null);
+  let dinheiro = null;
+  try {
+    const [config, contribs, pagamentos, produtos] = await Promise.all([
+      sb('vit_config?select=*&order=chave'),
+      sb('vit_contribuicoes?select=*&order=criado_em.desc&limit=200'),
+      sb('vit_pagamentos?select=*&order=criado_em.desc&limit=300'),
+      sb('rf_produtos?select=id,nome,titulo_publico&order=criado_em.desc&limit=200'),
+    ]);
+    const semCusto = await sb('varejo_pedidos?status=eq.entregue&custo_fabrica=is.null&select=numero&limit=100').catch(() => []);
+    dinheiro = { config, contribs, pagamentos, produtos, semCusto: semCusto.length };
+  } catch (e) { dinheiro = null; }
   return {
+    dinheiro,
     achados, fontes, canais,
     divulgacoes: divulgacoes.map((d) => ({ ...d, produto: nomes[d.produto_id] || 'Produto' })),
     leads7: leads ? leads.length : null,
@@ -90,6 +104,33 @@ export default async function handler(req, res) {
         if (!UUID.test(id) || !['feito', 'pulado'].includes(b.status)) return res.status(400).json({ erro: 'Dados inválidos.' });
         await sb(`vit_divulgacoes?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ status: b.status, concluido_em: new Date().toISOString() }) });
         break;
+      case 'config_set': {
+        const lim = CONFIG_LIMITES[b.chave];
+        const v = num(b.valor);
+        if (!lim) return res.status(400).json({ erro: 'Regra desconhecida.' });
+        if (!(v >= lim[0] && v <= lim[1])) return res.status(400).json({ erro: `Valor inválido (use de ${lim[0]} a ${lim[1]}).` });
+        await sb(`vit_config?chave=eq.${b.chave}`, { method: 'PATCH', body: JSON.stringify({ valor: v }) });
+        break;
+      }
+      case 'contrib_add': {
+        const produto_id = String(b.produto_id || '');
+        const nome = txt(b.nome, 80);
+        if (!UUID.test(produto_id) || nome.length < 2 || !TIPOS.includes(b.tipo)) return res.status(400).json({ erro: 'Escolha o produto, escreva o nome da pessoa e o tipo de ajuda.' });
+        await sb('vit_contribuicoes', { method: 'POST', body: JSON.stringify({ produto_id, nome, tipo: b.tipo, operario_id: UUID.test(String(b.operario_id || '')) ? b.operario_id : null }) });
+        break;
+      }
+      case 'contrib_del':
+        if (!UUID.test(id)) return res.status(400).json({ erro: 'Dados inválidos.' });
+        await sb(`vit_contribuicoes?id=eq.${id}`, { method: 'DELETE' });
+        break;
+      case 'apurar': { aviso = textoFundo(await apurarFundo()); break; }
+      case 'pagar': {
+        const nome = txt(b.nome, 80);
+        if (nome.length < 2) return res.status(400).json({ erro: 'Dados inválidos.' });
+        await sb(`vit_pagamentos?status=eq.a_pagar&nome=eq.${encodeURIComponent(nome)}`, { method: 'PATCH', body: JSON.stringify({ status: 'pago', pago_em: new Date().toISOString(), nota: txt(b.nota, 120) || null }) });
+        aviso = `Pagamentos de ${nome} marcados como pagos.`;
+        break;
+      }
       case 'rodar_garimpo': { const r = await garimpar(); aviso = textoGarimpo(r); break; }
       case 'rodar_divulgacao': { const r = await gerarDivulgacao(); aviso = textoDivulgacao(r); break; }
       default:

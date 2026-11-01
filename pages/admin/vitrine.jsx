@@ -32,6 +32,8 @@ export default function AdminVitrine() {
   const [campos, setCampos] = useState({});
   const [novo, setNovo] = useState({ url: '', titulo: '', preco_visto: '' });
   const [fonte, setFonte] = useState({ tipo: 'busca', valor: '', categoria: '' });
+  const [cfg, setCfg] = useState({});
+  const [contrib, setContrib] = useState({ produto_id: '', nome: '', tipo: 'validacao' });
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/vitrine')); setFase('pronto'); }
@@ -56,6 +58,14 @@ export default function AdminVitrine() {
   const setC = (id, k, v) => setCampos((c) => ({ ...c, [id]: { ...(c[id] || {}), [k]: v } }));
   const copiar = async (t) => { try { await navigator.clipboard.writeText(t); setMsg({ tipo: 'ok', texto: 'Texto copiado.' }); } catch (e) { setMsg({ tipo: 'er', texto: 'Não consegui copiar. Selecione o texto e copie à mão.' }); } };
 
+  const salvarConfig = async () => {
+    setOcupado(true); setMsg(null);
+    try {
+      for (const [k, v] of Object.entries(cfg)) await api('/api/admin/vitrine', { method: 'POST', body: { acao: 'config_set', chave: k, valor: v } });
+      setCfg({}); await carregar(); setMsg({ tipo: 'ok', texto: 'Regras salvas.' });
+    } catch (e) { setMsg({ tipo: 'er', texto: e.message }); }
+    setOcupado(false);
+  };
   const achados = d && d.achados ? d.achados.filter((a) => !filtro || a.status === filtro) : [];
   const nStatus = (s) => (d && d.achados ? d.achados.filter((a) => a.status === s).length : 0);
 
@@ -102,7 +112,7 @@ export default function AdminVitrine() {
               </div>
 
               <div className="vt-tabs">
-                {[['achados', 'Achados'], ['divulgacao', 'Divulgação'], ['fontes', 'Fontes de busca'], ['como', 'Como funciona']].map(([k, t]) => (
+                {[['achados', 'Achados'], ['divulgacao', 'Divulgação'], ['dinheiro', 'Dinheiro'], ['fontes', 'Fontes de busca'], ['como', 'Como funciona']].map(([k, t]) => (
                   <button key={k} className={aba === k ? 'on' : ''} onClick={() => setAba(k)}>{t}</button>
                 ))}
               </div>
@@ -177,6 +187,66 @@ export default function AdminVitrine() {
                   ))}
                 </div>
               )}
+
+              {aba === 'dinheiro' && (() => {
+                const din = d.dinheiro;
+                if (!din) return <div className="ea-card"><h2>Falta uma etapa</h2><p>Rode uma vez o SQL <b>supabase-vitrine-pagamentos.sql</b> no Supabase e recarregue esta página.</p></div>;
+                const ROT = { fundo_pct: '% do lucro de cada venda que vai para o fundo', carencia_dias: 'Dias de espera depois da entrega', peso_validacao: 'Peso de quem valida com o fornecedor', peso_cadastro: 'Peso de quem cadastra o modelo', peso_divulgacao: 'Peso de quem divulga' };
+                const tit = Object.fromEntries(din.produtos.map((x) => [x.id, x.titulo_publico || x.nome]));
+                const aPagar = {};
+                din.pagamentos.filter((x) => x.status === 'a_pagar').forEach((x) => { aPagar[x.nome] = aPagar[x.nome] || { total: 0, n: 0 }; aPagar[x.nome].total += Number(x.valor); aPagar[x.nome].n += 1; });
+                const pagos = din.pagamentos.filter((x) => x.status === 'pago').slice(0, 15);
+                return (
+                  <>
+                    <div className="ea-card">
+                      <h2>Fundo da equipe</h2>
+                      <div className="ea-mu">Quando um pedido é entregue e passa o prazo de espera, uma parte do lucro (preço dos produtos menos o custo da fábrica e a taxa de pagamento) vira o <b>fundo</b>. O fundo de cada produto é dividido entre quem ajudou a publicá-lo, pelos pesos abaixo. Produto sem ninguém registrado não gera pagamento. Não há promessa de ganho: só se paga quando há venda entregue e lucro.</div>
+                      {din.semCusto > 0 && <div className="ea-msg er">{din.semCusto} pedido(s) entregue(s) sem o custo da fábrica. Preencha a coluna <b>custo_fabrica</b> (e <b>taxa_pagamento</b>, se quiser) na tabela varejo_pedidos do Supabase para entrarem na apuração.</div>}
+                      <div className="vt-g2" style={{ marginTop: 12 }}>
+                        {din.config.map((c) => (
+                          <div key={c.chave}><label>{ROT[c.chave] || c.chave}</label><input inputMode="decimal" value={cfg[c.chave] !== undefined ? cfg[c.chave] : String(c.valor)} onChange={(e) => setCfg({ ...cfg, [c.chave]: e.target.value })} /></div>
+                        ))}
+                      </div>
+                      <div className="ea-row" style={{ marginTop: 10 }}>
+                        <button className="ea-btn" disabled={ocupado || !Object.keys(cfg).length} onClick={salvarConfig}>Salvar regras</button>
+                        <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => enviar({ acao: 'apurar' })}>Apurar agora</button>
+                      </div>
+                    </div>
+
+                    <div className="ea-card">
+                      <h2>A pagar</h2>
+                      {Object.keys(aPagar).length === 0 && <p className="ea-mu">Ninguém tem valor a receber agora.</p>}
+                      {Object.entries(aPagar).map(([nome, v]) => (
+                        <div className="ea-item" key={nome}>
+                          <div><div className="vt-tit">{nome}</div><div className="ea-mu">{v.n} lançamento(s)</div></div>
+                          <div className="ea-row">
+                            <b>{brl(v.total)}</b>
+                            <button className="ea-btn ea-btn-ok" disabled={ocupado} onClick={() => { if (confirm(`Você já pagou ${brl(v.total)} para ${nome}?`)) enviar({ acao: 'pagar', nome }); }}>Já paguei</button>
+                          </div>
+                        </div>
+                      ))}
+                      {pagos.length > 0 && (<><h2 style={{ marginTop: 18 }}>Últimos pagos</h2>{pagos.map((x) => <div className="ea-mu" key={x.id}>{x.nome} · {brl(x.valor)} · {tit[x.produto_id] || 'produto'} · {x.pago_em ? new Date(x.pago_em).toLocaleDateString('pt-BR') : ''}</div>)}</>)}
+                    </div>
+
+                    <div className="ea-card">
+                      <h2>Quem ajudou em cada produto</h2>
+                      <div className="ea-mu">Registre aqui quem validou, cadastrou ou divulgou. É isso que define quem entra na divisão quando o produto vender.</div>
+                      <div className="vt-g2" style={{ marginTop: 10 }}>
+                        <div><label>Produto</label><select value={contrib.produto_id} onChange={(e) => setContrib({ ...contrib, produto_id: e.target.value })}><option value="">Escolha…</option>{din.produtos.map((x) => <option key={x.id} value={x.id}>{x.titulo_publico || x.nome}</option>)}</select></div>
+                        <div><label>Nome da pessoa</label><input value={contrib.nome} onChange={(e) => setContrib({ ...contrib, nome: e.target.value })} /></div>
+                        <div><label>O que fez</label><select value={contrib.tipo} onChange={(e) => setContrib({ ...contrib, tipo: e.target.value })}><option value="validacao">Validou com o fornecedor</option><option value="cadastro">Cadastrou o modelo</option><option value="divulgacao">Divulgou</option></select></div>
+                      </div>
+                      <div style={{ marginTop: 8 }}><button className="ea-btn" disabled={ocupado} onClick={async () => { await enviar({ acao: 'contrib_add', ...contrib }, 'Registrado.'); setContrib({ ...contrib, nome: '' }); }}>Registrar</button></div>
+                      {din.contribs.map((x) => (
+                        <div className="ea-item" key={x.id}>
+                          <div><div className="vt-tit">{x.nome}</div><div className="ea-mu">{{ validacao: 'Validou', cadastro: 'Cadastrou', divulgacao: 'Divulgou' }[x.tipo]} · {tit[x.produto_id] || 'produto'}</div></div>
+                          <button className="ea-btn ea-btn2 ea-btn-er" disabled={ocupado} onClick={() => enviar({ acao: 'contrib_del', id: x.id })}>Remover</button>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
 
               {aba === 'fontes' && (
                 <div className="ea-card">

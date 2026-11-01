@@ -16,7 +16,8 @@ O departamento junta três coisas: **uma IA que garimpa e escreve**, **pessoas d
 
 1. Rode `supabase-vitrine.sql` (cria fontes, achados, canais e fila de divulgação; usa só nomes `vit_`).
 2. Rode `supabase-cal-lotes-portal.sql`, se ainda não rodou (a captação de leads grava em `cal_leads`).
-3. **Depois** de rodar os SQL da Oficina (`supabase-oficina-fase1.sql`), rode `supabase-vitrine-cartoes.sql`. Ele cria o setor Vitrine e os cartões V1 a V4. Se rodar antes da hora, ele para com uma mensagem avisando.
+3. Rode `supabase-vitrine-pagamentos.sql` (fundo da equipe; só precisa da loja `/calcados`). Ele acrescenta `entregue_em`, `custo_fabrica` e `taxa_pagamento` aos pedidos.
+4. **Depois** de rodar os SQL da Oficina (`supabase-oficina-fase1.sql`), rode `supabase-vitrine-cartoes.sql`. Ele cria o setor Vitrine e os cartões V1 a V4. Se rodar antes da hora, ele para com uma mensagem avisando.
 
 ## Passo 2: variáveis na Vercel
 
@@ -31,10 +32,11 @@ O plano gratuito do Gemini tem limite pequeno e o Google não publica mais a tab
 
 ## Passo 3: fluxos no n8n
 
-Importe os dois arquivos da pasta `n8n/`:
+Importe os três arquivos da pasta `n8n/`:
 
 - `vitrine-garimpo-diario.json`: todo dia às 6h, o garimpo roda e você recebe o resumo no Telegram.
 - `vitrine-divulgacao-diaria.json`: todo dia às 9h, cria os textos, avisa você e publica no canal do Telegram.
+- `vitrine-apuracao-semanal.json`: toda segunda às 8h, apura o fundo da equipe e avisa quanto deve a cada pessoa.
 
 Em cada fluxo troque `COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN` pelo valor da variável e os `COLE_AQUI_O_ID_...` pelos IDs do seu chat e do seu canal (o robô precisa ser administrador do canal). Se importar e algum nó pedir ajuste, confira primeiro a credencial do Telegram. Os fluxos foram montados no mesmo padrão dos que já existem, mas não foram testados dentro do seu n8n.
 
@@ -49,3 +51,12 @@ Em cada fluxo troque `COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN` pelo valor da 
 - “Falta uma etapa” no painel: falta rodar `supabase-vitrine.sql`.
 - Garimpo diz “falta GEMINI_API_KEY” ou “cota acabou”: o resto continua; os achados podem ser cadastrados à mão.
 - Nada é publicado no canal: confira se o robô é administrador do canal e o ID do canal no fluxo.
+
+## Dinheiro da equipe (fundo)
+
+1. Quando você entregar um pedido, mude o status para `entregue` e preencha `custo_fabrica` (e `taxa_pagamento`, se quiser) na tabela `varejo_pedidos`. Sem o custo, o pedido não entra na apuração.
+2. Registre em `/admin/vitrine`, aba **Dinheiro**, quem validou, cadastrou ou divulgou cada produto.
+3. Depois da espera de 7 dias, a apuração calcula o fundo e divide entre essas pessoas. Você paga por PIX e marca **Já paguei**.
+4. Pedido reembolsado ou cancelado antes do pagamento cancela os valores pendentes.
+
+Antes do primeiro pagamento, confirme com um contador como pagar e registrar valores para pessoas sem vínculo.
