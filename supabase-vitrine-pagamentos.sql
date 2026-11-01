@@ -21,8 +21,8 @@ create table if not exists public.vit_config (
   descricao text
 );
 insert into public.vit_config (chave, valor, descricao) values
-  ('fundo_pct', 20, 'Percentual do lucro de cada venda que vai para o fundo da equipe'),
-  ('carencia_dias', 7, 'Dias depois da entrega antes de apurar (prazo de arrependimento do cliente)'),
+  ('fundo_pct', 25, 'Percentual do lucro de cada venda que vai para o fundo da equipe (25% nos primeiros 90 dias, depois 20%)'),
+  ('carencia_dias', 10, 'Dias depois da entrega antes de apurar (7 de arrependimento do cliente + margem)'),
   ('peso_validacao', 50, 'Peso de quem validou o produto com o fornecedor'),
   ('peso_cadastro', 30, 'Peso de quem cadastrou o modelo'),
   ('peso_divulgacao', 20, 'Peso de quem divulgou o produto')

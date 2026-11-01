@@ -30,6 +30,21 @@ O departamento junta três coisas: **uma IA que garimpa e escreve**, **pessoas d
 
 O plano gratuito do Gemini tem limite pequeno e o Google não publica mais a tabela: veja os seus números no Google AI Studio. Quando a cota acaba, o sistema continua sem IA (usa texto padrão na divulgação e pula a busca) e avisa no resumo.
 
+### Como criar o `RADAR_N8N_TOKEN` sem expor a senha
+
+No Windows, abra o PowerShell e rode:
+
+```
+[guid]::NewGuid().ToString("N") + [guid]::NewGuid().ToString("N")
+```
+
+O resultado (64 letras e números) é o token. Cole o mesmo valor na Vercel (`RADAR_N8N_TOKEN`) e nos fluxos do n8n. Não cole o valor em conversas.
+
+### Como achar o ID do seu chat e do canal
+
+- **Seu chat:** no Telegram, procure o robô `@userinfobot`, mande “oi” e ele responde o seu ID (um número).
+- **Canal público:** o fluxo já vem com `@igrejaeco_ricardo`. Isso só funciona se esse endereço for um **canal** (não uma conta pessoal) e se o seu robô for **administrador** dele. Se não for, troque pelo endereço do canal certo.
+
 ## Passo 3: fluxos no n8n
 
 Importe os três arquivos da pasta `n8n/`:
@@ -38,7 +53,7 @@ Importe os três arquivos da pasta `n8n/`:
 - `vitrine-divulgacao-diaria.json`: todo dia às 9h, cria os textos, avisa você e publica no canal do Telegram.
 - `vitrine-apuracao-semanal.json`: toda segunda às 8h, apura o fundo da equipe e avisa quanto deve a cada pessoa.
 
-Em cada fluxo troque `COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN` pelo valor da variável e os `COLE_AQUI_O_ID_...` pelos IDs do seu chat e do seu canal (o robô precisa ser administrador do canal). Se importar e algum nó pedir ajuste, confira primeiro a credencial do Telegram. Os fluxos foram montados no mesmo padrão dos que já existem, mas não foram testados dentro do seu n8n.
+Em cada fluxo troque `COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN` pelo valor da variável e `COLE_AQUI_O_ID_DO_SEU_CHAT` pelo seu ID. O canal público já vem preenchido (veja acima). Se importar e algum nó pedir ajuste, confira primeiro a credencial do Telegram. Os fluxos foram montados no mesmo padrão dos que já existem, mas não foram testados dentro do seu n8n.
 
 ## Passo 4: rotina no painel
 

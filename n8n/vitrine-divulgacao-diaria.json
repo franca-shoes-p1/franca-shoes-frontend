@@ -94,7 +94,7 @@
     120
    ],
    "parameters": {
-    "chatId": "COLE_AQUI_O_ID_DO_CANAL_PUBLICO",
+    "chatId": "@igrejaeco_ricardo",
     "text": "={{ $json.texto }}",
     "additionalFields": {
      "appendAttribution": false
