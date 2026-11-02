@@ -1,0 +1,72 @@
+/* Faixa Vitrine da home: fundo claro entre a Campanha (verde) e o Canal (azul), com cantos e formas redondas como as outras vitrines. */
+.faixa { position: relative; overflow: hidden; color: #0b2f66;
+  background:
+    radial-gradient(700px 360px at 8% 0%, rgba(255, 212, 0, 0.28), transparent 60%),
+    radial-gradient(700px 380px at 100% 100%, rgba(20, 147, 63, 0.14), transparent 60%),
+    linear-gradient(180deg, #fffdf2 0%, #f3f8ff 100%);
+  border-bottom: 1px solid rgba(11, 47, 102, 0.1); }
+.faixa * { box-sizing: border-box; }
+.bolha { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.35; }
+.b1 { width: 240px; height: 240px; top: -90px; right: 8%; background: #ffd400; }
+.b2 { width: 150px; height: 150px; bottom: -50px; left: 4%; background: #8dff9d; opacity: 0.3; }
+.dentro { position: relative; max-width: 1140px; margin: 0 auto; padding: 56px 20px 48px; }
+
+.topo { max-width: 46em; }
+.pilula { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(10, 106, 53, 0.5); border-radius: 999px; padding: 9px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(10, 106, 53, 0.08); color: #0a6a35; }
+.pilula i { width: 8px; height: 8px; border-radius: 50%; background: #14933f; animation: ping 2s infinite; }
+.titulo { font-size: clamp(30px, 4.6vw, 50px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; margin: 20px 0 0; text-wrap: balance; }
+.titulo em { font-style: normal; color: #0a6a35; background: linear-gradient(transparent 62%, rgba(255, 212, 0, 0.7) 62%); }
+.texto { font-size: clamp(16px, 1.5vw, 18px); line-height: 1.6; color: #35507d; margin: 16px 0 0; }
+
+.assistente { margin-top: 28px; background: #fff; border: 2px solid rgba(11, 47, 102, 0.12); border-radius: 22px; padding: 18px; box-shadow: 0 14px 38px rgba(11, 47, 102, 0.1); }
+.assLabel { display: block; font-weight: 800; font-size: 15px; margin-bottom: 10px; }
+.assLinha { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+.assLinha input { width: 100%; min-width: 0; border: 2px solid #c9d6ec; border-radius: 999px; padding: 14px 20px; font-size: 16px; color: #0b2f66; background: #f8fbff; }
+.assLinha input:focus { outline: 3px solid #ffd400; outline-offset: 1px; border-color: #0a6a35; }
+.assZap { display: inline-block; text-align: center; background: #14933f; color: #fff !important; font-weight: 800; font-size: 15px; border-radius: 999px; padding: 14px 24px; box-shadow: 0 8px 22px rgba(20, 147, 63, 0.35); transition: transform 0.15s; }
+.assZap:hover { transform: translateY(-2px); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chips button { border: 2px solid #c9d6ec; background: #fff; color: #0b2f66; border-radius: 999px; padding: 6px 16px; font-weight: 700; font-size: 14px; cursor: pointer; }
+.chips .chipOn { background: #0b2f66; border-color: #0b2f66; color: #fff; }
+
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 20px; margin-top: 28px; }
+.card { display: flex; flex-direction: column; background: #fff; border: 1px solid rgba(11, 47, 102, 0.12); border-radius: 22px; padding: 14px; color: #0b2f66 !important; box-shadow: 0 8px 24px rgba(11, 47, 102, 0.08); transition: transform 0.18s, box-shadow 0.18s; min-width: 0; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(11, 47, 102, 0.16); }
+.card:focus-visible { outline: 3px solid #ffd400; outline-offset: 3px; }
+.foto { position: relative; aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: #eef3fb; display: grid; place-items: center; }
+.foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.semFoto { font-size: 56px; }
+.selo { position: absolute; top: 10px; left: 10px; background: #ffd400; color: #064a24; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 12px; }
+.card h3 { font-size: 17px; line-height: 1.25; margin: 12px 4px 0; font-weight: 800; }
+.nums { margin: 4px 4px 0; font-size: 13px; color: #5a6f93; }
+.preco { margin: 10px 4px 0; font-size: 26px; font-weight: 800; color: #0a6a35; }
+.ver { margin: 8px 4px 4px; font-weight: 800; font-size: 14px; color: #0b2f66; }
+
+.vazio { margin-top: 28px; background: #fff; border: 2px dashed #c9d6ec; border-radius: 22px; padding: 26px; text-align: center; }
+.vazio p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; color: #35507d; }
+
+.acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.botao { display: inline-block; font-weight: 800; font-size: 15px; border-radius: 999px; padding: 15px 28px; transition: transform 0.15s, box-shadow 0.15s; }
+.principal { background: #0b2f66; color: #fff !important; box-shadow: 0 10px 28px rgba(11, 47, 102, 0.35); }
+.contorno { border: 2px solid #0b2f66; color: #0b2f66 !important; background: transparent; }
+.botao:hover { transform: translateY(-2px); }
+.botao:focus-visible { outline: 3px solid #ffd400; outline-offset: 3px; }
+
+.faixaInfo { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+.faixaInfo li { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(11, 47, 102, 0.1); border-radius: 999px; padding: 8px 16px 8px 8px; font-size: 14px; font-weight: 700; }
+.faixaInfo li span { flex: none; width: 34px; height: 34px; border-radius: 50%; background: #ffd400; display: grid; place-items: center; font-size: 16px; }
+
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(20, 147, 63, 0.6); } 70% { box-shadow: 0 0 0 10px rgba(20, 147, 63, 0); } 100% { box-shadow: 0 0 0 0 rgba(20, 147, 63, 0); } }
+
+@media (max-width: 640px) {
+  .dentro { padding: 40px 16px 36px; }
+  .assLinha { grid-template-columns: minmax(0, 1fr); }
+  .grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .card { padding: 10px; border-radius: 18px; }
+  .card h3 { font-size: 15px; }
+  .preco { font-size: 21px; }
+  .ver { font-size: 13px; }
+  .acoes { flex-direction: column; }
+  .botao { text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) { .pilula i, .card, .botao, .assZap { animation: none; transition: none; } }

@@ -85,3 +85,8 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Erro 23502 (coluna obrigatoria vazia) ao salvar em /admin/calcados: rf_produtos ja existia com fornecedor_id NOT NULL.
 - Correcao no Supabase: `alter table public.rf_produtos alter column fornecedor_id drop not null;` (arquivo supabase-rf-produtos-fornecedor-opcional.sql).
 - Regra de preco adotada: preco = (custo + R$ 20,00 de lucro) / (1 - 4,98% taxa Mercado Pago cartao a vista), arredondado para cima. Modelo 935: custo 163,12, preco 192,90.
+
+## Registro 02/11/2026 - faixa Vitrine na home
+- Novo componente lib/VitrineFaixa.jsx (+ styles/vitrineFaixa.module.css), inserido em pages/index.jsx entre a Campanha (verde) e o Canal (azul).
+- Mostra ate 8 modelos publicados (/api/varejo/catalogo), busca por texto, filtro por categoria e botao "Pedir pelo WhatsApp" (assistente da vitrine). Botao "Ver a vitrine completa" leva a /calcados.
+- Cadastrou em /admin/calcados, aparece na home sozinho. Nenhum SQL novo.
