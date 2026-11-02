@@ -56,6 +56,7 @@ export default function Produto() {
       quantidade: Math.max(1, Math.min(10, parseInt(qtd, 10) || 1)),
       foto: p.foto,
       fornecedor: !!p.fornecedorId,
+      preco_assinante: p.precoAssinante != null ? p.precoAssinante : null,
     });
     setAdicionado(true);
   }
@@ -72,6 +73,11 @@ export default function Produto() {
           <h1>{p.titulo}</h1>
           {p.material && <span className={styles.itemMeta}>Material: {p.material}</span>}
           <div className={styles.precoGrande}>{brl(p.preco)}</div>
+          {p.precoAssinante != null && p.precoAssinante < p.preco && (
+            <span className={styles.parcela} style={{ display: 'block' }}>
+              🎟️ <b>Assinante paga {brl(p.precoAssinante)}</b> · <Link href="/assinar">conheça o passe</Link>
+            </span>
+          )}
           {p.vendedor ? (
             <>
               <span className={styles.parcela}>Vendido e enviado por <b>{p.vendedor}</b>. Pagamento por PIX direto ao fornecedor. Frete calculado no carrinho.</span>

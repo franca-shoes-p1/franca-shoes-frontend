@@ -16,14 +16,22 @@ export default function Checkout() {
   const [f, setF] = useState(VAZIO);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState('');
+  const [ativo, setAtivo] = useState(false);
 
+  useEffect(() => {
+    fetch('/api/membro/eu').then((r) => r.json()).then((j) => setAtivo(!!(j && j.logado && j.ativo))).catch(() => {});
+  }, []);
   useEffect(() => {
     setItens(lerCarrinho());
     setPronto(true);
   }, []);
 
   const mudar = (e) => setF((p) => ({ ...p, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
-  const subtotal = subtotalCarrinho(itens);
+  const subtotalGeral = subtotalCarrinho(itens);
+  // Desconto de assinante: o preço final é sempre calculado no servidor; aqui só mostramos o que vale a partir do cadastro do modelo.
+  const economia = itens.reduce((s, i) => s + (i.preco_assinante != null && i.preco_assinante < i.preco ? (i.preco - i.preco_assinante) * i.quantidade : 0), 0);
+  const desconto = ativo ? economia : 0;
+  const subtotal = subtotalGeral - desconto;
   // Retirada na rodoviária só para modelos da própria loja (modelo de fornecedor vai pelos Correios).
   const temFornecedor = itens.some((i) => i.fornecedor);
   const rod = f.entrega === 'rodoviaria' && !temFornecedor;
@@ -228,8 +236,19 @@ export default function Checkout() {
           ))}
           <div className={styles.linhaTotal} style={{ marginTop: 8 }}>
             <span>Produtos</span>
-            <span>{brl(subtotal)}</span>
+            <span>{brl(subtotalGeral)}</span>
           </div>
+          {desconto > 0 && (
+            <div className={styles.linhaTotal} style={{ color: '#0a6a35' }}>
+              <span>🎟️ Desconto de assinante</span>
+              <span>− {brl(desconto)}</span>
+            </div>
+          )}
+          {!ativo && economia > 0 && (
+            <p className={styles.parcela} style={{ marginTop: 6 }}>
+              Assinantes pagariam {brl(economia)} a menos neste pedido. <Link href="/assinar">Conheça o passe</Link> ou <Link href="/area-do-cliente">entre na Área do cliente</Link>.
+            </p>
+          )}
           <div className={styles.linhaTotal}>
             <span>Frete</span>
             <span>{frete === null ? 'escolha o estado' : frete === 0 ? 'Grátis' : brl(frete)}</span>

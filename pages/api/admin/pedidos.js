@@ -3,9 +3,11 @@ import { exigirAdmin } from '../../../lib/adminAuth';
 import { sb, txt } from '../../../lib/varejoServer';
 import { LISTA_STATUS } from '../../../lib/pedidosStatus';
 import { carregarFila, agruparFila, paresDoPedido } from '../../../lib/filaFabricas';
+import { carregarConfigAssinatura, emailValido } from '../../../lib/assinaturaServer';
 
-const CAMPOS = 'id,numero,criado_em,pago_em,status,cliente_nome,email,whatsapp,cep,rua,numero_casa,complemento,bairro,cidade,estado,observacao,itens,subtotal,frete,total,codigo_rastreio,nota_interna,entrega,lote_id,custo_fabrica';
-const CAMPOS_BASE = CAMPOS.replace(',entrega,lote_id,custo_fabrica', '');
+const CAMPOS = 'id,numero,criado_em,pago_em,status,cliente_nome,email,whatsapp,cep,rua,numero_casa,complemento,bairro,cidade,estado,observacao,itens,subtotal,frete,total,codigo_rastreio,nota_interna,entrega,lote_id,custo_fabrica,tipo';
+const CAMPOS_BASE = CAMPOS.replace(',entrega,lote_id,custo_fabrica,tipo', '');
+const CAMPOS_SEM_TIPO = CAMPOS.replace(',tipo', '');
 const STATUS_LOTE = ['aberto', 'fechado', 'em_rota', 'entregue'];
 const dataOk = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d));
 
@@ -13,7 +15,12 @@ async function carregar() {
   let pedidos;
   let semLotes = false;
   try {
-    pedidos = await sb(`varejo_pedidos?select=${CAMPOS}&order=numero.desc&limit=300`);
+    try {
+      pedidos = await sb(`varejo_pedidos?select=${CAMPOS}&order=numero.desc&limit=300`);
+    } catch (e0) {
+      // SQL da assinatura ainda não rodado: sem a coluna "tipo"
+      pedidos = await sb(`varejo_pedidos?select=${CAMPOS_SEM_TIPO}&order=numero.desc&limit=300`);
+    }
   } catch (e) {
     // SQL dos lotes ainda não rodado: mostra os pedidos mesmo assim
     pedidos = await sb(`varejo_pedidos?select=${CAMPOS_BASE}&order=numero.desc&limit=300`);
@@ -34,7 +41,15 @@ async function carregar() {
     fabricas = await sb('cal_fabricas?select=*&order=nome_interno');
     fila = agruparFila(await carregarFila());
   } catch (e) { semFabricas = true; }
-  return { pedidos, lotes, semLotes, fabricas, fila, semFabricas };
+  // Assinatura: preço do passe, ramos com desconto e assinantes (vazio se o SQL da assinatura não rodou)
+  let assin = { pronto: false, config: null, ramos: [], membros: [] };
+  try {
+    const cfg = await carregarConfigAssinatura();
+    const ramos = await sb('cal_ramos?select=*&order=ordem');
+    const membros = await sb('cal_acessos_portal?select=chave,nome,whatsapp,expira_em&order=expira_em.desc&limit=300');
+    assin = { pronto: cfg.pronto, config: { preco_passe: cfg.preco_passe, taxa_mp_pct: cfg.taxa_mp_pct, fundo_pct: cfg.fundo_pct }, ramos, membros };
+  } catch (e) {}
+  return { pedidos, lotes, semLotes, fabricas, fila, semFabricas, assin };
 }
 
 export default async function handler(req, res) {
@@ -129,6 +144,34 @@ export default async function handler(req, res) {
       const alvo = base.pedidos.filter((p) => { const k = Object.keys(paresDoPedido(p.itens, base.prod)); return k.length === 1 && k[0] === fid; });
       for (const p of alvo) await sb(`varejo_pedidos?id=eq.${p.id}&status=eq.pago`, { method: 'PATCH', body: JSON.stringify({ status: 'em_compra_fabrica' }) });
       aviso = alvo.length ? `${alvo.length} pedido(s) marcado(s) como "Comprando na fábrica".` : 'Nenhum pedido para marcar (pedidos com mais de uma fábrica você marca à mão).';
+    } else if (c.acao === 'assin_config') {
+      const preco = Number(String(c.preco_passe).replace(',', '.'));
+      const taxa = Number(String(c.taxa_mp_pct).replace(',', '.'));
+      if (!(preco >= 1 && preco <= 999)) return res.status(400).json({ erro: 'Preço do passe inválido (de 1 a 999).' });
+      if (!(taxa >= 0 && taxa <= 30)) return res.status(400).json({ erro: 'Taxa do Mercado Pago inválida (de 0 a 30).' });
+      const up = { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=minimal' } };
+      await sb('cal_config?on_conflict=chave', { ...up, body: JSON.stringify([{ chave: 'preco_passe', valor: preco.toFixed(2) }, { chave: 'taxa_mp_pct', valor: taxa.toFixed(2) }]) });
+      aviso = 'Preço do passe e taxa salvos.';
+    } else if (c.acao === 'ramo_salvar') {
+      const slug = txt(c.slug, 30);
+      if (!/^[a-z0-9_-]{2,30}$/.test(slug)) return res.status(400).json({ erro: 'Ramo inválido.' });
+      const teto = c.teto_pct === '' || c.teto_pct == null ? null : Number(String(c.teto_pct).replace(',', '.'));
+      if (teto !== null && !(teto >= 0 && teto <= 80)) return res.status(400).json({ erro: 'O teto de desconto deve ser de 0 a 80%.' });
+      const modo = c.modo === 'margem' ? 'margem' : 'teto';
+      if (modo === 'teto' && teto === null) return res.status(400).json({ erro: 'No modo "teto" informe o percentual.' });
+      await sb(`cal_ramos?slug=eq.${slug}`, { method: 'PATCH', body: JSON.stringify({ teto_pct: teto, modo, automatico: !!c.automatico, ativo: c.ativo !== false }) });
+      aviso = 'Ramo atualizado.';
+    } else if (c.acao === 'membro_conceder') {
+      const email = txt(c.email, 120).toLowerCase();
+      const dias = Math.floor(Number(c.dias) || 30);
+      if (!emailValido(email)) return res.status(400).json({ erro: 'E-mail inválido.' });
+      if (!(dias >= 1 && dias <= 365)) return res.status(400).json({ erro: 'Dias de 1 a 365.' });
+      const [atual] = await sb(`cal_acessos_portal?chave=eq.${encodeURIComponent(email)}&select=expira_em&limit=1`);
+      const base = atual ? Math.max(Date.parse(atual.expira_em) || 0, Date.now()) : Date.now();
+      const expira = new Date(base + dias * 86400000).toISOString();
+      if (atual) await sb(`cal_acessos_portal?chave=eq.${encodeURIComponent(email)}`, { method: 'PATCH', body: JSON.stringify({ expira_em: expira }) });
+      else await sb('cal_acessos_portal', { method: 'POST', body: JSON.stringify({ chave: email, nome: txt(c.nome, 120) || null, expira_em: expira }) });
+      aviso = `Acesso de ${email} liberado por mais ${dias} dia(s).`;
     } else {
       return res.status(400).json({ erro: 'Ação desconhecida.' });
     }

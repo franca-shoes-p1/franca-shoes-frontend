@@ -5,6 +5,7 @@ import { textoTroca } from '../../../lib/fornecedores';
 import { revPorCodigo } from '../../../lib/revendedoresServer';
 import { podeVender, precoComMargem } from '../../../lib/revendedores';
 import { regrasPublicas } from '../../../lib/fabricas';
+import { carregarConfigAssinatura, precosAssinante } from '../../../lib/assinaturaServer';
 
 const CAMPOS = 'id,nome,titulo_publico,descricao,categoria,material,tamanhos,foto_url,preco_venda_sugerido';
 const CAMPOS_F = CAMPOS + ',fornecedor_id,preco_fornecedor,estoque_status,prazo_postagem_dias,prazo_confeccao_dias';
@@ -27,6 +28,7 @@ const formatar = (p) => ({
   prazoConfeccao: p.prazo_confeccao_dias || 0,
   troca: p.troca || null,
   regras: p.regras || regrasPublicas(null),
+  precoAssinante: p.preco_assinante != null ? p.preco_assinante : null,
 });
 
 // Tenta com os campos de fornecedor; se o SQL de fornecedores ainda não foi rodado, volta ao jeito antigo.
@@ -71,6 +73,17 @@ async function comRegras(linhas) {
   }
 }
 
+// Preço para assinante (público: todos veem quanto pagariam como assinantes). Nunca expõe custo.
+async function comPrecoAssinante(linhas) {
+  try {
+    const cfg = await carregarConfigAssinatura();
+    const m = await precosAssinante(linhas, cfg);
+    return linhas.map((p) => (m.has(p.id) ? { ...p, preco_assinante: m.get(p.id).preco_assinante } : p));
+  } catch (e) {
+    return linhas;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ erro: 'Método não permitido.' });
   try {
@@ -88,12 +101,12 @@ export default async function handler(req, res) {
     const id = String(req.query.id || '');
     if (id) {
       if (!UUID.test(id)) return res.status(404).json({ erro: 'Produto não encontrado.' });
-      const [p] = await comRegras(await buscar(filtro, `&id=eq.${id}`, margem));
+      const [p] = await comPrecoAssinante(await comRegras(await buscar(filtro, `&id=eq.${id}`, margem)));
       if (!p) return res.status(404).json({ erro: 'Produto não encontrado.' });
       res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
       return res.status(200).json({ produto: formatar(p), revendedor: rev ? { nome: rev.nome, cidade: rev.cidade, estado: rev.estado } : null, revInativo });
     }
-    const linhas = await comRegras(await buscar(filtro, '&order=criado_em.desc&limit=200', margem));
+    const linhas = await comPrecoAssinante(await comRegras(await buscar(filtro, '&order=criado_em.desc&limit=200', margem)));
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
     return res.status(200).json({ produtos: linhas.map(formatar), revendedor: rev ? { nome: rev.nome, cidade: rev.cidade, estado: rev.estado } : null, revInativo });
   } catch (e) {

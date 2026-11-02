@@ -47,6 +47,9 @@ export default function AdminPedidos() {
   const [aberto, setAberto] = useState('');
   const [ed, setEd] = useState({});
   const [fab, setFab] = useState(null); // fábrica em edição (objeto) ou null
+  const [cfgA, setCfgA] = useState(null); // preço do passe e taxa em edição
+  const [ramoEd, setRamoEd] = useState({}); // ramos em edição por slug
+  const [conceder, setConceder] = useState({ email: '', dias: 30 });
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/pedidos')); setFase('pronto'); }
@@ -110,6 +113,7 @@ export default function AdminPedidos() {
                 <button className={aba === 'pedidos' ? 'on' : ''} onClick={() => setAba('pedidos')}>Pedidos ({d.pedidos.length})</button>
                 <button className={aba === 'lotes' ? 'on' : ''} onClick={() => setAba('lotes')}>Lotes da rodoviária ({d.lotes.length})</button>
                 <button className={aba === 'fabricas' ? 'on' : ''} onClick={() => setAba('fabricas')}>Fábricas e regras ({(d.fabricas || []).length})</button>
+                <button className={aba === 'assin' ? 'on' : ''} onClick={() => setAba('assin')}>Assinantes e descontos ({((d.assin && d.assin.membros) || []).length})</button>
               </div>
 
               {aba === 'pedidos' && d.fila && d.fila.length > 0 && (
@@ -150,7 +154,7 @@ export default function AdminPedidos() {
                           <div>
                             <span className="pd-tit">#{p.numero} · {p.cliente_nome}</span>{' '}
                             <span className={`ea-tag ${st.cor}`}>{st.rotulo}</span>{' '}
-                            <span className="ea-tag">{p.entrega === 'rodoviaria' ? `🚌 ${p.cidade}-${p.estado}` : `📮 ${p.cidade}-${p.estado}`}</span>
+                            {p.tipo === 'passe' ? <span className="ea-tag">🎟️ Passe de assinante</span> : <span className="ea-tag">{p.entrega === 'rodoviaria' ? `🚌 ${p.cidade}-${p.estado}` : `📮 ${p.cidade}-${p.estado}`}</span>}
                           </div>
                           <div className="ea-mu">{dt(p.criado_em)} · <b>{brl(p.total)}</b></div>
                         </div>
@@ -282,6 +286,69 @@ export default function AdminPedidos() {
                       )}
                     </>
                   )}
+                </div>
+              )}
+
+              {aba === 'assin' && (
+                <div className="ea-card">
+                  {!(d.assin && d.assin.pronto) && <p className="ea-mu">O SQL da assinatura ainda não rodou: valem os padrões (passe R$ 29,90). Rode <b>supabase-assinatura.sql</b> no Supabase e recarregue para poder alterar.</p>}
+                  {d.assin && d.assin.config && (
+                    <>
+                      <h2>Passe e taxa</h2>
+                      <div className="pd-g">
+                        <div><label>Preço do passe de 30 dias (R$)</label><input inputMode="decimal" value={cfgA ? cfgA.preco_passe : String(d.assin.config.preco_passe).replace('.', ',')} onChange={(e) => setCfgA({ preco_passe: e.target.value, taxa_mp_pct: cfgA ? cfgA.taxa_mp_pct : String(d.assin.config.taxa_mp_pct).replace('.', ',') })} /></div>
+                        <div><label>Taxa do Mercado Pago usada no cálculo (%)</label><input inputMode="decimal" value={cfgA ? cfgA.taxa_mp_pct : String(d.assin.config.taxa_mp_pct).replace('.', ',')} onChange={(e) => setCfgA({ preco_passe: cfgA ? cfgA.preco_passe : String(d.assin.config.preco_passe).replace('.', ','), taxa_mp_pct: e.target.value })} /></div>
+                        <div><label>Fundo dos operadores (%) — vem da aba Vitrine</label><input value={d.assin.config.fundo_pct} disabled /></div>
+                      </div>
+                      <div style={{ marginTop: 10 }}><button className="ea-btn" disabled={ocupado || !cfgA || !d.assin.pronto} onClick={() => enviar({ acao: 'assin_config', ...cfgA }).then(() => setCfgA(null))}>Salvar passe e taxa</button></div>
+
+                      <h2 style={{ marginTop: 20 }}>Desconto por ramo</h2>
+                      <div className="ea-mu">O desconto é o <b>menor</b> entre o que a margem permite (sem mexer no fundo dos operadores, que é sobre o preço geral) e o teto do ramo. “Margem” não tem teto fixo. Só os ramos marcados como automáticos aplicam desconto sozinhos no checkout.</div>
+                      {d.assin.ramos.map((r) => {
+                        const e = ramoEd[r.slug] || {};
+                        const v = (k) => (e[k] !== undefined ? e[k] : k === 'teto_pct' ? (r.teto_pct == null ? '' : String(r.teto_pct)) : r[k]);
+                        return (
+                          <div key={r.slug} className="pd-it">
+                            <div className="pd-tit">{r.nome}</div>
+                            <div className="pd-g">
+                              <div><label>Critério</label>
+                                <select value={v('modo')} onChange={(ev) => setRamoEd({ ...ramoEd, [r.slug]: { ...e, modo: ev.target.value } })}>
+                                  <option value="margem">Só pela margem</option><option value="teto">Teto percentual</option>
+                                </select></div>
+                              <div><label>Teto (%)</label><input inputMode="decimal" value={v('teto_pct')} onChange={(ev) => setRamoEd({ ...ramoEd, [r.slug]: { ...e, teto_pct: ev.target.value } })} /></div>
+                              <div><label>Aplicar sozinho no checkout?</label>
+                                <select value={v('automatico') ? 'sim' : 'nao'} onChange={(ev) => setRamoEd({ ...ramoEd, [r.slug]: { ...e, automatico: ev.target.value === 'sim' } })}>
+                                  <option value="sim">Sim</option><option value="nao">Não (combinado pelo WhatsApp)</option>
+                                </select></div>
+                            </div>
+                            <div style={{ marginTop: 8 }}><button className="ea-btn ea-btn2" disabled={ocupado || !ramoEd[r.slug]} onClick={() => enviar({ acao: 'ramo_salvar', slug: r.slug, modo: v('modo'), teto_pct: v('teto_pct'), automatico: v('automatico'), ativo: r.ativo }).then(() => setRamoEd({ ...ramoEd, [r.slug]: undefined }))}>Salvar ramo</button></div>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+
+                  <h2 style={{ marginTop: 20 }}>Assinantes</h2>
+                  {d.assin && d.assin.membros.length === 0 && <p className="ea-mu">Nenhum assinante ainda. O passe nasce quando um pedido de produto ou de passe é pago.</p>}
+                  {d.assin && d.assin.membros.map((m) => {
+                    const ativo = Date.parse(m.expira_em) > Date.now();
+                    return (
+                      <div key={m.chave} className="pd-it">
+                        <div className="pd-top" style={{ cursor: 'default' }}>
+                          <div><span className="pd-tit">{m.nome || m.chave}</span> <span className={`ea-tag ${ativo ? 'ok' : 'er'}`}>{ativo ? 'ativo' : 'vencido'}</span></div>
+                          <div className="ea-mu">{m.chave} · até {new Date(m.expira_em).toLocaleDateString('pt-BR')}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div className="pd-det" style={{ marginTop: 12 }}>
+                    <b>Liberar acesso à mão</b> <span className="ea-mu">(cortesia ou ajuste)</span>
+                    <div className="pd-g">
+                      <div><label>E-mail</label><input value={conceder.email} onChange={(e) => setConceder({ ...conceder, email: e.target.value })} /></div>
+                      <div><label>Dias</label><input type="number" min="1" max="365" value={conceder.dias} onChange={(e) => setConceder({ ...conceder, dias: e.target.value })} /></div>
+                    </div>
+                    <div style={{ marginTop: 8 }}><button className="ea-btn" disabled={ocupado || !conceder.email} onClick={() => enviar({ acao: 'membro_conceder', ...conceder }).then(() => setConceder({ email: '', dias: 30 }))}>Liberar</button></div>
+                  </div>
                 </div>
               )}
             </>
