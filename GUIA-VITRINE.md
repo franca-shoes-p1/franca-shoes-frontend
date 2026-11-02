@@ -80,3 +80,8 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Telegram: robo "Vitrine Avisos" (@vitrine_avisos_ricardo_bot) e canal publico @vitrine_igrejaeco (robo e admin do canal). Chat de avisos do Ricardo: 8902658390.
 - n8n (n8n.igreja.eco.br): credencial "Telegram Vitrine" criada; fluxos importados e PUBLICADOS: "Vitrine - garimpo diario 6h (Telegram)" e "Vitrine - divulgacao diaria 9h (resumo + canal do Telegram)". Ambos testados com sucesso (token RADAR_N8N_TOKEN colado so no n8n).
 - Pendente: fluxo "apuracao semanal" (n8n/vitrine-apuracao-semanal.json); cadastrar os 2 sapatos em /admin/calcados; cadastrar fontes em /admin/vitrine > Fontes de busca; rodar supabase-vitrine-cartoes.sql depois do SQL da Oficina.
+
+## Registro 02/11/2026 - erro ao cadastrar o primeiro modelo
+- Erro 23502 (coluna obrigatoria vazia) ao salvar em /admin/calcados: rf_produtos ja existia com fornecedor_id NOT NULL.
+- Correcao no Supabase: `alter table public.rf_produtos alter column fornecedor_id drop not null;` (arquivo supabase-rf-produtos-fornecedor-opcional.sql).
+- Regra de preco adotada: preco = (custo + R$ 20,00 de lucro) / (1 - 4,98% taxa Mercado Pago cartao a vista), arredondado para cima. Modelo 935: custo 163,12, preco 192,90.
