@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { api, ADMIN_CSS } from '../../lib/adminClient';
 import AdminNav from '../../lib/AdminNav';
 
-const VAZIO = { titulo: '', categoria: '', material: '', tamanhos: '', descricao: '', custo: '', preco: '', foto_url: '' };
+const VAZIO = { titulo: '', categoria: '', material: '', tamanhos: '', descricao: '', custo: '', preco: '', foto_url: '', fabrica_id: '' };
 const brl = (n) => 'R$ ' + Number(n || 0).toFixed(2).replace('.', ',');
 const num = (v) => {
   let s = String(v ?? '').replace(/[^\d,.-]/g, '');
@@ -42,6 +42,7 @@ async function reduzirFoto(arquivo) {
 export default function AdminCalcados() {
   const [fase, setFase] = useState('carregando'); // carregando | login | pronto
   const [lista, setLista] = useState([]);
+  const [fabricas, setFabricas] = useState([]);
   const [senha, setSenha] = useState('');
   const [form, setForm] = useState(VAZIO);
   const [editandoId, setEditandoId] = useState(null);
@@ -55,6 +56,7 @@ export default function AdminCalcados() {
     try {
       const d = await api('/api/admin/produtos');
       setLista(d.produtos || []);
+      setFabricas(d.fabricas || []);
       setFase('pronto');
     } catch (e) {
       if (e.status === 401) setFase('login');
@@ -124,6 +126,7 @@ export default function AdminCalcados() {
       custo: p.custo ? String(p.custo).replace('.', ',') : '',
       preco: p.preco_venda_sugerido ? String(p.preco_venda_sugerido).replace('.', ',') : '',
       foto_url: p.foto_url || '',
+      fabrica_id: p.fabrica_id || '',
     });
     setMsg(null);
     if (topoForm.current) topoForm.current.scrollIntoView({ behavior: 'smooth' });
@@ -135,16 +138,23 @@ export default function AdminCalcados() {
     setMsg(null);
   }
 
+  // Só manda a fábrica se o SQL das fábricas já foi rodado (a lista de fábricas veio do servidor).
+  const corpo = () => {
+    if (fabricas.length) return form;
+    const { fabrica_id, ...resto } = form;
+    return resto;
+  };
+
   async function salvar(ev) {
     ev.preventDefault();
     setOcupado(true);
     setMsg(null);
     try {
       if (editandoId) {
-        await api(`/api/admin/produtos/${editandoId}`, { method: 'PATCH', body: form });
+        await api(`/api/admin/produtos/${editandoId}`, { method: 'PATCH', body: corpo() });
         setMsg({ tipo: 'ok', texto: 'Modelo atualizado.' });
       } else {
-        await api('/api/admin/produtos', { method: 'POST', body: form });
+        await api('/api/admin/produtos', { method: 'POST', body: corpo() });
         setMsg({ tipo: 'ok', texto: 'Modelo cadastrado e já está na loja!' });
       }
       setEditandoId(null);
@@ -249,6 +259,15 @@ export default function AdminCalcados() {
                   <label>Números disponíveis</label>
                   <input value={form.tamanhos} onChange={mudar('tamanhos')} placeholder="38 ao 44  ou  35, 36, 37" />
                 </div>
+                {fabricas.length > 0 && (
+                  <div>
+                    <label>Fábrica deste modelo (só você vê o nome)</label>
+                    <select value={form.fabrica_id} onChange={mudar('fabrica_id')}>
+                      <option value="">Sem fábrica definida (regras padrão)</option>
+                      {fabricas.map((f) => <option key={f.id} value={f.id}>{f.nome_interno} · lote mínimo {f.lote_minimo_pares} par(es)</option>)}
+                    </select>
+                  </div>
+                )}
                 <div>
                   <label>Preço de venda ao cliente (R$) *</label>
                   <input value={form.preco} onChange={mudar('preco')} required inputMode="decimal" placeholder="149,90" />

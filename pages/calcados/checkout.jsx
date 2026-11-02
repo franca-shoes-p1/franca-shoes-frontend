@@ -249,7 +249,7 @@ export default function Checkout() {
             {enviando ? 'Abrindo pagamento…' : 'Pagar com PIX ou cartão'}
           </button>
           <p className={styles.parcela} style={{ marginTop: 10 }}>
-            Modelos da própria loja: você paga no Mercado Pago (PIX ou cartão) e o pedido sai em {VAREJO.prazoPreparoDias}.
+            Modelos da própria loja: você paga no Mercado Pago (PIX ou cartão) e o pedido segue para a fábrica. O prazo e o lote mínimo de cada modelo estão na página dele; acompanhe em “Meu pedido”.
             Modelos de fornecedores: o PIX vai direto ao fornecedor, que faz o par depois do pedido; a página seguinte mostra o código.
           </p>
           <p style={{ marginTop: 10 }}>

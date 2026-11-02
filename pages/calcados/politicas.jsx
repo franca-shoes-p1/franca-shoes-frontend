@@ -12,7 +12,7 @@ export default function Politicas() {
         <h2>Como funciona o pedido</h2>
         <p>
           A {VAREJO.nomeLoja} trabalha sem estoque próprio: depois que o pagamento é confirmado, o seu pedido é separado diretamente na
-          fábrica em Franca, SP. A saída do pedido acontece em {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}.
+          fábrica em Franca, SP. O prazo de saída depende da fábrica: quando ela não informa outro, é de {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}, e fábricas com lote mínimo só liberam o pedido quando o lote completa.
         </p>
 
         <h2>Pagamento</h2>
@@ -24,6 +24,17 @@ export default function Politicas() {
         <p>
           Por ser uma compra pela internet, você pode desistir em até 7 dias corridos a partir do recebimento (art. 49 do Código de
           Defesa do Consumidor), com o produto sem uso e na embalagem. Avise pelo WhatsApp e orientamos o envio de volta e o reembolso.
+        </p>
+
+        <h2>Cada fábrica tem as suas regras</h2>
+        <p>
+          Trabalhamos com várias fábricas de Franca e cada uma tem o seu jeito: algumas pedem <b>lote mínimo de pares</b> (por exemplo, 12), o prazo de
+          preparo muda, e nem todas aceitam troca de numeração. Essas regras aparecem na página de cada modelo, antes da compra. Quando o modelo tem lote
+          mínimo, o seu pedido fica na fila até o lote completar, e você acompanha o andamento em <a href="/acompanhar">Acompanhar pedido</a>.
+        </p>
+        <p>
+          Vale sempre, para qualquer fábrica: desistência em 7 dias, defeito de fabricação com no mínimo 30 dias para avisar, erro no pedido em 7 dias.
+          Se a regra da fábrica for melhor para você, vale a dela. A lei sempre prevalece.
         </p>
 
         <h2>Como você recebe</h2>
@@ -42,13 +53,13 @@ export default function Politicas() {
 
         <h2>Troca de numeração</h2>
         <p>
-          Fazemos uma troca de numeração por pedido, pelos Correios, com o produto sem uso e na embalagem. Fale conosco pelo WhatsApp e
-          combinamos o custo do envio antes. Confira a numeração com atenção antes de comprar, pois cada fábrica tem sua forma.
+          Fazemos uma troca de numeração por pedido, pelos Correios, com o produto sem uso e na embalagem, exceto nos modelos de fábricas que não aceitam troca de
+          numeração (isso aparece na página do modelo). Fale conosco pelo WhatsApp e combinamos o custo do envio antes. Confira a numeração com atenção antes de comprar, pois cada fábrica tem sua forma.
         </p>
 
         <h2>Produto com defeito</h2>
         <p>
-          Se chegar com defeito de fabricação, você tem 30 dias a partir do recebimento para avisar. Trocamos ou devolvemos o valor, sem custo
+          Se chegar com defeito de fabricação, você tem no mínimo 30 dias a partir do recebimento para avisar (alguns modelos têm prazo maior, mostrado na página do modelo). Trocamos ou devolvemos o valor, sem custo
           para você. Mande fotos pelo WhatsApp.
         </p>
 

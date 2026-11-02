@@ -50,11 +50,12 @@ const PASSOS = [
   },
   {
     icone: '🏭', titulo: 'Compramos o seu par na fábrica', quem: 'Nós', mode: 'todos',
-    resumo: 'Trabalhamos sem estoque parado: o seu pedido é separado direto na fábrica, em Franca (SP).',
+    resumo: 'Trabalhamos sem estoque parado: o seu pedido é comprado direto na fábrica, em Franca (SP).',
     itens: [
-      `Preparo do pedido: ${VAREJO.prazoPreparoDias}.`,
-      'Conferimos modelo, cor e número antes de embalar.',
-      'Se algo faltar ou o modelo acabar, falamos com você antes de qualquer coisa: troca por outro modelo ou reembolso.',
+      'Cada fábrica tem o seu jeito. Algumas vendem só em lote mínimo (por exemplo, 12 pares): nesse caso o seu pedido espera juntar o lote, e você vê "X de Y pares" em Acompanhar pedido.',
+      `Depois do lote (ou logo após o pagamento, quando a fábrica não pede mínimo), o preparo segue o prazo da fábrica. Se a fábrica não informar outro, é de ${VAREJO.prazoPreparoDias}.`,
+      'O prazo e o lote mínimo de cada modelo aparecem na página dele, antes de você comprar.',
+      'Conferimos modelo, cor e número antes de embalar. Se algo faltar ou o modelo acabar, falamos com você antes de qualquer coisa: outro modelo ou reembolso.',
     ],
   },
   {
@@ -119,7 +120,7 @@ const TROCAS = [
   },
   {
     t: 'Produto com defeito', d: '30 dias',
-    c: 'Defeito de fabricação: você tem 30 dias a partir do recebimento para avisar. Trocamos por outro igual ou devolvemos o valor. Mande fotos pelo WhatsApp. Não há custo para você.',
+    c: 'Defeito de fabricação: você tem no mínimo 30 dias a partir do recebimento para avisar (alguns modelos têm prazo maior, que aparece na página do modelo). Trocamos por outro igual ou devolvemos o valor. Mande fotos pelo WhatsApp. Não há custo para você.',
   },
   {
     t: 'Erro no pedido', d: '7 dias',
@@ -127,13 +128,14 @@ const TROCAS = [
   },
   {
     t: 'Troca de numeração', d: '1 por pedido',
-    c: 'Se o número não servir, fazemos uma troca de numeração por pedido, pelos Correios, com o produto sem uso e na embalagem. Combinamos o custo do envio com você antes de enviar. Confira a numeração com atenção antes de comprar.',
+    c: 'Se o número não servir, fazemos uma troca de numeração por pedido, pelos Correios, com o produto sem uso e na embalagem. Combinamos o custo do envio com você antes de enviar. Algumas fábricas não aceitam troca de numeração: quando for o caso, isso aparece na página do modelo antes da compra. Confira a numeração com atenção.',
   },
 ];
 
 const FAQ = [
   ['Posso receber em casa sem usar os Correios?', 'Não fazemos entrega em domicílio por conta própria. Você escolhe entre retirar na rodoviária da capital (frete grátis) ou receber pelos Correios.'],
   ['Moro no Norte do país. Como recebo?', 'Pela região Norte, a entrega é só pelos Correios, com o frete calculado antes de você pagar.'],
+  ['E se a fábrica tiver lote mínimo?', 'Algumas fábricas só liberam pedidos em lote (por exemplo, 12 pares). O seu pedido fica na fila até completar, e você vê o andamento em Acompanhar pedido. O lote mínimo de cada modelo aparece na página dele, antes de você comprar.'],
   ['Quanto tempo demora a retirada na rodoviária?', `Depende de juntar ${LOTE.minimoPedidos} pedidos pagos na sua cidade. Quando o lote fecha, avisamos a data e o horário. Se você não quiser esperar, escolha os Correios na hora da compra.`],
   ['O preço pode mudar depois que eu pagar?', 'Não. O valor mostrado no resumo, antes de pagar, é o valor do pedido.'],
   ['É seguro pagar?', 'O pagamento acontece no Mercado Pago, com PIX ou cartão. Nós não vemos nem guardamos os dados do seu cartão.'],
@@ -247,8 +249,8 @@ export default function ComoComprar() {
             <div className={s.cartao}>
               <span className={s.cIco}>🏭</span>
               <b>Preparo na fábrica</b>
-              <strong>{VAREJO.prazoPreparoDias}</strong>
-              <small>depois da confirmação do pagamento</small>
+              <strong>Depende da fábrica</strong>
+              <small>cada modelo mostra o prazo e o lote mínimo; o padrão é {VAREJO.prazoPreparoDias}</small>
             </div>
             <div className={s.cartao}>
               <span className={s.cIco}>📮</span>
@@ -263,6 +265,39 @@ export default function ComoComprar() {
               <small>{LOTE.minimoPedidos} pedidos pagos na sua cidade; avisamos a data</small>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="regras" className={s.secao} data-rev>
+        <div className={s.cont}>
+          <p className={s.sobre}>Regras</p>
+          <h2>O que vale sempre e o que muda por fábrica</h2>
+          <p className={s.sub}>Cada fábrica trabalha de um jeito. Por isso a página de cada modelo mostra as regras daquela fábrica antes da compra.</p>
+          <div className={s.prazos}>
+            <div className={s.cartao}>
+              <span className={s.cIco}>🛡️</span>
+              <b>Vale para todas as compras</b>
+              <ul className={s.listaRegra}>
+                <li>Desistência em 7 dias (Código de Defesa do Consumidor).</li>
+                <li>Defeito de fabricação: no mínimo 30 dias.</li>
+                <li>Erro no pedido: 7 dias, troca por nossa conta.</li>
+                <li>Pagamento seguro no Mercado Pago.</li>
+                <li>Você escolhe: rodoviária (grátis) ou Correios.</li>
+              </ul>
+            </div>
+            <div className={s.cartao}>
+              <span className={s.cIco}>🏭</span>
+              <b>Muda de fábrica para fábrica</b>
+              <ul className={s.listaRegra}>
+                <li>Lote mínimo de pares para a fábrica produzir ou liberar.</li>
+                <li>Prazo de preparo depois do lote.</li>
+                <li>Prazo maior para avisar defeito, quando a fábrica oferece.</li>
+                <li>Se aceita ou não troca de numeração.</li>
+                <li>Observações do modelo (por exemplo, sob encomenda).</li>
+              </ul>
+            </div>
+          </div>
+          <div className={s.aviso}>Se a regra da fábrica for diferente da regra geral, vale a que for <b>melhor para você</b>, e a lei sempre prevalece.</div>
         </div>
       </section>
 

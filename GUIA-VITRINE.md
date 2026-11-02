@@ -109,3 +109,13 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - lib/pedidosStatus.js guarda os textos das situacoes do pedido em um lugar so. Sem SQL novo.
 - Ajuste visual: topo da loja passa a quebrar linha no celular (os links novos estouravam a largura).
 - Rotina sugerida: pedido pago -> comprar na fabrica e marcar "Comprando na fabrica" (preencher custo) -> Correios: informar rastreio e marcar "Enviado"; rodoviaria: lote fecha com 10 pedidos, definir data de saida e marcar o lote "Em rota", depois "Entregue".
+
+## Registro 02/11/2026 - regras por fabrica (lote minimo, prazo, troca) e fila de compra
+- Motivo: cada fabrica tem o seu jeito. A fabrica dos dois primeiros sapatos so libera retirada com lote minimo de 12 pares, entao "preparo em 3 a 5 dias" nao vale sempre.
+- SQL novo: supabase-fabricas-regras.sql (tabela cal_fabricas + coluna rf_produtos.fabrica_id; cria a fabrica "Di Franca" com lote minimo 12 e liga os sapatos 934 e 935). Rodar no Supabase ANTES de usar. O nome da fabrica nunca vai para o cliente.
+- Regras por fabrica: lote minimo de pares, prazo depois do lote, prazo para defeito (minimo 30 dias), aceita troca de numeracao, observacao. Cadastro em /admin/pedidos > aba "Fabricas e regras". O modelo e ligado a fabrica em /admin/calcados (campo "Fabrica deste modelo").
+- Pagina do modelo (/calcados/[id]) mostra "Como funciona este modelo" com as regras da fabrica (sem nome). Sem fabrica ligada: regras padrao da loja.
+- Fila de compra por fabrica em /admin/pedidos: soma os pares dos pedidos pagos por fabrica ("9 de 12 pares"); so libera o botao "Marcar como Comprando na fabrica" quando atinge o minimo. Pedidos com fabricas misturadas ficam para marcar a mao.
+- Cliente ve "Aguardando o lote da fabrica: X de Y pares" em /acompanhar.
+- Regras gerais (valem sempre): desistencia 7 dias (CDC), defeito no minimo 30 dias, erro no pedido 7 dias. Se a regra da fabrica for melhor para o cliente, vale a dela. Textos atualizados em /como-comprar, /calcados/politicas, checkout e agradecimento.
+- Dois minimos convivem: o da fabrica (para comprar) e o do lote da cidade (10 pedidos, para a viagem). Hoje a conferencia final dos dois e sua.

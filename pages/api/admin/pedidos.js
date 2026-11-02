@@ -2,6 +2,7 @@
 import { exigirAdmin } from '../../../lib/adminAuth';
 import { sb, txt } from '../../../lib/varejoServer';
 import { LISTA_STATUS } from '../../../lib/pedidosStatus';
+import { carregarFila, agruparFila, paresDoPedido } from '../../../lib/filaFabricas';
 
 const CAMPOS = 'id,numero,criado_em,pago_em,status,cliente_nome,email,whatsapp,cep,rua,numero_casa,complemento,bairro,cidade,estado,observacao,itens,subtotal,frete,total,codigo_rastreio,nota_interna,entrega,lote_id,custo_fabrica';
 const CAMPOS_BASE = CAMPOS.replace(',entrega,lote_id,custo_fabrica', '');
@@ -25,7 +26,15 @@ async function carregar() {
   const cont = {};
   pedidos.forEach((p) => { if (p.lote_id) cont[p.lote_id] = (cont[p.lote_id] || 0) + 1; });
   lotes = lotes.map((l) => ({ ...l, pedidos: cont[l.id] || 0 }));
-  return { pedidos, lotes, semLotes };
+  // Fábricas e fila de compra (pedidos pagos somados em pares por fábrica). Sem o SQL das fábricas, vem vazio.
+  let fabricas = [];
+  let fila = [];
+  let semFabricas = false;
+  try {
+    fabricas = await sb('cal_fabricas?select=*&order=nome_interno');
+    fila = agruparFila(await carregarFila());
+  } catch (e) { semFabricas = true; }
+  return { pedidos, lotes, semLotes, fabricas, fila, semFabricas };
 }
 
 export default async function handler(req, res) {
@@ -86,6 +95,40 @@ export default async function handler(req, res) {
         await sb(`varejo_pedidos?lote_id=eq.${id}&status=in.(pago,em_compra_fabrica,enviado)`, { method: 'PATCH', body: JSON.stringify({ status: 'entregue' }) });
       }
       aviso = 'Lote atualizado.';
+    } else if (c.acao === 'fabrica_salvar') {
+      const nome = txt(c.nome_interno, 60);
+      if (nome.length < 2) return res.status(400).json({ erro: 'Informe o nome da fábrica (só você vê).' });
+      const lote = Math.floor(Number(c.lote_minimo_pares));
+      const defeito = Math.floor(Number(c.troca_defeito_dias));
+      if (!(lote >= 1 && lote <= 500)) return res.status(400).json({ erro: 'O lote mínimo deve ser de 1 a 500 pares.' });
+      if (!(defeito >= 30 && defeito <= 365)) return res.status(400).json({ erro: 'O prazo de defeito deve ser de 30 a 365 dias (30 é o mínimo da loja).' });
+      const d = {
+        nome_interno: nome,
+        lote_minimo_pares: lote,
+        prazo_preparo: txt(c.prazo_preparo, 120) || null,
+        troca_defeito_dias: defeito,
+        troca_numeracao: c.troca_numeracao !== false,
+        troca_obs: txt(c.troca_obs, 300) || null,
+        ativo: c.ativo !== false,
+      };
+      if (c.id) {
+        if (!/^[0-9a-f-]{36}$/i.test(String(c.id))) return res.status(400).json({ erro: 'Fábrica inválida.' });
+        await sb(`cal_fabricas?id=eq.${c.id}`, { method: 'PATCH', body: JSON.stringify(d) });
+      } else {
+        await sb('cal_fabricas', { method: 'POST', body: JSON.stringify(d) });
+      }
+      aviso = 'Regras da fábrica salvas.';
+    } else if (c.acao === 'fila_comprar') {
+      // Marca como "Comprando na fábrica" os pedidos pagos cujos itens são todos desta fábrica (pedido com fábricas misturadas fica para marcar à mão).
+      const fid = String(c.fabrica_id || '');
+      if (fid && !/^[0-9a-f-]{36}$/i.test(fid)) return res.status(400).json({ erro: 'Fábrica inválida.' });
+      const base = await carregarFila();
+      const grupo = agruparFila(base).find((g) => g.fabrica_id === fid);
+      if (!grupo) return res.status(400).json({ erro: 'Não há pedidos pagos esperando esta fábrica.' });
+      if (!grupo.pronto) return res.status(400).json({ erro: `Ainda não atingiu o lote mínimo: ${grupo.pares} de ${grupo.minimo} pares.` });
+      const alvo = base.pedidos.filter((p) => { const k = Object.keys(paresDoPedido(p.itens, base.prod)); return k.length === 1 && k[0] === fid; });
+      for (const p of alvo) await sb(`varejo_pedidos?id=eq.${p.id}&status=eq.pago`, { method: 'PATCH', body: JSON.stringify({ status: 'em_compra_fabrica' }) });
+      aviso = alvo.length ? `${alvo.length} pedido(s) marcado(s) como "Comprando na fábrica".` : 'Nenhum pedido para marcar (pedidos com mais de uma fábrica você marca à mão).';
     } else {
       return res.status(400).json({ erro: 'Ação desconhecida.' });
     }
