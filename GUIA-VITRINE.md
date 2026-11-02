@@ -102,3 +102,10 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Situacao real: o banco ja libera 30 dias em cal_acessos_portal quando o pedido vira "pago" (gatilho t_cal_pedido_mudou), mas NENHUMA pagina do site consulta essa tabela ainda. Nao existe login de cliente nem area bloqueada, entao o bonus ainda nao e entregue.
 - Por isso o aviso "compra libera 1 mes de portal" foi retirado de /como-comprar e da previa /nova-home ate a area do cliente existir.
 - Para entregar: criar area do cliente (login por e-mail + numero do pedido), definir o que ela libera e como cobra depois do mes gratis (assinatura).
+
+## Registro 02/11/2026 - painel de Pedidos e lotes + pagina Acompanhar pedido
+- Novo painel /admin/pedidos (pages/admin/pedidos.jsx, pages/api/admin/pedidos.js), item "Pedidos" no menu do painel. Aba Pedidos: lista dos 300 mais recentes, filtro por situacao, detalhe (itens, contato, endereco ou rodoviaria), mudar situacao, codigo de rastreio, custo de fabrica (so voce ve), nota interna e botao "Avisar no WhatsApp" com mensagem pronta por situacao. Aba Lotes: situacao do lote (aberto, fechado, em rota, entregue), data de saida da viagem, avisar cada cliente. Marcar o lote "Em rota" ou "Entregue" atualiza tambem os pedidos dele que ainda estao no caminho.
+- Nova pagina publica /acompanhar (pages/acompanhar.jsx, pages/api/varejo/acompanhar.js): o cliente informa numero do pedido + e-mail da compra e ve a etapa, o lote (quantos pedidos faltam e data de saida) ou o codigo de rastreio. Nao mostra CPF, endereco nem custo; limite de 15 consultas por 10 minutos por IP. Linkada no topo/rodape da loja, na pagina de agradecimento e em /como-comprar.
+- lib/pedidosStatus.js guarda os textos das situacoes do pedido em um lugar so. Sem SQL novo.
+- Ajuste visual: topo da loja passa a quebrar linha no celular (os links novos estouravam a largura).
+- Rotina sugerida: pedido pago -> comprar na fabrica e marcar "Comprando na fabrica" (preencher custo) -> Correios: informar rastreio e marcar "Enviado"; rodoviaria: lote fecha com 10 pedidos, definir data de saida e marcar o lote "Em rota", depois "Entregue".
