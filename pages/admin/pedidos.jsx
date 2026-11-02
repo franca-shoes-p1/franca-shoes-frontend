@@ -46,6 +46,7 @@ export default function AdminPedidos() {
   const [filtro, setFiltro] = useState('');
   const [aberto, setAberto] = useState('');
   const [ed, setEd] = useState({});
+  const [fab, setFab] = useState(null); // fábrica em edição (objeto) ou null
 
   const carregar = useCallback(async () => {
     try { setD(await api('/api/admin/pedidos')); setFase('pronto'); }
@@ -108,7 +109,30 @@ export default function AdminPedidos() {
               <div className="pd-tabs">
                 <button className={aba === 'pedidos' ? 'on' : ''} onClick={() => setAba('pedidos')}>Pedidos ({d.pedidos.length})</button>
                 <button className={aba === 'lotes' ? 'on' : ''} onClick={() => setAba('lotes')}>Lotes da rodoviária ({d.lotes.length})</button>
+                <button className={aba === 'fabricas' ? 'on' : ''} onClick={() => setAba('fabricas')}>Fábricas e regras ({(d.fabricas || []).length})</button>
               </div>
+
+              {aba === 'pedidos' && d.fila && d.fila.length > 0 && (
+                <div className="ea-card">
+                  <h2>Fila de compra por fábrica</h2>
+                  <div className="ea-mu">Pedidos pagos que ainda não foram comprados, somados em pares. Quando a fábrica pede lote mínimo, só compre ao atingir.</div>
+                  {d.fila.map((f) => (
+                    <div key={f.fabrica_id || 'sem'} className="pd-it">
+                      <div className="pd-top" style={{ cursor: 'default' }}>
+                        <div><span className="pd-tit">{f.nome_interno}</span>{' '}
+                          <span className={`ea-tag ${f.pronto ? 'ok' : 'am'}`}>{f.pares} de {f.minimo} par(es){f.pronto ? ' · pode comprar' : ' · juntando'}</span></div>
+                        <div className="ea-mu">Pedidos: {f.pedidos.map((x) => '#' + x).join(', ')}</div>
+                      </div>
+                      {f.mistos.length > 0 && <div className="ea-mu">Pedidos com mais de uma fábrica ({f.mistos.map((x) => '#' + x).join(', ')}) você marca à mão.</div>}
+                      {f.pronto && (
+                        <div style={{ marginTop: 8 }}>
+                          <button className="ea-btn ea-btn-ok" disabled={ocupado} onClick={() => enviar({ acao: 'fila_comprar', fabrica_id: f.fabrica_id })}>Marcar estes pedidos como "Comprando na fábrica"</button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {aba === 'pedidos' && (
                 <div className="ea-card">
@@ -206,6 +230,58 @@ export default function AdminPedidos() {
                       </div>
                     );
                   })}
+                </div>
+              )}
+
+              {aba === 'fabricas' && (
+                <div className="ea-card">
+                  {d.semFabricas && <p className="ea-mu">As fábricas ainda não existem no banco. Rode o SQL <b>supabase-fabricas-regras.sql</b> no Supabase e recarregue.</p>}
+                  {!d.semFabricas && (
+                    <>
+                      <h2>Regras de cada fábrica</h2>
+                      <div className="ea-mu">Cada fábrica tem o seu jeito. Estas regras aparecem na página de cada modelo, sem o nome da fábrica. Ligue o modelo à fábrica em Calçados.</div>
+                      {(d.fabricas || []).map((f) => (
+                        <div key={f.id} className="pd-it">
+                          <div className="pd-top" style={{ cursor: 'default' }}>
+                            <div><span className="pd-tit">{f.nome_interno}</span>{' '}
+                              <span className="ea-tag">lote mínimo {f.lote_minimo_pares} par(es)</span>{' '}
+                              <span className="ea-tag">defeito {f.troca_defeito_dias} dias</span>{' '}
+                              <span className={`ea-tag ${f.troca_numeracao ? 'ok' : 'er'}`}>{f.troca_numeracao ? 'troca de número: sim' : 'troca de número: não'}</span>
+                              {!f.ativo && <span className="ea-tag er">pausada</span>}</div>
+                            <button className="ea-btn ea-btn2" onClick={() => setFab({ ...f })}>Editar</button>
+                          </div>
+                        </div>
+                      ))}
+                      <div style={{ marginTop: 12 }}>
+                        {!fab && <button className="ea-btn" onClick={() => setFab({ nome_interno: '', lote_minimo_pares: 1, prazo_preparo: '', troca_defeito_dias: 30, troca_numeracao: true, troca_obs: '', ativo: true })}>+ Nova fábrica</button>}
+                      </div>
+                      {fab && (
+                        <div className="pd-det">
+                          <h2>{fab.id ? 'Editar fábrica' : 'Nova fábrica'}</h2>
+                          <div className="pd-g">
+                            <div><label>Nome (só você vê)</label><input value={fab.nome_interno} onChange={(e) => setFab({ ...fab, nome_interno: e.target.value })} /></div>
+                            <div><label>Lote mínimo (pares) para comprar</label><input type="number" min="1" max="500" value={fab.lote_minimo_pares} onChange={(e) => setFab({ ...fab, lote_minimo_pares: e.target.value })} /></div>
+                            <div><label>Prazo depois do lote</label><input value={fab.prazo_preparo || ''} onChange={(e) => setFab({ ...fab, prazo_preparo: e.target.value })} placeholder="Ex.: 3 a 5 dias úteis" /></div>
+                            <div><label>Prazo para avisar defeito (dias)</label><input type="number" min="30" max="365" value={fab.troca_defeito_dias} onChange={(e) => setFab({ ...fab, troca_defeito_dias: e.target.value })} /></div>
+                            <div><label>Aceita troca de numeração?</label>
+                              <select value={fab.troca_numeracao ? 'sim' : 'nao'} onChange={(e) => setFab({ ...fab, troca_numeracao: e.target.value === 'sim' })}>
+                                <option value="sim">Sim</option><option value="nao">Não</option>
+                              </select></div>
+                            <div><label>Situação</label>
+                              <select value={fab.ativo ? 'sim' : 'nao'} onChange={(e) => setFab({ ...fab, ativo: e.target.value === 'sim' })}>
+                                <option value="sim">Ativa</option><option value="nao">Pausada</option>
+                              </select></div>
+                          </div>
+                          <div style={{ marginTop: 10 }}><label>Observação para o cliente (opcional, sem nome da fábrica)</label>
+                            <input value={fab.troca_obs || ''} onChange={(e) => setFab({ ...fab, troca_obs: e.target.value })} placeholder="Ex.: modelos sob encomenda não têm troca de cor." /></div>
+                          <div className="ea-row" style={{ marginTop: 12 }}>
+                            <button className="ea-btn" disabled={ocupado} onClick={async () => { await enviar({ acao: 'fabrica_salvar', ...fab }); setFab(null); }}>Salvar fábrica</button>
+                            <button className="ea-btn ea-btn2" onClick={() => setFab(null)}>Cancelar</button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               )}
             </>

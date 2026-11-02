@@ -4,6 +4,7 @@ import { sb, UUID } from '../../../lib/varejoServer';
 import { textoTroca } from '../../../lib/fornecedores';
 import { revPorCodigo } from '../../../lib/revendedoresServer';
 import { podeVender, precoComMargem } from '../../../lib/revendedores';
+import { regrasPublicas } from '../../../lib/fabricas';
 
 const CAMPOS = 'id,nome,titulo_publico,descricao,categoria,material,tamanhos,foto_url,preco_venda_sugerido';
 const CAMPOS_F = CAMPOS + ',fornecedor_id,preco_fornecedor,estoque_status,prazo_postagem_dias,prazo_confeccao_dias';
@@ -25,6 +26,7 @@ const formatar = (p) => ({
   prazoPostagem: p.prazo_postagem_dias || 0,
   prazoConfeccao: p.prazo_confeccao_dias || 0,
   troca: p.troca || null,
+  regras: p.regras || regrasPublicas(null),
 });
 
 // Tenta com os campos de fornecedor; se o SQL de fornecedores ainda não foi rodado, volta ao jeito antigo.
@@ -51,6 +53,24 @@ async function buscar(filtro, extra, margem = 0) {
   }
 }
 
+
+// Regras da fábrica de cada modelo da loja (lote mínimo, prazo, troca). Nunca devolve o nome da fábrica.
+// Se o SQL das fábricas ainda não foi rodado, todos os modelos ficam com as regras padrão.
+async function comRegras(linhas) {
+  const ids = linhas.filter((p) => !p.fornecedor_id).map((p) => p.id);
+  if (!ids.length) return linhas;
+  try {
+    const vinc = await sb(`rf_produtos?select=id,fabrica_id&id=in.(${ids.join(',')})`);
+    const fids = [...new Set(vinc.map((v) => v.fabrica_id).filter(Boolean))];
+    const fabs = fids.length ? await sb(`cal_fabricas?select=*&id=in.(${fids.join(',')})`) : [];
+    const fmap = new Map(fabs.map((f) => [f.id, f]));
+    const pf = new Map(vinc.map((v) => [v.id, v.fabrica_id]));
+    return linhas.map((p) => (p.fornecedor_id ? p : { ...p, regras: regrasPublicas(fmap.get(pf.get(p.id))) }));
+  } catch (e) {
+    return linhas;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ erro: 'Método não permitido.' });
   try {
@@ -68,12 +88,12 @@ export default async function handler(req, res) {
     const id = String(req.query.id || '');
     if (id) {
       if (!UUID.test(id)) return res.status(404).json({ erro: 'Produto não encontrado.' });
-      const [p] = await buscar(filtro, `&id=eq.${id}`, margem);
+      const [p] = await comRegras(await buscar(filtro, `&id=eq.${id}`, margem));
       if (!p) return res.status(404).json({ erro: 'Produto não encontrado.' });
       res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
       return res.status(200).json({ produto: formatar(p), revendedor: rev ? { nome: rev.nome, cidade: rev.cidade, estado: rev.estado } : null, revInativo });
     }
-    const linhas = await buscar(filtro, '&order=criado_em.desc&limit=200', margem);
+    const linhas = await comRegras(await buscar(filtro, '&order=criado_em.desc&limit=200', margem));
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
     return res.status(200).json({ produtos: linhas.map(formatar), revendedor: rev ? { nome: rev.nome, cidade: rev.cidade, estado: rev.estado } : null, revInativo });
   } catch (e) {

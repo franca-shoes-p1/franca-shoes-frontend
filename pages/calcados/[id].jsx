@@ -141,9 +141,28 @@ export default function Produto() {
             </div>
           )}
 
-          <div className={styles.aviso}>
-            🏭 Este modelo é separado direto na fábrica depois do pagamento: saída em {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}.
-          </div>
+          {!p.vendedor && (() => {
+            const r = p.regras || { lote_minimo: 1, prazo: VAREJO.prazoPreparoDias, defeito_dias: 30, troca_numeracao: true, obs: '' };
+            return (
+              <div className={styles.aviso}>
+                <b>🏭 Como funciona este modelo</b>
+                <ul style={{ margin: '6px 0 0', paddingLeft: 18, display: 'grid', gap: 4 }}>
+                  {r.lote_minimo > 1 ? (
+                    <li>
+                      A fábrica trabalha com <b>lote mínimo de {r.lote_minimo} pares</b>: o seu pedido vai para a fábrica quando juntarmos {r.lote_minimo} pares de vários clientes.
+                      Você acompanha em “Meu pedido”. Depois do lote, saída em {r.prazo}, {VAREJO.prazoEntregaInfo}.
+                    </li>
+                  ) : (
+                    <li>Separado direto na fábrica depois do pagamento: saída em {r.prazo}, {VAREJO.prazoEntregaInfo}.</li>
+                  )}
+                  <li>Defeito de fabricação: avise em até <b>{r.defeito_dias} dias</b> do recebimento.</li>
+                  <li>{r.troca_numeracao ? 'Troca de numeração: 1 troca por pedido, pelos Correios.' : 'Esta fábrica não aceita troca de numeração: confira o número com atenção.'}</li>
+                  {r.obs ? <li>{r.obs}</li> : null}
+                </ul>
+                <div style={{ marginTop: 6 }}><Link href="/como-comprar#trocas">Ver todas as regras de troca e devolução</Link></div>
+              </div>
+            );
+          })()}
 
           {p.descricao && <p className={styles.descricao}>{p.descricao}</p>}
           <ul className={styles.garantias}>

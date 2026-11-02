@@ -88,6 +88,12 @@ export default function Acompanhar() {
             <div style={{ marginTop: 6 }}>Total pago: <b>{brl(r.total)}</b> {Number(r.frete) > 0 ? `(com frete de ${brl(r.frete)})` : '(frete grátis)'}</div>
           </div>
 
+          {r.fila && (
+            <div className={styles.parcela} style={{ marginTop: 14 }}>
+              <b>Aguardando o lote da fábrica:</b> {r.fila.pares} de {r.fila.minimo} pares. Quando completar, compramos o seu pedido e avisamos pelo WhatsApp.
+            </div>
+          )}
+
           {rod && (
             <div className={styles.parcela} style={{ marginTop: 14 }}>
               <b>Retirada na rodoviária de {r.cidade}-{r.estado}.</b>{' '}

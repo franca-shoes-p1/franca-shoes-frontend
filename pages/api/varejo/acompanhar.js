@@ -1,6 +1,7 @@
 // Consulta pública do pedido: precisa do número E do e-mail da compra. Devolve só o necessário, nunca CPF, endereço completo nem custo.
 import { sb, txt } from '../../../lib/varejoServer';
 import { rotuloStatus } from '../../../lib/pedidosStatus';
+import { carregarFila, agruparFila, paresDoPedido } from '../../../lib/filaFabricas';
 
 // Freio simples contra tentativa em massa (por instância; ajuda, não substitui senha).
 const tentativas = new Map();
@@ -40,7 +41,19 @@ export default async function handler(req, res) {
         if (l) lote = { status: l.status, minimo: l.minimo, pedidos: quantos.length, data_saida: l.data_saida, cidade: l.cidade, estado: l.estado };
       } catch (e) {}
     }
+    // Pedido pago esperando o lote mínimo da fábrica: mostra "X de Y pares" (a fábrica com menos progresso).
+    let fila = null;
+    if (p.status === 'pago') {
+      try {
+        const base = await carregarFila();
+        const grupos = agruparFila(base);
+        const meus = Object.keys(paresDoPedido(p.itens, base.prod));
+        const g = grupos.filter((x) => meus.includes(x.fabrica_id) && x.minimo > 1 && !x.pronto).sort((a, b) => a.pares / a.minimo - b.pares / b.minimo)[0];
+        if (g) fila = { pares: g.pares, minimo: g.minimo };
+      } catch (e) {}
+    }
     return res.json({
+      fila,
       numero: p.numero,
       criado_em: p.criado_em,
       status: p.status,

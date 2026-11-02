@@ -1,13 +1,21 @@
 // Lista e cadastra modelos (calçados/acessórios). Só para quem fez login no painel.
 import { exigirAdmin } from '../../../../lib/adminAuth';
 import { sb } from '../../../../lib/varejoServer';
-import { validarProduto, CAMPOS_ADMIN } from '../../../../lib/produtosAdmin';
+import { validarProduto, CAMPOS_ADMIN, CAMPOS_ADMIN_FAB } from '../../../../lib/produtosAdmin';
 
 export default async function handler(req, res) {
   if (!exigirAdmin(req, res)) return;
   try {
     if (req.method === 'GET') {
-      const produtos = await sb(`rf_produtos?select=${CAMPOS_ADMIN}&order=criado_em.desc&limit=500`);
+      // Com o SQL das fábricas rodado, traz também a fábrica de cada modelo e a lista de fábricas.
+      let produtos;
+      let fabricas = [];
+      try {
+        produtos = await sb(`rf_produtos?select=${CAMPOS_ADMIN_FAB}&order=criado_em.desc&limit=500`);
+        fabricas = await sb('cal_fabricas?select=id,nome_interno,lote_minimo_pares&ativo=eq.true&order=nome_interno');
+      } catch (e) {
+        produtos = await sb(`rf_produtos?select=${CAMPOS_ADMIN}&order=criado_em.desc&limit=500`);
+      }
       // Marca os modelos cadastrados por operadores (para você revisar antes de publicar).
       // Se o SQL do catálogo ainda não foi rodado, simplesmente não marca.
       try {
@@ -15,7 +23,7 @@ export default async function handler(req, res) {
         const deOp = new Set(regs.map((r) => r.produto_id));
         produtos.forEach((p) => { if (deOp.has(p.id)) p.de_operador = true; });
       } catch (e) {}
-      return res.json({ produtos });
+      return res.json({ produtos, fabricas });
     }
     if (req.method === 'POST') {
       const c = req.body && typeof req.body === 'object' ? req.body : {};

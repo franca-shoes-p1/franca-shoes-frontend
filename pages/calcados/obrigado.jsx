@@ -35,13 +35,13 @@ export default function Obrigado() {
             {rodoviaria ? (
               <p style={{ margin: '10px 0' }}>
                 Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), seu pedido entra no lote da rodoviária que você escolheu.
-                O lote fecha com {LOTE.minimoPedidos} pedidos pagos; aí compramos na fábrica, separamos e levamos em viagem. Avisamos a data e o horário
+                O lote da cidade fecha com {LOTE.minimoPedidos} pedidos pagos e a fábrica pode ter lote mínimo próprio; quando os dois se completam, compramos, separamos e levamos em viagem. Avisamos a data e o horário
                 da retirada por WhatsApp e e-mail. Leve um documento com foto.
               </p>
             ) : (
               <p style={{ margin: '10px 0' }}>
-                Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), vamos separar seus calçados na fábrica e enviar.
-                Saída em {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}. Avisamos você por e-mail e WhatsApp.
+                Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), vamos comprar seus calçados na fábrica e enviar. Se a fábrica trabalha
+                com lote mínimo, o pedido espera o lote completar; o prazo de cada modelo está na página dele. Avisamos você por e-mail e WhatsApp.
               </p>
             )}
             <p style={{ margin: '10px 0' }}>
