@@ -55,6 +55,7 @@ export default function Produto() {
       tamanho: tamanho.trim(),
       quantidade: Math.max(1, Math.min(10, parseInt(qtd, 10) || 1)),
       foto: p.foto,
+      fornecedor: !!p.fornecedorId,
     });
     setAdicionado(true);
   }

@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
-import { VAREJO, limparCarrinho } from '../../lib/varejo';
+import { VAREJO, LOTE, limparCarrinho } from '../../lib/varejo';
 
 export default function Obrigado() {
   const { query } = useRouter();
   const falhou = query.falhou === '1';
   const pedido = String(query.pedido || '').replace(/\D/g, '');
+  const rodoviaria = query.e === 'r';
 
   useEffect(() => {
     // Só esvazia o carrinho se o cliente voltou do pagamento sem falha.
@@ -31,10 +32,18 @@ export default function Obrigado() {
         ) : (
           <>
             <h1>Pedido{pedido ? ` nº ${pedido}` : ''} recebido ✅</h1>
-            <p style={{ margin: '10px 0' }}>
-              Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), vamos separar seus calçados na fábrica e enviar.
-              Saída em {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}. Avisamos você por e-mail e WhatsApp.
-            </p>
+            {rodoviaria ? (
+              <p style={{ margin: '10px 0' }}>
+                Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), seu pedido entra no lote da rodoviária que você escolheu.
+                O lote fecha com {LOTE.minimoPedidos} pedidos pagos; aí compramos na fábrica, separamos e levamos em viagem. Avisamos a data e o horário
+                da retirada por WhatsApp e e-mail. Leve um documento com foto.
+              </p>
+            ) : (
+              <p style={{ margin: '10px 0' }}>
+                Assim que o Mercado Pago confirmar o pagamento (o PIX costuma cair na hora), vamos separar seus calçados na fábrica e enviar.
+                Saída em {VAREJO.prazoPreparoDias}, {VAREJO.prazoEntregaInfo}. Avisamos você por e-mail e WhatsApp.
+              </p>
+            )}
             <p style={{ margin: '10px 0' }}>
               Se o pagamento ainda estiver pendente, finalize pelo link que o Mercado Pago enviou ao seu e-mail.
             </p>
@@ -42,6 +51,7 @@ export default function Obrigado() {
               <a className={styles.botaoSecundario} href={`https://wa.me/${VAREJO.whatsapp}?text=${msg}`} target="_blank" rel="noopener noreferrer">
                 Falar no WhatsApp
               </a>
+              <Link className={styles.botaoSecundario} href="/como-comprar">Ver o passo a passo da compra</Link>
               <Link className={styles.botaoSecundario} href="/calcados">Continuar comprando</Link>
             </p>
           </>

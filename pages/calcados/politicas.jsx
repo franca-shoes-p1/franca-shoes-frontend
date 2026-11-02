@@ -2,7 +2,7 @@ import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
 import { VAREJO } from '../../lib/varejo';
 
-// RASCUNHO: revise com calma e ajuste ao que você realmente vai praticar antes de divulgar a loja.
+// Texto completo das regras. O resumo visual está em /como-comprar. Mantenha os dois iguais ao alterar prazos.
 export default function Politicas() {
   return (
     <VarejoLayout titulo="Trocas, devoluções e entrega">
@@ -26,14 +26,42 @@ export default function Politicas() {
           Defesa do Consumidor), com o produto sem uso e na embalagem. Avise pelo WhatsApp e orientamos o envio de volta e o reembolso.
         </p>
 
+        <h2>Como você recebe</h2>
+        <p>
+          <b>Retirada na rodoviária (frete grátis):</b> nas capitais atendidas, levamos os pedidos em viagem, em lote. O lote de cada cidade fecha
+          quando juntar pedidos pagos suficientes; então programamos a rota e avisamos a data e o horário da retirada por WhatsApp e e-mail.
+          Leve um documento com foto. Como depende de formar o lote, não prometemos uma data exata antes dele fechar.
+        </p>
+        <p>
+          <b>Correios:</b> o frete aparece no resumo antes do pagamento e o código de rastreio é enviado por WhatsApp e e-mail. Na região Norte, a
+          entrega é só pelos Correios. Não fazemos entrega em domicílio por conta própria.
+        </p>
+        <p>
+          Veja o caminho completo do pedido, com prazos e situações, em <a href="/como-comprar">Como comprar, passo a passo</a>.
+        </p>
+
         <h2>Troca de numeração</h2>
         <p>
-          Se o número não servir, fale conosco em até 7 dias após o recebimento. Confira a numeração com atenção antes de comprar, pois
-          cada fábrica tem sua forma.
+          Fazemos uma troca de numeração por pedido, pelos Correios, com o produto sem uso e na embalagem. Fale conosco pelo WhatsApp e
+          combinamos o custo do envio antes. Confira a numeração com atenção antes de comprar, pois cada fábrica tem sua forma.
         </p>
 
         <h2>Produto com defeito</h2>
-        <p>Se chegar com defeito de fabricação, trocamos ou devolvemos o valor. Mande fotos pelo WhatsApp.</p>
+        <p>
+          Se chegar com defeito de fabricação, você tem 30 dias a partir do recebimento para avisar. Trocamos ou devolvemos o valor, sem custo
+          para você. Mande fotos pelo WhatsApp.
+        </p>
+
+        <h2>Erro no pedido</h2>
+        <p>Se enviarmos modelo, cor ou número diferente do que você comprou, avise em até 7 dias. A troca é por nossa conta.</p>
+
+        <h2>Se o modelo acabar</h2>
+        <p>Falamos com você antes de qualquer coisa: você escolhe outro modelo ou o reembolso do valor pago.</p>
+
+        <h2>Seus dados</h2>
+        <p>
+          Usamos os seus dados só para o pedido, o pagamento, a entrega e o contato sobre a sua compra. Não vendemos nem repassamos seus dados.
+        </p>
 
         <h2>Modelos de fornecedores (loja de fábrica)</h2>
         <p>

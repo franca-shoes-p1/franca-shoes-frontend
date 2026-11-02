@@ -1,7 +1,7 @@
 // Cria o pedido de varejo e o link de pagamento do Mercado Pago (PIX e cartão).
 // Os preços e o frete são SEMPRE calculados aqui no servidor, nunca vêm do navegador.
 import { sb, UUID, txt, siteUrl } from '../../../lib/varejoServer';
-import { calcularFrete, ESTADOS, brl } from '../../../lib/varejo';
+import { calcularFrete, ESTADOS, brl, achaRodoviaria, ESTADOS_SO_CORREIOS } from '../../../lib/varejo';
 import { avisar } from '../../../lib/avisar';
 import { novoToken } from '../../../lib/fornecedoresServer';
 import { r2, cpfValido } from '../../../lib/fornecedores';
@@ -24,13 +24,24 @@ export default async function handler(req, res) {
   const numero = txt(c.numero, 15);
   const complemento = txt(c.complemento, 60);
   const bairro = txt(c.bairro, 80);
-  const cidade = txt(c.cidade, 80);
-  const estado = txt(c.estado, 2).toUpperCase();
+  let cidade = txt(c.cidade, 80);
+  let estado = txt(c.estado, 2).toUpperCase();
+
+  // Retirada na rodoviária (só modelos da própria loja): o cliente escolhe a capital; frete grátis; o pedido entra no lote da cidade.
+  const querRodoviaria = c.entrega === 'rodoviaria';
+  let rodoviaria = null;
+  if (querRodoviaria) {
+    const [rc, ruf] = String(c.rodoviaria || '').split('|');
+    rodoviaria = achaRodoviaria(txt(rc, 60), txt(ruf, 2));
+    if (!rodoviaria || ESTADOS_SO_CORREIOS.includes(rodoviaria.uf)) {
+      return res.status(400).json({ erro: 'Escolha uma das cidades com retirada na rodoviária.' });
+    }
+  }
 
   if (nome.length < 3) return res.status(400).json({ erro: 'Informe seu nome completo.' });
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return res.status(400).json({ erro: 'Informe um e-mail válido.' });
   if (whatsapp.length < 10) return res.status(400).json({ erro: 'Informe um WhatsApp com DDD.' });
-  if (cep.length !== 8 || !rua || !numero || !bairro || !cidade || !ESTADOS.includes(estado)) {
+  if (!querRodoviaria && (cep.length !== 8 || !rua || !numero || !bairro || !cidade || !ESTADOS.includes(estado))) {
     return res.status(400).json({ erro: 'Preencha o endereço de entrega completo.' });
   }
 
@@ -62,6 +73,9 @@ export default async function handler(req, res) {
       );
     }
     const doForn = produtos.filter((p) => p.fornecedor_id);
+    if (doForn.length && querRodoviaria) {
+      return res.status(400).json({ erro: 'Modelos de fornecedores são enviados pelos Correios. Escolha "Receber pelos Correios".' });
+    }
     if (doForn.length) {
       if (doForn.length !== produtos.length || new Set(doForn.map((p) => p.fornecedor_id)).size > 1) {
         return res.status(400).json({ erro: 'Cada pedido pode ter modelos de um só fornecedor. Faça um pedido para cada fornecedor.' });
@@ -86,7 +100,12 @@ export default async function handler(req, res) {
     }
 
     const subtotal = Math.round(itens.reduce((s, i) => s + i.preco * i.quantidade, 0) * 100) / 100;
-    const frete = calcularFrete(estado, subtotal);
+    // Rodoviária: sem frete; cidade/estado = a capital escolhida (é a chave do lote). Os campos de endereço são obrigatórios no banco, por isso o texto fixo.
+    if (rodoviaria) {
+      cidade = rodoviaria.cidade;
+      estado = rodoviaria.uf;
+    }
+    const frete = rodoviaria ? 0 : calcularFrete(estado, subtotal);
     const total = Math.round((subtotal + frete) * 100) / 100;
 
     const [pedido] = await sb('varejo_pedidos', {
@@ -95,14 +114,15 @@ export default async function handler(req, res) {
         cliente_nome: nome,
         email,
         whatsapp,
-        cep,
-        rua,
-        numero_casa: numero,
-        complemento: complemento || null,
-        bairro,
+        cep: rodoviaria ? '00000000' : cep,
+        rua: rodoviaria ? 'Retirada na rodoviária' : rua,
+        numero_casa: rodoviaria ? 's/n' : numero,
+        complemento: rodoviaria ? null : complemento || null,
+        bairro: rodoviaria ? 'Rodoviária' : bairro,
         cidade,
         estado,
-        observacao: [txt(c.observacao, 300), /^[A-Z0-9]{4,10}$/.test(String(c.ponto || '')) ? `[ponto:${c.ponto}]` : ''].filter(Boolean).join(' ') || null,
+        ...(rodoviaria ? { entrega: 'rodoviaria' } : {}),
+        observacao: [txt(c.observacao, 300), rodoviaria ? `[retirada:rodoviaria ${rodoviaria.cidade}-${rodoviaria.uf}]` : '', /^[A-Z0-9]{4,10}$/.test(String(c.ponto || '')) ? `[ponto:${c.ponto}]` : ''].filter(Boolean).join(' ') || null,
         itens,
         subtotal,
         frete,
@@ -128,9 +148,9 @@ export default async function handler(req, res) {
       external_reference: pedido.id,
       notification_url: `${base}/api/varejo/webhook`,
       back_urls: {
-        success: `${base}/calcados/obrigado?pedido=${pedido.numero}`,
-        pending: `${base}/calcados/obrigado?pedido=${pedido.numero}`,
-        failure: `${base}/calcados/obrigado?pedido=${pedido.numero}&falhou=1`,
+        success: `${base}/calcados/obrigado?pedido=${pedido.numero}${rodoviaria ? '&e=r' : ''}`,
+        pending: `${base}/calcados/obrigado?pedido=${pedido.numero}${rodoviaria ? '&e=r' : ''}`,
+        failure: `${base}/calcados/obrigado?pedido=${pedido.numero}&falhou=1${rodoviaria ? '&e=r' : ''}`,
       },
       auto_return: 'approved',
       statement_descriptor: 'FRANCA CALCADOS',
