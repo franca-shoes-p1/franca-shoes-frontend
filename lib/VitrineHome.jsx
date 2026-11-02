@@ -171,7 +171,6 @@ export default function VitrineHome() {
           <ul className={styles.provas}>
             <li>✔ Couro e materiais de fábrica</li>
             <li>✔ Retirada na rodoviária: frete grátis</li>
-            <li>✔ Compra paga libera 1 mês do portal</li>
           </ul>
         </div>
       </section>
@@ -230,9 +229,6 @@ export default function VitrineHome() {
           </div>
           <div className={styles.rodoviarias}>
             <strong>Retirada na rodoviária:</strong> {CIDADES_RODOVIARIA.join(' · ')}.
-          </div>
-          <div className={styles.bonus}>
-            🎁 <strong>Bônus:</strong> quem compra ganha 1 mês de acesso ao portal do site, com todos os conteúdos da plataforma.
           </div>
         </div>
       </section>

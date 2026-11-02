@@ -97,3 +97,8 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Nova pagina publica /como-comprar (pages/como-comprar.jsx + styles/comoComprar.module.css): 10 etapas (abas rodoviaria x Correios), prazos, capitais, significado das situacoes do pedido, trocas e devolucoes, perguntas frequentes. Linkada no topo/rodape da loja, no rodape do site, na faixa Vitrine da home, no checkout e na pagina de agradecimento.
 - Politicas (pages/calcados/politicas.jsx) atualizadas: desistencia 7 dias (CDC), defeito 30 dias, erro no pedido 7 dias, 1 troca de numeracao por pedido pelos Correios (custo do envio combinado antes), modelo esgotado, dados pessoais.
 - Para conferir antes de divulgar: prazo maximo de espera do lote, quem paga o frete da troca de numeracao, dados do vendedor (CPF e endereco) no rodape.
+
+## Registro 02/11/2026 - bonus do portal (1 mes gratis na compra)
+- Situacao real: o banco ja libera 30 dias em cal_acessos_portal quando o pedido vira "pago" (gatilho t_cal_pedido_mudou), mas NENHUMA pagina do site consulta essa tabela ainda. Nao existe login de cliente nem area bloqueada, entao o bonus ainda nao e entregue.
+- Por isso o aviso "compra libera 1 mes de portal" foi retirado de /como-comprar e da previa /nova-home ate a area do cliente existir.
+- Para entregar: criar area do cliente (login por e-mail + numero do pedido), definir o que ela libera e como cobra depois do mes gratis (assinatura).
