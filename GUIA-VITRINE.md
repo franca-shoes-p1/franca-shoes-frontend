@@ -75,3 +75,8 @@ Em cada fluxo troque `COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN` pelo valor da 
 4. Pedido reembolsado ou cancelado antes do pagamento cancela os valores pendentes.
 
 Antes do primeiro pagamento, confirme com um contador como pagar e registrar valores para pessoas sem vínculo.
+
+## Registro de implantacao (01-02/11/2026)
+- Telegram: robo "Vitrine Avisos" (@vitrine_avisos_ricardo_bot) e canal publico @vitrine_igrejaeco (robo e admin do canal). Chat de avisos do Ricardo: 8902658390.
+- n8n (n8n.igreja.eco.br): credencial "Telegram Vitrine" criada; fluxos importados e PUBLICADOS: "Vitrine - garimpo diario 6h (Telegram)" e "Vitrine - divulgacao diaria 9h (resumo + canal do Telegram)". Ambos testados com sucesso (token RADAR_N8N_TOKEN colado so no n8n).
+- Pendente: fluxo "apuracao semanal" (n8n/vitrine-apuracao-semanal.json); cadastrar os 2 sapatos em /admin/calcados; cadastrar fontes em /admin/vitrine > Fontes de busca; rodar supabase-vitrine-cartoes.sql depois do SQL da Oficina.
