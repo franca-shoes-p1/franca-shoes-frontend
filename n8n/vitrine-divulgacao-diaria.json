@@ -1,0 +1,195 @@
+{
+ "name": "Vitrine - divulgação diária 9h (resumo + canal do Telegram)",
+ "nodes": [
+  {
+   "id": "d1",
+   "name": "Todo dia às 9h",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    0,
+    0
+   ],
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "cronExpression",
+       "expression": "0 9 * * *"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "d2",
+   "name": "Criar divulgação do dia",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    260,
+    0
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://www.igreja.eco.br/api/vitrine/divulgar",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "x-radar-token",
+       "value": "COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN"
+      }
+     ]
+    },
+    "options": {
+     "timeout": 90000
+    }
+   }
+  },
+  {
+   "id": "d3",
+   "name": "Resumo para mim",
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    520,
+    -120
+   ],
+   "parameters": {
+    "chatId": "COLE_AQUI_O_ID_DO_SEU_CHAT",
+    "text": "={{ $json.texto }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "credentials": {
+    "telegramApi": {
+     "id": "",
+     "name": "Telegram Radar"
+    }
+   }
+  },
+  {
+   "id": "d4",
+   "name": "Separar posts",
+   "type": "n8n-nodes-base.splitOut",
+   "typeVersion": 1,
+   "position": [
+    520,
+    120
+   ],
+   "parameters": {
+    "fieldToSplitOut": "posts_telegram",
+    "options": {}
+   }
+  },
+  {
+   "id": "d5",
+   "name": "Publicar no canal",
+   "type": "n8n-nodes-base.telegram",
+   "typeVersion": 1.2,
+   "position": [
+    780,
+    120
+   ],
+   "parameters": {
+    "chatId": "@vitrine_igrejaeco",
+    "text": "={{ $json.texto }}",
+    "additionalFields": {
+     "appendAttribution": false
+    }
+   },
+   "credentials": {
+    "telegramApi": {
+     "id": "",
+     "name": "Telegram Radar"
+    }
+   }
+  },
+  {
+   "id": "d6",
+   "name": "Marcar como enviado",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    1040,
+    120
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://www.igreja.eco.br/api/vitrine/enviado",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "x-radar-token",
+       "value": "COLE_AQUI_O_MESMO_VALOR_DE_RADAR_N8N_TOKEN"
+      }
+     ]
+    },
+    "options": {
+     "timeout": 30000
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify({ id: $('Separar posts').item.json.id }) }}"
+   }
+  }
+ ],
+ "connections": {
+  "Todo dia às 9h": {
+   "main": [
+    [
+     {
+      "node": "Criar divulgação do dia",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Criar divulgação do dia": {
+   "main": [
+    [
+     {
+      "node": "Resumo para mim",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "Separar posts",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Separar posts": {
+   "main": [
+    [
+     {
+      "node": "Publicar no canal",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Publicar no canal": {
+   "main": [
+    [
+     {
+      "node": "Marcar como enviado",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "timezone": "America/Sao_Paulo"
+ }
+}
