@@ -46,7 +46,6 @@ const PASSOS = [
     itens: [
       'Avisamos por e-mail e WhatsApp.',
       'Seu pedido só segue para a fábrica depois da confirmação do pagamento.',
-      'A compra libera 1 mês de acesso ao portal do site, sem custo adicional.',
     ],
   },
   {
