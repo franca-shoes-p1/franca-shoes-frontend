@@ -8,6 +8,7 @@ import Redes from './Redes';
 const COLUNAS = [
   { t: 'Negócios', itens: [
     ['👟', 'Loja de Calçados Pronta', '/calcados'],
+    ['🧭', 'Como comprar, passo a passo', '/como-comprar'],
     ['📍', 'Radar de Pontos', '/radar'],
     ['🧩', 'Ateliê Sob Medida', '/atelie'],
     ['🌐', 'Fábrica de Sites', '/sites'],

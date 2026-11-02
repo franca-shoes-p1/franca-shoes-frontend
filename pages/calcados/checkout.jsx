@@ -3,11 +3,11 @@ import Link from 'next/link';
 import VarejoLayout from '../../lib/VarejoLayout';
 import styles from '../../styles/varejo.module.css';
 import {
-  brl, lerCarrinho, chaveItem, subtotalCarrinho, calcularFrete, ESTADOS, VAREJO, lerPonto, lerRev,
+  brl, lerCarrinho, chaveItem, subtotalCarrinho, calcularFrete, ESTADOS, VAREJO, lerPonto, lerRev, RODOVIARIAS_VAREJO, LOTE,
 } from '../../lib/varejo';
 
 const VAZIO = {
-  nome: '', cpf: '', autorizo: false, email: '', whatsapp: '', cep: '', rua: '', numero: '', complemento: '', bairro: '', cidade: '', estado: '', observacao: '', site: '',
+  nome: '', cpf: '', autorizo: false, email: '', whatsapp: '', cep: '', rua: '', numero: '', complemento: '', bairro: '', cidade: '', estado: '', observacao: '', site: '', entrega: 'correios', rodoviaria: '',
 };
 
 export default function Checkout() {
@@ -24,7 +24,10 @@ export default function Checkout() {
 
   const mudar = (e) => setF((p) => ({ ...p, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
   const subtotal = subtotalCarrinho(itens);
-  const frete = f.estado ? calcularFrete(f.estado, subtotal) : null;
+  // Retirada na rodoviária só para modelos da própria loja (modelo de fornecedor vai pelos Correios).
+  const temFornecedor = itens.some((i) => i.fornecedor);
+  const rod = f.entrega === 'rodoviaria' && !temFornecedor;
+  const frete = rod ? 0 : f.estado ? calcularFrete(f.estado, subtotal) : null;
   const total = subtotal + (frete || 0);
 
   async function buscarCep(valor) {
@@ -55,6 +58,8 @@ export default function Checkout() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...f,
+          entrega: rod ? 'rodoviaria' : 'correios',
+          rodoviaria: rod ? f.rodoviaria : '',
           ponto: lerPonto(),
           rev: lerRev(),
           itens: itens.map((i) => ({ id: i.id, tamanho: i.tamanho, quantidade: i.quantidade })),
@@ -108,7 +113,53 @@ export default function Checkout() {
             </div>
           </div>
 
-          <h2 style={{ marginTop: 22 }}>Endereço de entrega</h2>
+          <h2 style={{ marginTop: 22 }}>Como você quer receber?</h2>
+          {temFornecedor ? (
+            <p className={styles.parcela}>Este pedido tem modelos de fornecedor, enviados pelos Correios para o seu endereço.</p>
+          ) : (
+            <div className={styles.formGrade}>
+              <label className={`${styles.grupo} ${styles.cheio}`} style={{ border: '2px solid ' + (rod ? '#0a6a35' : '#d6dee9'), borderRadius: 12, padding: 12, cursor: 'pointer' }}>
+                <span style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <input type="radio" name="entrega" value="rodoviaria" checked={rod} onChange={mudar} style={{ marginTop: 4 }} />
+                  <span>
+                    <b>Retirar na rodoviária da capital: frete grátis</b>
+                    <br />
+                    <small>
+                      Levamos em viagem, em lote: o lote da sua cidade fecha com {LOTE.minimoPedidos} pedidos pagos. Avisamos a data e o horário pelo WhatsApp.
+                      Não fazemos entrega em domicílio.
+                    </small>
+                  </span>
+                </span>
+              </label>
+              <label className={`${styles.grupo} ${styles.cheio}`} style={{ border: '2px solid ' + (!rod ? '#0a6a35' : '#d6dee9'), borderRadius: 12, padding: 12, cursor: 'pointer' }}>
+                <span style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <input type="radio" name="entrega" value="correios" checked={!rod} onChange={mudar} style={{ marginTop: 4 }} />
+                  <span>
+                    <b>Receber pelos Correios no meu endereço</b>
+                    <br />
+                    <small>O frete aparece no resumo antes de pagar. Serve para todo o Brasil, inclusive a região Norte.</small>
+                  </span>
+                </span>
+              </label>
+              {rod && (
+                <div className={`${styles.grupo} ${styles.cheio}`}>
+                  <label>Rodoviária de retirada *</label>
+                  <select className={styles.campo} name="rodoviaria" value={f.rodoviaria} onChange={mudar} required>
+                    <option value="">Escolha a cidade</option>
+                    {RODOVIARIAS_VAREJO.map((r) => (
+                      <option key={r.cidade} value={`${r.cidade}|${r.uf}`}>{r.cidade} ({r.uf})</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          )}
+          <p style={{ marginTop: 8, fontSize: '0.85rem' }}>
+            Dúvidas? Veja o <Link href="/como-comprar">passo a passo completo da compra</Link>.
+          </p>
+
+          {!rod && <h2 style={{ marginTop: 22 }}>Endereço de entrega</h2>}
+          {!rod && (
           <div className={styles.formGrade}>
             <div className={styles.grupo}>
               <label>CEP *</label>
@@ -160,8 +211,9 @@ export default function Checkout() {
               <label>Observação (opcional)</label>
               <input className={styles.campo} name="observacao" value={f.observacao} onChange={mudar} maxLength={300} placeholder="Ponto de referência, melhor horário…" />
             </div>
-            <input name="site" value={f.site} onChange={mudar} tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
           </div>
+          )}
+          <input name="site" value={f.site} onChange={mudar} tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
         </div>
 
         <div className={styles.caixa}>
@@ -193,7 +245,7 @@ export default function Checkout() {
               Li o <Link href="/calcados/politicas">regulamento</Link>.
             </span>
           </label>
-          <button type="submit" className={styles.botaoPrincipal} disabled={enviando || frete === null}>
+          <button type="submit" className={styles.botaoPrincipal} disabled={enviando || (rod ? !f.rodoviaria : frete === null)}>
             {enviando ? 'Abrindo pagamento…' : 'Pagar com PIX ou cartão'}
           </button>
           <p className={styles.parcela} style={{ marginTop: 10 }}>

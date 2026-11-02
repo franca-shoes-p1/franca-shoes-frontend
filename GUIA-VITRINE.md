@@ -90,3 +90,10 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Novo componente lib/VitrineFaixa.jsx (+ styles/vitrineFaixa.module.css), inserido em pages/index.jsx entre a Campanha (verde) e o Canal (azul).
 - Mostra ate 8 modelos publicados (/api/varejo/catalogo), busca por texto, filtro por categoria e botao "Pedir pelo WhatsApp" (assistente da vitrine). Botao "Ver a vitrine completa" leva a /calcados.
 - Cadastrou em /admin/calcados, aparece na home sozinho. Nenhum SQL novo.
+
+## Registro 02/11/2026 - checkout com retirada na rodoviaria + pagina "Como comprar"
+- Checkout (pages/calcados/checkout.jsx e pages/api/varejo/pedido.js): o cliente escolhe "Retirar na rodoviaria" (frete gratis) ou "Correios". Na rodoviaria escolhe a capital (lista RODOVIARIAS_VAREJO em lib/varejo.js); o pedido grava entrega='rodoviaria' e cidade/estado da capital, o que faz o gatilho t_cal_pedido_mudou colocar o pedido pago no lote da cidade (fecha com 10 pedidos pagos). Modelos de fornecedor so por Correios. Sem SQL novo (colunas ja existiam).
+- Capitais com retirada: Belo Horizonte, Rio de Janeiro, Goiania, Curitiba, Campo Grande, Vitoria, Salvador, Florianopolis, Sao Paulo. Regiao Norte: so Correios. Sem entrega em domicilio.
+- Nova pagina publica /como-comprar (pages/como-comprar.jsx + styles/comoComprar.module.css): 10 etapas (abas rodoviaria x Correios), prazos, capitais, significado das situacoes do pedido, trocas e devolucoes, perguntas frequentes. Linkada no topo/rodape da loja, no rodape do site, na faixa Vitrine da home, no checkout e na pagina de agradecimento.
+- Politicas (pages/calcados/politicas.jsx) atualizadas: desistencia 7 dias (CDC), defeito 30 dias, erro no pedido 7 dias, 1 troca de numeracao por pedido pelos Correios (custo do envio combinado antes), modelo esgotado, dados pessoais.
+- Para conferir antes de divulgar: prazo maximo de espera do lote, quem paga o frete da troca de numeracao, dados do vendedor (CPF e endereco) no rodape.

@@ -121,7 +121,7 @@ export default function VitrineFaixa() {
           <Link href="/calcados" className={`${s.botao} ${s.principal}`}>
             Ver a vitrine completa{lista.length > MAX_NA_HOME ? ` (${lista.length} modelos)` : ''}
           </Link>
-          <a href="#calcados" className={`${s.botao} ${s.contorno}`}>Quero montar a minha loja</a>
+          <Link href="/como-comprar" className={`${s.botao} ${s.contorno}`}>Como comprar, passo a passo</Link>
         </div>
 
         <ul className={s.faixaInfo}>
