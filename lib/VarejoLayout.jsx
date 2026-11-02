@@ -33,6 +33,7 @@ export default function VarejoLayout({ titulo, children }) {
           <nav className={styles.topoLinks}>
             <Link href="/como-comprar">Como comprar</Link>
             <Link href="/acompanhar">Meu pedido</Link>
+            <Link href="/area-do-cliente">Área do cliente</Link>
             <a href={`https://wa.me/${VAREJO.whatsapp}`} target="_blank" rel="noopener noreferrer">
               WhatsApp
             </a>
@@ -47,6 +48,7 @@ export default function VarejoLayout({ titulo, children }) {
         <span>© {new Date().getFullYear()} {VAREJO.nomeLoja} — Franca, SP</span>
         <Link href="/como-comprar">Como comprar</Link>
         <Link href="/acompanhar">Acompanhar pedido</Link>
+        <Link href="/assinar">Passe de assinante</Link>
         <Link href="/calcados/politicas">Trocas, devoluções e entrega</Link>
         <Link href="/fornecedor">Sou fornecedor: quero vender aqui</Link>
         <Link href="/">Portal</Link>

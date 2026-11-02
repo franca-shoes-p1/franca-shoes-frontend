@@ -46,6 +46,7 @@ const PASSOS = [
     itens: [
       'Avisamos por e-mail e WhatsApp.',
       'Seu pedido só segue para a fábrica depois da confirmação do pagamento.',
+      'Quem compra um produto físico ganha 30 dias de passe de assinante, com desconto nas próximas compras. Veja em Área do cliente.',
     ],
   },
   {
@@ -140,6 +141,7 @@ const FAQ = [
   ['O preço pode mudar depois que eu pagar?', 'Não. O valor mostrado no resumo, antes de pagar, é o valor do pedido.'],
   ['É seguro pagar?', 'O pagamento acontece no Mercado Pago, com PIX ou cartão. Nós não vemos nem guardamos os dados do seu cartão.'],
   ['O que acontece se o modelo acabar?', 'Falamos com você antes de qualquer coisa. Você escolhe entre outro modelo ou o reembolso do valor pago.'],
+  ['O que é o passe de assinante?', 'É opcional. Por um valor mensal (30 dias) você tem desconto nos produtos e serviços do site e acessa a Área do cliente. O desconto de cada produto aparece na página dele. Quem não assina compra normalmente pelo preço geral. Veja em Passe de assinante.'],
   ['Como falo com vocês?', 'Pelo WhatsApp. Informe o número do pedido para a gente localizar mais rápido.'],
   ['Para que usam os meus dados?', 'Só para o pedido, o pagamento, a entrega e o contato sobre a sua compra. Não vendemos nem repassamos seus dados.'],
 ];

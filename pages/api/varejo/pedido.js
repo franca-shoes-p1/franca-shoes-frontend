@@ -6,6 +6,7 @@ import { avisar } from '../../../lib/avisar';
 import { novoToken } from '../../../lib/fornecedoresServer';
 import { r2, cpfValido } from '../../../lib/fornecedores';
 import { revPorCodigo } from '../../../lib/revendedoresServer';
+import { membroAtivo, carregarConfigAssinatura, precosAssinante } from '../../../lib/assinaturaServer';
 import { podeVender, precoComMargem, margemUnitaria } from '../../../lib/revendedores';
 
 const so_digitos = (v) => String(v ?? '').replace(/\D/g, '');
@@ -99,6 +100,22 @@ export default async function handler(req, res) {
       });
     }
 
+    // Assinante com passe ativo (sessão assinada): desconto por produto, limitado pela margem e pelo teto do ramo.
+    // O fundo dos operadores continua sobre o preço GERAL (guardado em subtotal_geral); o desconto sai da parte do dono.
+    const subtotalGeral = Math.round(itens.reduce((s, i) => s + i.preco * i.quantidade, 0) * 100) / 100;
+    let descontoAssinante = 0;
+    try {
+      const membro = await membroAtivo(req);
+      if (membro) {
+        const cfg = await carregarConfigAssinatura();
+        const mapa = await precosAssinante(produtos.map((p) => ({ ...p, preco: p.preco_venda_sugerido })), cfg);
+        itens.forEach((i) => {
+          const d = mapa.get(i.id);
+          if (d && d.desconto > 0) { i.preco_geral = i.preco; i.preco = d.preco_assinante; }
+        });
+        descontoAssinante = Math.round((subtotalGeral - itens.reduce((s, i) => s + i.preco * i.quantidade, 0)) * 100) / 100;
+      }
+    } catch (e) { descontoAssinante = 0; }
     const subtotal = Math.round(itens.reduce((s, i) => s + i.preco * i.quantidade, 0) * 100) / 100;
     // Rodoviária: sem frete; cidade/estado = a capital escolhida (é a chave do lote). Os campos de endereço são obrigatórios no banco, por isso o texto fixo.
     if (rodoviaria) {
@@ -125,6 +142,7 @@ export default async function handler(req, res) {
         observacao: [txt(c.observacao, 300), rodoviaria ? `[retirada:rodoviaria ${rodoviaria.cidade}-${rodoviaria.uf}]` : '', /^[A-Z0-9]{4,10}$/.test(String(c.ponto || '')) ? `[ponto:${c.ponto}]` : ''].filter(Boolean).join(' ') || null,
         itens,
         subtotal,
+        ...(descontoAssinante > 0 ? { subtotal_geral: subtotalGeral } : {}),
         frete,
         total,
       }),
