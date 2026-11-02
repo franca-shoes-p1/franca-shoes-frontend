@@ -43,7 +43,7 @@ O resultado (64 letras e números) é o token. Cole o mesmo valor na Vercel (`RA
 ### Como achar o ID do seu chat e do canal
 
 - **Seu chat:** no Telegram, procure o robô `@userinfobot`, mande “oi” e ele responde o seu ID (um número).
-- **Canal público:** o fluxo já vem com `@igrejaeco_ricardo`. Isso só funciona se esse endereço for um **canal** (não uma conta pessoal) e se o seu robô for **administrador** dele. Se não for, troque pelo endereço do canal certo.
+- **Canal público:** o fluxo já vem com `@vitrine_igrejaeco` (canal criado em 01/11/2026, com o robô Vitrine Avisos como admin). Isso só funciona se esse endereço for um **canal** (não uma conta pessoal) e se o seu robô for **administrador** dele. Se não for, troque pelo endereço do canal certo.
 
 ## Passo 3: fluxos no n8n
 

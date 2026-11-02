@@ -94,7 +94,7 @@
     120
    ],
    "parameters": {
-    "chatId": "@igrejaeco_ricardo",
+    "chatId": "@vitrine_igrejaeco",
     "text": "={{ $json.texto }}",
     "additionalFields": {
      "appendAttribution": false
