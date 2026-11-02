@@ -7,6 +7,7 @@ import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
+import VitrineFaixa from '../lib/VitrineFaixa';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
@@ -180,6 +181,7 @@ export default function Home() {
       <main id="topo">
         <FestaBanner />
         <CampanhaBanner />
+        <VitrineFaixa />
         <IgrejaHero />
         <AtelieBanner />
         <LivrosBanner />
