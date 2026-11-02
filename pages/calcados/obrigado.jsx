@@ -51,6 +51,7 @@ export default function Obrigado() {
               <a className={styles.botaoSecundario} href={`https://wa.me/${VAREJO.whatsapp}?text=${msg}`} target="_blank" rel="noopener noreferrer">
                 Falar no WhatsApp
               </a>
+              <Link className={styles.botaoSecundario} href={`/acompanhar${pedido ? '?pedido=' + pedido : ''}`}>Acompanhar o pedido</Link>
               <Link className={styles.botaoSecundario} href="/como-comprar">Ver o passo a passo da compra</Link>
               <Link className={styles.botaoSecundario} href="/calcados">Continuar comprando</Link>
             </p>

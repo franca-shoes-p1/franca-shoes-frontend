@@ -284,7 +284,7 @@ export default function ComoComprar() {
         <div className={s.cont}>
           <p className={s.sobre}>Acompanhe</p>
           <h2>O que cada situação do pedido significa</h2>
-          <p className={s.sub}>Avisamos você por WhatsApp e e-mail a cada etapa importante. Se quiser saber como está, é só mandar o número do pedido.</p>
+          <p className={s.sub}>Avisamos você por WhatsApp e e-mail a cada etapa importante. Para ver como está o seu pedido a qualquer hora, use a página <Link href="/acompanhar" style={{ color: '#0a6a35', fontWeight: 800, textDecoration: 'underline' }}>Acompanhar pedido</Link>.</p>
           <ul className={s.status}>
             {STATUS.map(([t, d, cor]) => (
               <li key={t}><span className={s.ponto} style={{ background: cor }} /><div><b>{t}</b><small>{d}</small></div></li>
