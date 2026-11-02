@@ -91,7 +91,7 @@ export default function Carrinho() {
               Continuar para entrega e pagamento
             </Link>
             <p className={styles.parcela} style={{ marginTop: 10 }}>
-              Separado na fábrica em {VAREJO.prazoPreparoDias} após o pagamento.
+              Depois do pagamento o pedido segue para a fábrica. O prazo e o lote mínimo de cada modelo estão na página dele.
             </p>
             <p style={{ marginTop: 12 }}>
               <Link href="/calcados">← Continuar comprando</Link>

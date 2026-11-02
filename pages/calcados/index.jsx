@@ -35,8 +35,8 @@ export default function Vitrine() {
       {rev && <div className={styles.faixa}>🤝 Você está sendo atendido por <strong>{rev.nome}</strong>{rev.cidade ? ` (${rev.cidade}/${rev.estado})` : ''}. Os preços já são os dele.</div>}
       {revInativo && <div className={styles.erro}>Este link de revendedor está inativo no momento. Os preços abaixo são os preços normais do site.</div>}
       <div className={styles.faixa}>
-        🏭 Calçados e acessórios direto das fábricas de Franca. Pague com <strong>PIX ou cartão</strong>. Seu pedido é separado na
-        fábrica em {VAREJO.prazoPreparoDias} e enviado para você.
+        🏭 Calçados e acessórios direto das fábricas de Franca. Pague com <strong>PIX ou cartão</strong>. Cada fábrica tem o seu prazo e, às
+        vezes, um lote mínimo: isso aparece na página de cada modelo. Veja o <a href="/como-comprar">passo a passo da compra</a>.
       </div>
 
       <div className={styles.filtros}>
