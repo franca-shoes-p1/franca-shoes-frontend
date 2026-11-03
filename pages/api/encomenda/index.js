@@ -2,9 +2,9 @@
 // Guarda em rf_encomendas e avisa o Telegram pelo n8n. O cliente NÃO paga nada aqui:
 // a cotação vem depois e o pagamento é em dinheiro, na visita.
 import crypto from 'crypto';
-import { sb, txt } from '../../lib/varejoServer';
-import { ESTADOS } from '../../lib/varejo';
-import { avisar } from '../../lib/avisar';
+import { sb, txt } from '../../../lib/varejoServer';
+import { ESTADOS } from '../../../lib/varejo';
+import { avisar } from '../../../lib/avisar';
 
 const tentativas = new Map(); // limite simples por IP (reinicia quando a instância reinicia)
 function limite(ip) {

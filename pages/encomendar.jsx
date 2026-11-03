@@ -135,6 +135,7 @@ function Formulario() {
         </ol>
         <div className={s.botoes} style={{ flexDirection: 'column' }}>
           <a className={`${s.botao} ${s.verde}`} href={WHATS(`Olá! Fiz a encomenda ${ok} no site e quero acompanhar.`)} target="_blank" rel="noopener noreferrer">Acompanhar pelo WhatsApp</a>
+          <Link className={`${s.botao} ${s.claro}`} href={ok !== 'recebida' ? `/minha-encomenda?c=${ok}` : '/minha-encomenda'}>Acompanhar ou sair da fila</Link>
           <Link className={`${s.botao} ${s.claro}`} href="/entrega-em-casa#pacote">Conhecer o pacote tecnológico</Link>
         </div>
       </div>
