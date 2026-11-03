@@ -8,6 +8,7 @@ const ITENS = [
   { href: '/admin/pontos', t: '📍 Mapa e pontos' },
   { href: '/admin/captacao', t: '🚀 Captação' },
   { href: '/admin/material', t: '🖨️ Materiais' },
+  { href: '/admin/anuncios', t: '📣 Anúncios' },
   { href: '/admin/calcados', t: '👟 Calçados' },
   { href: '/admin/pedidos', t: '📦 Pedidos' },
   { href: '/admin/encomendas', t: '🏠 Encomendas' },
