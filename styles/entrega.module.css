@@ -152,3 +152,20 @@
   .banner *, .hero * { animation: none !important; }
   .esq > * { opacity: 1; transform: none; }
 }
+
+/* acompanhar a encomenda (/minha-encomenda) */
+.acomp { max-width: 720px; margin: 0 auto; padding: 0 16px 70px; }
+.acomp .heroForm { margin-top: -34px; position: relative; }
+.linhaTempo { list-style: none; margin: 18px 0 0; padding: 0; }
+.linhaTempo li { position: relative; padding: 0 0 18px 38px; font-size: 15px; color: #6b8b82; }
+.linhaTempo li::before { content: ""; position: absolute; left: 7px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: #cfe7de; border: 3px solid #f4fffb; box-shadow: 0 0 0 2px #cfe7de; }
+.linhaTempo li::after { content: ""; position: absolute; left: 14px; top: 22px; bottom: -2px; width: 2px; background: #cfe7de; }
+.linhaTempo li:last-child::after { display: none; }
+.linhaTempo li.feito { color: #0b2a26; }
+.linhaTempo li.feito::before { background: #0d6b5c; box-shadow: 0 0 0 2px #0d6b5c; }
+.linhaTempo li.feito::after { background: #0d6b5c; }
+.linhaTempo li.agora { color: #0b2a26; font-weight: 800; }
+.linhaTempo li.agora::before { background: #ffb020; box-shadow: 0 0 0 2px #ffb020, 0 0 0 7px rgba(255, 176, 32, 0.3); }
+.etiqueta { display: inline-block; border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 800; background: #fff3d6; color: #6b4300; border: 1px solid #f3cf8a; }
+.etiqueta.fim { background: #fde6e4; color: #8c1d14; border-color: #e6a29c; }
+.perigo { background: #fff; color: #8c1d14 !important; border: 2px solid #e6a29c; }

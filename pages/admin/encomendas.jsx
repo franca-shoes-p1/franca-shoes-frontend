@@ -34,7 +34,7 @@ function mensagem(e) {
   const base = `Olá, ${nome}! Aqui é da Entrega em Casa, sobre a sua encomenda ${e.codigo}. `;
   if (e.status === 'aguardando_cotacao') return base + 'Estamos procurando o melhor preço para o seu pedido e já avisamos.';
   if (e.status === 'cotado') {
-    return base + (e.preco_cotado ? `O preço ficou em ${brl(e.preco_cotado)} por unidade, pago em dinheiro só na visita, depois de provar. ` : '') + 'Você quer seguir com a encomenda? Pode desistir quando quiser.';
+    return base + (e.preco_cotado ? `O preço ficou em ${brl(e.preco_cotado)} por unidade, pago em dinheiro só na visita, depois de provar. ` : '') + 'Para seguir, confirme em https://www.igreja.eco.br/minha-encomenda?c=' + e.codigo + ' (ou responda aqui). Você pode desistir quando quiser.';
   }
   if (e.status === 'aguardando_lote') return base + 'Seu pedido está na fila do lote mínimo da fábrica. Assim que fechar, avisamos por aqui.';
   if (e.status === 'lote_fechado' || e.status === 'comprado') return base + 'O lote fechou e a compra está andando. Em breve combinamos a rota e o horário da visita.';
@@ -178,7 +178,7 @@ export default function AdminEncomendas() {
               {aba === 'cidades' && (
                 <div className="ea-card">
                   <h2>Cidades e mínimo para a rota</h2>
-                  <div className="ea-mu">Uma cidade entra na rota com {MIN_CIDADE} visitas confirmadas (quem já recebeu cotação e segue na fila). Valor inicial, para ajustar depois da primeira rota.</div>
+                  <div className="ea-mu">Uma cidade entra na rota com {MIN_CIDADE} visitas confirmadas (quem aceitou a cotação, pelo site ou pelo WhatsApp, e segue na fila). Valor inicial, para ajustar depois da primeira rota.</div>
                   {!listaCidades.length && <div className="ea-mu" style={{ marginTop: 10 }}>Ainda não há encomendas ativas.</div>}
                   {listaCidades.map((c) => (
                     <div key={c.uf + c.cidade} className="en-it">

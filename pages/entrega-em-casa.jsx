@@ -69,7 +69,7 @@ const FAQ = [
   ['Preciso pagar para fazer a encomenda?', 'Não. O formulário é grátis e não pede cartão nem PIX. Você só paga na visita, em dinheiro, depois de provar o produto.'],
   ['Por que só dinheiro?', 'Nas visitas de calçados e acessórios o recebimento é só em dinheiro. Tenha o valor aproximado separado; a cotação mostra o preço antes da visita.'],
   ['Quanto tempo demora?', 'Não há prazo fixo. A viagem sai quando os pedidos completam o lote mínimo da empresa e há visitas suficientes na sua cidade. Você acompanha o andamento por WhatsApp.'],
-  ['Posso desistir da fila?', 'Sim, a qualquer momento. É só avisar pelo WhatsApp com o código da encomenda.'],
+  ['Posso desistir da fila?', 'Sim, a qualquer momento. Você sai sozinho pela página Minha encomenda (com o código e o seu WhatsApp) ou avisa pelo WhatsApp.'],
   ['E se eu não gostar do produto na visita?', 'Você não paga nada. O par volta para a bag e é oferecido na próxima parada ou no site.'],
   ['Minha cidade entra na rota?', 'Entra quando houver visitas confirmadas suficientes. Hoje o mínimo é de 6 por cidade. Enquanto isso, você fica em lista de espera para a rota seguinte.'],
   ['Qualquer produto pode ser encomendado?', 'Qualquer um que possa ser comprado e retirado em mãos, direto na empresa, em Franca, e que caiba na bagagem. Se não der, avisamos na cotação.'],
@@ -286,7 +286,7 @@ export default function EntregaEmCasa() {
       </section>
 
       <footer className={s.rodape}>
-        <p>Entrega em Casa · Igreja Eco. Preços, prazos e disponibilidade dependem de cada empresa e de cada lote.</p>
+        <p>Entrega em Casa · Igreja Eco. Preços, prazos e disponibilidade dependem de cada empresa e de cada lote. <Link href="/minha-encomenda">Já fez uma encomenda? Acompanhe aqui</Link></p>
       </footer>
     </div>
   );
