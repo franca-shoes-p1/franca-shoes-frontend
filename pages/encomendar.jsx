@@ -69,7 +69,23 @@ function Formulario() {
   const [enviando, setEnviando] = useState(false);
   const [ok, setOk] = useState(null);
   const t0 = useRef(0);
-  useEffect(() => { t0.current = Date.now(); }, []);
+  const origem = useRef('');
+  useEffect(() => {
+    t0.current = Date.now();
+    try {
+      // Links dos anúncios: guarda canal/campanha, conta a visita e já preenche a cidade
+      const q = new URLSearchParams(window.location.search);
+      const src = (q.get('utm_source') || '').toLowerCase();
+      const camp = (q.get('utm_campaign') || '').toLowerCase();
+      if (/^[a-z0-9_-]{2,20}$/.test(src) && /^[a-z0-9-]{3,60}$/.test(camp)) {
+        origem.current = `${src}/${camp}`;
+        fetch('/api/anuncios/visita', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ canal: src, campanha: camp }), keepalive: true }).catch(() => {});
+      }
+      const cid = (q.get('cidade') || '').slice(0, 80);
+      const uf = (q.get('uf') || '').toUpperCase();
+      if (cid) setD((x) => ({ ...x, cidade: cid, uf: ESTADOS.includes(uf) ? uf : x.uf }));
+    } catch (e) { /* sem anúncio, o formulário funciona igual */ }
+  }, []);
 
   const set = (k) => (e) => setD((x) => ({ ...x, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
   const marcarPacote = (k) => () => setD((x) => ({ ...x, interesse: x.interesse.includes(k) ? x.interesse.filter((i) => i !== k) : [...x.interesse, k] }));
@@ -108,7 +124,7 @@ function Formulario() {
         body: JSON.stringify({
           categoria: d.categoria, produto: d.produto, numeracao: d.numeracao, quantidade: Number(d.quantidade), referencia: d.referencia,
           nome: d.nome, whatsapp: d.whatsapp, email: d.email, cidade: d.cidade, uf: d.uf, bairro: d.bairro, endereco: d.endereco,
-          melhor_horario: d.melhor_horario, aceite_visita: d.aceite, interesse_pacote: d.interesse, site: d.site, tempo: Date.now() - t0.current,
+          melhor_horario: d.melhor_horario, aceite_visita: d.aceite, interesse_pacote: d.interesse, site: d.site, origem: origem.current, tempo: Date.now() - t0.current,
         }),
       });
       const j = await r.json().catch(() => ({}));

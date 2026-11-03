@@ -40,6 +40,7 @@ export default async function handler(req, res) {
   const bairro = txt(b.bairro, 80);
   const endereco = txt(b.endereco, 160);
   const melhor_horario = HORARIOS.includes(b.melhor_horario) ? b.melhor_horario : 'qualquer';
+  const origem = /^[a-z0-9_-]{2,20}\/[a-z0-9-]{3,60}$/.test(String(b.origem || '')) ? String(b.origem) : 'site';
   const interesse = (Array.isArray(b.interesse_pacote) ? b.interesse_pacote : []).filter((x) => PACOTES.includes(x));
 
   if (nome.length < 3) return res.status(400).json({ erro: 'Informe seu nome.' });
@@ -63,7 +64,7 @@ export default async function handler(req, res) {
           body: JSON.stringify([{
             codigo, nome, whatsapp, email: email || null, categoria, produto, numeracao: numeracao || null,
             quantidade, referencia: referencia || null, cidade, uf, bairro: bairro || null, endereco,
-            melhor_horario, aceite_visita: true, interesse_pacote: interesse,
+            melhor_horario, aceite_visita: true, interesse_pacote: interesse, origem,
           }]),
         });
         await avisar(`🛍️ Encomenda ${codigo}: ${produto.slice(0, 70)} (x${quantidade}) · ${cidade}/${uf}${interesse.length ? ' · quer saber do pacote' : ''}`);
