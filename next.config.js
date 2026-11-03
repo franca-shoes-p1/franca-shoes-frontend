@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [{ source: '/admin/encomendar', destination: '/admin/encomendas', permanent: false }];
+  },
   async rewrites() {
     return [
       // Página do Ateliê Sob Medida (arquivo estático em public/atelie/index.html)
