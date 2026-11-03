@@ -17,6 +17,7 @@ const COLUNAS = [
   ] },
   { t: 'Participe', itens: [
     ['🛠️', 'Oficina Digital', '/oficina'],
+    ['🏖️', 'Parceiros da Praia', '/praia'],
     ['📣', 'Programa de Afiliados', '/afiliados'],
     ['🎁', 'Campanha de Inauguração', '/campanha'],
     ['🤝', 'Quero participar do Radar', '/radar/participar'],
