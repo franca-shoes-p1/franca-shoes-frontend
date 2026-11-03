@@ -10,6 +10,7 @@ const ITENS = [
   { href: '/admin/material', t: '🖨️ Materiais' },
   { href: '/admin/calcados', t: '👟 Calçados' },
   { href: '/admin/pedidos', t: '📦 Pedidos' },
+  { href: '/admin/encomendas', t: '🏠 Encomendas' },
   { href: '/admin/vitrine', t: '🛍️ Vitrine' },
   { href: '/admin/fornecedores', t: '🏭 Fornecedores' },
   { href: '/admin/fabricas', t: '🏪 Vitrine de fábricas' },
