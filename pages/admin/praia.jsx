@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
-import { api } from '../../lib/adminClient';
+import { api, ADMIN_CSS } from '../../lib/adminClient';
 import AdminNav from '../../lib/AdminNav';
 import { ETAPAS_DONO, ROTINA_DONO } from '../../lib/praia';
 
@@ -16,6 +16,8 @@ const CSS = `
 .pr-cod{font:700 24px ui-monospace,Menlo,Consolas,monospace;letter-spacing:2px;word-break:break-all}
 .pr-big{font-size:32px;font-weight:800;line-height:1}
 .pr-alerta{color:#b45309;font-weight:700}
+.ea input[type=checkbox]{width:auto}
+.pr-ln label{display:flex}
 `;
 const ABAS = [['geral', 'Visão geral'], ['papel', 'Meu papel'], ['candidatos', 'Candidatos'], ['socios', 'Sócios'], ['fechamentos', 'Fechamentos'], ['produtos', 'Produtos'], ['vagas', 'Vagas'], ['avisos', 'Avisos']];
 
@@ -52,28 +54,29 @@ export default function AdminPraia() {
   return (
     <div className="ea">
       <Head><title>Parceiros da Praia | Painel</title><meta name="robots" content="noindex" /></Head>
-      <style>{CSS}</style>
+      <style>{ADMIN_CSS + CSS}</style>
+      <div className="ea-in">
       <AdminNav />
       <h1>🏖️ Parceiros da Praia</h1>
       {fase === 'carregando' && <p>Carregando…</p>}
       {fase === 'login' && (
-        <form className="card" onSubmit={entrar}>
+        <form className="ea-card" onSubmit={entrar}>
           <h3>Entrar no painel</h3>
-          {msg && <div className="er">{msg.t}</div>}
+          {msg && <div className="ea-msg er">{msg.t}</div>}
           <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} placeholder="Senha do painel" required />
-          <button disabled={ocupado}>Entrar</button>
+          <button className="ea-btn" disabled={ocupado}>Entrar</button>
         </form>
       )}
-      {fase === 'pronto' && d && !d.pronto && <div className="card"><div className="er">{d.motivo}</div></div>}
+      {fase === 'pronto' && d && !d.pronto && <div className="ea-card"><div className="ea-msg er">{d.motivo}</div></div>}
       {fase === 'pronto' && d && d.pronto && (
         <>
-          {!d.extra && <div className="card"><div className="er">Faltam as tabelas extras (vagas, avisos, etapas). Rode o arquivo supabase-praia-extra.sql no Supabase.</div></div>}
-          {codigo && (<div className="card"><b>Código de acesso (aparece só agora, envie ao sócio por WhatsApp):</b><div className="pr-cod">{codigo}</div><button onClick={() => setCodigo(null)}>Já anotei</button></div>)}
-          {msg && <div className={msg.er ? 'er' : 'ok'}>{msg.t}</div>}
+          {!d.extra && <div className="ea-card"><div className="ea-msg er">Faltam as tabelas extras (vagas, avisos, etapas). Rode o arquivo supabase-praia-extra.sql no Supabase.</div></div>}
+          {codigo && (<div className="ea-card"><b>Código de acesso (aparece só agora, envie ao sócio por WhatsApp):</b><div className="pr-cod">{codigo}</div><button className="ea-btn ea-btn2" onClick={() => setCodigo(null)}>Já anotei</button></div>)}
+          {msg && <div className={msg.er ? 'ea-msg er' : 'ea-msg ok'}>{msg.t}</div>}
           <div className="pr-tabs">{ABAS.map(([k, t]) => <button key={k} className={`pr-t ${aba === k ? 'on' : ''}`} onClick={() => { setAba(k); setMsg(null); }}>{t}</button>)}</div>
 
           {aba === 'geral' && (
-            <div className="card">
+            <div className="ea-card">
               <div className="pr-ln">
                 <div><div className="pr-big">{d.vagas ? `${d.vagas.livres}/${d.vagas.total}` : '—'}</div>vagas livres</div>
                 <div><div className="pr-big">{novos}</div>candidatos novos</div>
@@ -87,7 +90,7 @@ export default function AdminPraia() {
           )}
 
           {aba === 'papel' && (
-            <div className="card">
+            <div className="ea-card">
               <h3>Você é o dono-operador</h3>
               <p>Você põe a estrutura e o estoque, aprova os sócios, confere os fechamentos e paga a parte de cada um. Marque cada passo quando terminar.</p>
               {ETAPAS_DONO.map((e, i) => (
@@ -103,7 +106,7 @@ export default function AdminPraia() {
           )}
 
           {aba === 'candidatos' && (
-            <div className="card" style={{ overflowX: 'auto' }}>
+            <div className="ea-card" style={{ overflowX: 'auto' }}>
               <h3>Candidatos</h3>
               <table className="pr-tab"><thead><tr><th>Nome</th><th>Contato</th><th>Cidade</th><th>Perfil</th><th>Status</th><th></th></tr></thead>
                 <tbody>{d.candidatos.length ? d.candidatos.map((c) => (
@@ -113,13 +116,13 @@ export default function AdminPraia() {
                     <td>{c.cidade}{c.bairro ? ` · ${c.bairro}` : ''}</td>
                     <td><small>PIX: {c.tem_pix ? 'sim' : 'não'}<br />{c.disponibilidade || ''}<br />{c.experiencia || ''}</small></td>
                     <td><select value={c.status} disabled={ocupado} onChange={(e) => acao({ acao: 'candidato_status', id: c.id, status: e.target.value })}>{['novo', 'conversando', 'aprovado', 'recusado', 'lista_espera'].map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
-                    <td>{c.status !== 'aprovado' && <button disabled={ocupado} onClick={() => { if (window.confirm(`Aprovar ${c.nome} como sócio e gerar o código de acesso?`)) acao({ acao: 'candidato_aprovar', id: c.id }, 'Sócio criado.'); }}>Aprovar</button>}</td>
+                    <td>{c.status !== 'aprovado' && <button className="ea-btn" disabled={ocupado} onClick={() => { if (window.confirm(`Aprovar ${c.nome} como sócio e gerar o código de acesso?`)) acao({ acao: 'candidato_aprovar', id: c.id }, 'Sócio criado.'); }}>Aprovar</button>}</td>
                   </tr>)) : <tr><td colSpan={6}>Nenhum candidato ainda.</td></tr>}</tbody></table>
             </div>
           )}
 
           {aba === 'socios' && (
-            <div className="card" style={{ overflowX: 'auto' }}>
+            <div className="ea-card" style={{ overflowX: 'auto' }}>
               <h3>Sócios</h3>
               <table className="pr-tab"><thead><tr><th>Nome</th><th>Cidade</th><th>Kit</th><th>Ambulante</th><th>Curso</th><th>Contrato</th><th>Ativo</th><th></th></tr></thead>
                 <tbody>{d.parceiros.length ? d.parceiros.map((s) => (
@@ -127,14 +130,14 @@ export default function AdminPraia() {
                     <td><b>{s.nome}</b><br /><small>{s.telefone}</small></td><td>{s.cidade}</td>
                     <td><select value={s.kit || 'caminhante'} disabled={ocupado} onChange={(e) => acao({ acao: 'parceiro_kit', id: s.id, kit: e.target.value })}><option value="caminhante">Caminhante</option><option value="carrinho">Carrinho</option></select></td>
                     {['cadastro_ambulante', 'curso_manipulacao', 'contrato_assinado', 'ativo'].map((f) => (<td key={f}><input type="checkbox" checked={!!s[f]} disabled={ocupado} onChange={(e) => acao({ acao: 'parceiro_flag', id: s.id, campo: f, valor: e.target.checked })} /></td>))}
-                    <td><button disabled={ocupado} onClick={() => { if (window.confirm('Gerar um novo código? O anterior deixa de funcionar.')) acao({ acao: 'parceiro_novo_codigo', id: s.id }); }}>Novo código</button></td>
+                    <td><button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => { if (window.confirm('Gerar um novo código? O anterior deixa de funcionar.')) acao({ acao: 'parceiro_novo_codigo', id: s.id }); }}>Novo código</button></td>
                   </tr>)) : <tr><td colSpan={8}>Nenhum sócio ainda. Aprove um candidato.</td></tr>}</tbody></table>
               <p><small>O kit só é liberado ao sócio quando ambulante, curso e contrato estão marcados.</small></p>
             </div>
           )}
 
           {aba === 'fechamentos' && (
-            <div className="card" style={{ overflowX: 'auto' }}>
+            <div className="ea-card" style={{ overflowX: 'auto' }}>
               <h3>Fechamentos recentes</h3>
               <table className="pr-tab"><thead><tr><th>Dia</th><th>Sócio</th><th>Esperado</th><th>Informado</th><th>Diferença</th><th>Lucro</th><th>Cada um</th></tr></thead>
                 <tbody>{d.fechamentos.length ? d.fechamentos.map((f, i) => (
@@ -145,35 +148,36 @@ export default function AdminPraia() {
           )}
 
           {aba === 'produtos' && (
-            <div className="card">
+            <div className="ea-card">
               <h3>Produtos, custo e preço</h3>
               <table className="pr-tab"><thead><tr><th>Produto</th><th>Custo</th><th>Preço</th><th>Ativo</th><th></th></tr></thead>
                 <tbody>{d.produtos.map((x) => (<tr key={x.id}><td>{x.nome}</td><td>{brl(x.custo)}</td><td>{brl(x.preco)}</td><td>{x.ativo ? 'sim' : 'não'}</td>
-                  <td><button onClick={() => setProd({ id: String(x.id), nome: x.nome, custo: String(x.custo).replace('.', ','), preco: String(x.preco).replace('.', ',') })}>Editar</button> <button disabled={ocupado} onClick={() => acao({ acao: 'produto_salvar', id: String(x.id), nome: x.nome, custo: x.custo, preco: x.preco, ativo: !x.ativo })}>{x.ativo ? 'Desativar' : 'Ativar'}</button></td></tr>))}</tbody></table>
+                  <td><button className="ea-btn ea-btn2" onClick={() => setProd({ id: String(x.id), nome: x.nome, custo: String(x.custo).replace('.', ','), preco: String(x.preco).replace('.', ',') })}>Editar</button> <button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => acao({ acao: 'produto_salvar', id: String(x.id), nome: x.nome, custo: x.custo, preco: x.preco, ativo: !x.ativo })}>{x.ativo ? 'Desativar' : 'Ativar'}</button></td></tr>))}</tbody></table>
               <div className="pr-ln"><input placeholder="Nome" value={prod.nome} onChange={(e) => setProd({ ...prod, nome: e.target.value })} /><input placeholder="Custo (R$)" value={prod.custo} onChange={(e) => setProd({ ...prod, custo: e.target.value })} /><input placeholder="Preço (R$)" value={prod.preco} onChange={(e) => setProd({ ...prod, preco: e.target.value })} />
-                <button disabled={ocupado} onClick={() => acao({ acao: 'produto_salvar', ...prod }, 'Produto salvo.').then(() => setProd({ id: '', nome: '', custo: '', preco: '' }))}>{prod.id ? 'Salvar alteração' : 'Adicionar produto'}</button></div>
+                <button className="ea-btn" disabled={ocupado} onClick={() => acao({ acao: 'produto_salvar', ...prod }, 'Produto salvo.').then(() => setProd({ id: '', nome: '', custo: '', preco: '' }))}>{prod.id ? 'Salvar alteração' : 'Adicionar produto'}</button></div>
             </div>
           )}
 
           {aba === 'vagas' && (
-            <div className="card">
+            <div className="ea-card">
               <h3>Vagas por cidade</h3>
               <p>O número aparece na capa e em /praia. Use o número real de kits que você tem para aquela cidade.</p>
               <table className="pr-tab"><thead><tr><th>Cidade</th><th>Total</th><th>Ocupadas</th><th>Livres</th></tr></thead>
                 <tbody>{d.vagas && d.vagas.cidades.length ? d.vagas.cidades.map((v) => <tr key={v.cidade}><td>{v.cidade}</td><td>{v.total}</td><td>{v.ocupadas}</td><td><b>{v.livres}</b></td></tr>) : <tr><td colSpan={4}>Nenhuma cidade cadastrada.</td></tr>}</tbody></table>
-              <div className="pr-ln"><input placeholder="Cidade" value={vaga.cidade} onChange={(e) => setVaga({ ...vaga, cidade: e.target.value })} /><input placeholder="Total de vagas" inputMode="numeric" value={vaga.total} onChange={(e) => setVaga({ ...vaga, total: e.target.value })} /><button disabled={ocupado} onClick={() => acao({ acao: 'vaga_salvar', ...vaga }, 'Vagas salvas.').then(() => setVaga({ cidade: '', total: '' }))}>Salvar cidade</button></div>
+              <div className="pr-ln"><input placeholder="Cidade" value={vaga.cidade} onChange={(e) => setVaga({ ...vaga, cidade: e.target.value })} /><input placeholder="Total de vagas" inputMode="numeric" value={vaga.total} onChange={(e) => setVaga({ ...vaga, total: e.target.value })} /><button className="ea-btn" disabled={ocupado} onClick={() => acao({ acao: 'vaga_salvar', ...vaga }, 'Vagas salvas.').then(() => setVaga({ cidade: '', total: '' }))}>Salvar cidade</button></div>
             </div>
           )}
 
           {aba === 'avisos' && (
-            <div className="card">
+            <div className="ea-card">
               <h3>Avisos para os sócios</h3>
-              <div className="pr-ln"><input placeholder="Título" value={aviso.titulo} onChange={(e) => setAviso({ ...aviso, titulo: e.target.value })} /><input placeholder="Texto" value={aviso.texto} onChange={(e) => setAviso({ ...aviso, texto: e.target.value })} /><button disabled={ocupado} onClick={() => acao({ acao: 'aviso_novo', ...aviso }, 'Aviso publicado.').then(() => setAviso({ titulo: '', texto: '' }))}>Publicar</button></div>
-              <table className="pr-tab" style={{ marginTop: 12 }}><tbody>{d.avisos.map((a) => (<tr key={a.id}><td><b>{a.titulo}</b><br />{a.texto}</td><td>{a.ativo ? 'visível' : 'oculto'}</td><td><button disabled={ocupado} onClick={() => acao({ acao: 'aviso_ativo', id: String(a.id), ativo: !a.ativo })}>{a.ativo ? 'Ocultar' : 'Mostrar'}</button></td></tr>))}</tbody></table>
+              <div className="pr-ln"><input placeholder="Título" value={aviso.titulo} onChange={(e) => setAviso({ ...aviso, titulo: e.target.value })} /><input placeholder="Texto" value={aviso.texto} onChange={(e) => setAviso({ ...aviso, texto: e.target.value })} /><button className="ea-btn" disabled={ocupado} onClick={() => acao({ acao: 'aviso_novo', ...aviso }, 'Aviso publicado.').then(() => setAviso({ titulo: '', texto: '' }))}>Publicar</button></div>
+              <table className="pr-tab" style={{ marginTop: 12 }}><tbody>{d.avisos.map((a) => (<tr key={a.id}><td><b>{a.titulo}</b><br />{a.texto}</td><td>{a.ativo ? 'visível' : 'oculto'}</td><td><button className="ea-btn ea-btn2" disabled={ocupado} onClick={() => acao({ acao: 'aviso_ativo', id: String(a.id), ativo: !a.ativo })}>{a.ativo ? 'Ocultar' : 'Mostrar'}</button></td></tr>))}</tbody></table>
             </div>
           )}
         </>
       )}
+      </div>
     </div>
   );
 }
