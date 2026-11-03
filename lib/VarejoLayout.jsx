@@ -48,6 +48,7 @@ export default function VarejoLayout({ titulo, children }) {
         <span>© {new Date().getFullYear()} {VAREJO.nomeLoja} — Franca, SP</span>
         <Link href="/como-comprar">Como comprar</Link>
         <Link href="/acompanhar">Acompanhar pedido</Link>
+        <Link href="/fabricas">Fábricas de Franca</Link>
         <Link href="/assinar">Passe de assinante</Link>
         <Link href="/calcados/politicas">Trocas, devoluções e entrega</Link>
         <Link href="/fornecedor">Sou fornecedor: quero vender aqui</Link>

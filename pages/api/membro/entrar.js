@@ -21,7 +21,11 @@ export default async function handler(req, res) {
   const nao = { erro: 'Não encontramos uma compra paga com esses dados. Confira o e-mail e o número do pedido.' };
   if (!emailValido(email) || !Number.isInteger(numero) || numero <= 0) return res.status(404).json(nao);
   try {
-    const [p] = await sb(`varejo_pedidos?numero=eq.${numero}&email=eq.${encodeURIComponent(email)}&status=in.(pago,em_compra_fabrica,enviado,entregue)&select=numero&limit=1`);
+    let [p] = await sb(`varejo_pedidos?numero=eq.${numero}&email=eq.${encodeURIComponent(email)}&status=in.(pago,em_compra_fabrica,enviado,entregue)&select=numero&limit=1`);
+    if (!p) {
+      // Compra feita no site de uma fábrica listada em /fabricas e aprovada no painel: o protocolo funciona como número do pedido.
+      try { [p] = await sb(`ff_comprovantes?numero=eq.${numero}&email=eq.${encodeURIComponent(email)}&status=eq.aprovado&select=numero&limit=1`); } catch (e) { /* SQL das fábricas ainda não rodado */ }
+    }
     if (!p) return res.status(404).json(nao);
     res.setHeader('Set-Cookie', criarCookieMembro(email));
     return res.json({ ok: true });
