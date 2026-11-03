@@ -13,6 +13,7 @@ import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
 import SitesVitrine from '../lib/SitesVitrine';
 import RadarBanner from '../lib/RadarBanner';
+import EntregaBanner from '../lib/EntregaBanner';
 import ParceirosPainel from '../lib/ParceirosPainel';
 import RodapeSite from '../lib/RodapeSite';
 
@@ -59,6 +60,7 @@ const PROJETOS = [
   { e: '🧩', t: 'Ateliê Sob Medida', d: 'Sites, agentes de WhatsApp e automações montados para você', href: '/atelie' },
   { e: '🛠️', t: 'Oficina Digital', d: 'Tarefas curtas pelo celular, com Pontos Oficina', href: '/oficina' },
   { e: '👟', t: 'Loja de Calçados Pronta', d: 'Sua loja online de calçados, entregue funcionando', href: '#calcados' },
+  { e: '🏠', t: 'Entrega em Casa', d: 'Peça o que quiser, prove em casa e só pague se gostar', href: '/entrega-em-casa' },
 ];
 
 const PARA_QUEM = [
@@ -388,6 +390,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <EntregaBanner />
 
         <RadarBanner />
 
