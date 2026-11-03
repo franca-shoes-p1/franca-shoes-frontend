@@ -20,6 +20,7 @@ const ITENS = [
   { href: '/admin/lote', t: '🧾 Lote do dia' },
   { href: '/admin/operadores', t: '👥 Operadores' },
   { href: '/admin/oficina', t: '🛠️ Oficina' },
+  { href: '/admin/praia', t: '🏖️ Praia' },
   { href: '/admin/ebooks', t: '📚 E-books' },
 ];
 const CSS = `

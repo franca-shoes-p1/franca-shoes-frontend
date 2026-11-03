@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
+import PraiaHomeBanner from '../lib/PraiaHomeBanner';
 import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
@@ -59,6 +60,7 @@ const LINK_WHATS = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
 const PROJETOS = [
   { e: '🧩', t: 'Ateliê Sob Medida', d: 'Sites, agentes de WhatsApp e automações montados para você', href: '/atelie' },
   { e: '🛠️', t: 'Oficina Digital', d: 'Tarefas curtas pelo celular, com Pontos Oficina', href: '/oficina' },
+  { e: '🏖️', t: 'Parceiros da Praia', d: 'Venda comida na praia em parceria, vagas limitadas', href: '/praia' },
   { e: '👟', t: 'Loja de Calçados Pronta', d: 'Sua loja online de calçados, entregue funcionando', href: '#calcados' },
   { e: '🏠', t: 'Entrega em Casa', d: 'Peça o que quiser, prove em casa e só pague se gostar', href: '/entrega-em-casa' },
 ];
@@ -188,6 +190,7 @@ export default function Home() {
         <AtelieBanner />
         <LivrosBanner />
         <OficinaHomeBanner />
+        <PraiaHomeBanner />
         <AfiliadosBanner />
         <SitesVitrine />
         <section id="calcados" className={styles.hero}>
