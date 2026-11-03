@@ -8,7 +8,7 @@ import { api } from '../../lib/adminClient';
 
 export default function Cadastro() {
   const router = useRouter();
-  const [f, setF] = useState({ nome: '', telefone: '', cidade: '', bairro: '', tem_pix: 'sim', disponibilidade: '', experiencia: '', aceito: false, site: '' });
+  const [f, setF] = useState({ nome: '', telefone: '', cidade: '', bairro: '', tem_pix: 'sim', licenca: 'nao', disponibilidade: '', experiencia: '', aceito: false, site: '' });
   const [msg, setMsg] = useState(null);
   const [ocupado, setOcupado] = useState(false);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
@@ -50,6 +50,12 @@ export default function Cadastro() {
             <input id="b" type="text" value={f.bairro} onChange={set('bairro')} />
             <label htmlFor="x">Você tem chave PIX no seu nome?</label>
             <select id="x" value={f.tem_pix} onChange={set('tem_pix')}><option value="sim">Sim</option><option value="nao">Ainda não</option></select>
+            <label htmlFor="l">Você já tem licença de ambulante?</label>
+            <select id="l" value={f.licenca} onChange={set('licenca')}>
+              <option value="sim">Sim, já tenho</option>
+              <option value="andamento">Estou tirando</option>
+              <option value="nao">Ainda não</option>
+            </select>
             <label htmlFor="d">Em quais dias e horários pode vender? (opcional)</label>
             <input id="d" type="text" value={f.disponibilidade} onChange={set('disponibilidade')} />
             <label htmlFor="e">Experiência com vendas ou comida (opcional)</label>

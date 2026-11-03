@@ -4,6 +4,7 @@
 alter table praia_parceiros  add column if not exists codigo_hash text;
 alter table praia_candidatos add column if not exists origem text;
 alter table praia_candidatos add column if not exists aceito_em timestamptz;
+alter table praia_candidatos add column if not exists tem_licenca text check (tem_licenca in ('sim','andamento','nao'));
 
 create table if not exists praia_vagas (
   cidade text primary key,
