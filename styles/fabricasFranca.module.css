@@ -1,0 +1,21 @@
+.aviso { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 0.95rem; }
+.aviso b { color: #1e3a8a; }
+.filtros { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 14px 0; }
+.chip { border: 1px solid #d1d5db; background: #fff; border-radius: 999px; padding: 7px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.chipOn { background: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+.busca { flex: 1 1 200px; min-width: 160px; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font: inherit; }
+.grade { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin: 10px 0 20px; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.cardDestaque { border-color: #f59e0b; box-shadow: 0 0 0 1px #f59e0b inset; }
+.topo { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.nome { font-size: 1.1rem; font-weight: 700; margin: 0; }
+.meta { font-size: 0.85rem; color: #6b7280; }
+.pub { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background: #fef3c7; color: #92400e; border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+.desc { font-size: 0.95rem; flex: 1; margin: 0; }
+.ir { display: block; text-align: center; background: #16a34a; color: #fff; border-radius: 10px; padding: 11px; font-weight: 700; text-decoration: none; }
+.vazio { background: #fff; border: 1px dashed #d1d5db; border-radius: 12px; padding: 24px; text-align: center; color: #6b7280; }
+.faixa { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 6px 0 14px; }
+.faixaItem { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; }
+.faixaItem h2 { font-size: 1rem; margin: 0 0 6px; }
+.faixaItem p { margin: 0 0 10px; font-size: 0.92rem; }
+.ok { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 16px; }
