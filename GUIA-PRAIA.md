@@ -25,3 +25,8 @@ Sem policies de propósito: só o servidor lê e grava (chave de serviço da Ver
 
 ## Pendências
 Revisão do contrato e da privacidade por advogado/contador; foto de conferência; avisos no Telegram via n8n.
+
+## Atualização 03/11/2026 — licença de ambulante
+- Cadastro pergunta "Você já tem licença de ambulante?" (sim / estou tirando / ainda não), salvo em `praia_candidatos.tem_licenca`.
+- No painel, candidatos com licença aparecem primeiro e marcados com ✅. Sem a coluna no banco, o cadastro continua funcionando (salva sem a resposta).
+- SQL: `alter table praia_candidatos add column if not exists tem_licenca text check (tem_licenca in ('sim','andamento','nao'));`

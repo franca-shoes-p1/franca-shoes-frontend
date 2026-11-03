@@ -108,13 +108,13 @@ export default function AdminPraia() {
           {aba === 'candidatos' && (
             <div className="ea-card" style={{ overflowX: 'auto' }}>
               <h3>Candidatos</h3>
-              <table className="pr-tab"><thead><tr><th>Nome</th><th>Contato</th><th>Cidade</th><th>Perfil</th><th>Status</th><th></th></tr></thead>
-                <tbody>{d.candidatos.length ? d.candidatos.map((c) => (
+              <table className="pr-tab"><thead><tr><th>Nome</th><th>Contato</th><th>Cidade</th><th>Licença e perfil</th><th>Status</th><th></th></tr></thead>
+                <tbody>{d.candidatos.length ? [...d.candidatos].sort((a, b) => (b.tem_licenca === 'sim') - (a.tem_licenca === 'sim')).map((c) => (
                   <tr key={c.id}>
                     <td><b>{c.nome}</b><br /><small>{new Date(c.criado_em).toLocaleDateString('pt-BR')}</small></td>
                     <td><a href={`https://wa.me/55${String(c.telefone).replace(/\D/g, '').replace(/^55/, '')}`} target="_blank" rel="noopener noreferrer">{c.telefone}</a></td>
                     <td>{c.cidade}{c.bairro ? ` · ${c.bairro}` : ''}</td>
-                    <td><small>PIX: {c.tem_pix ? 'sim' : 'não'}<br />{c.disponibilidade || ''}<br />{c.experiencia || ''}</small></td>
+                    <td><small>{c.tem_licenca === 'sim' ? <b>✅ Já tem licença</b> : c.tem_licenca === 'andamento' ? '⏳ Licença em andamento' : c.tem_licenca === 'nao' ? 'Sem licença ainda' : 'Licença: não informado'}<br />PIX: {c.tem_pix ? 'sim' : 'não'}<br />{c.disponibilidade || ''}<br />{c.experiencia || ''}</small></td>
                     <td><select value={c.status} disabled={ocupado} onChange={(e) => acao({ acao: 'candidato_status', id: c.id, status: e.target.value })}>{['novo', 'conversando', 'aprovado', 'recusado', 'lista_espera'].map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
                     <td>{c.status !== 'aprovado' && <button className="ea-btn" disabled={ocupado} onClick={() => { if (window.confirm(`Aprovar ${c.nome} como sócio e gerar o código de acesso?`)) acao({ acao: 'candidato_aprovar', id: c.id }, 'Sócio criado.'); }}>Aprovar</button>}</td>
                   </tr>)) : <tr><td colSpan={6}>Nenhum candidato ainda.</td></tr>}</tbody></table>

@@ -26,11 +26,19 @@ export default async function handler(req, res) {
       const da = v.cidades.find((x) => normCidade(x.cidade) === normCidade(cidade));
       lista = !da || da.livres <= 0; // cidade sem vaga aberta ou fora do piloto: lista de espera
     } catch (e) { lista = true; }
-    await sb('praia_candidatos', { method: 'POST', body: JSON.stringify({
+    const corpo = {
       nome, telefone, cidade, bairro: txt(c.bairro, 80) || null, tem_pix: c.tem_pix === true,
       disponibilidade: txt(c.disponibilidade, 200) || null, experiencia: txt(c.experiencia, 400) || null,
       ponto_codigo: null, status: lista ? 'lista_espera' : 'novo', origem: txt(c.origem, 60) || null, aceito_em: new Date().toISOString(),
-    }) });
+    };
+    const licenca = ['sim', 'andamento', 'nao'].includes(c.licenca) ? c.licenca : null;
+    try {
+      await sb('praia_candidatos', { method: 'POST', body: JSON.stringify({ ...corpo, tem_licenca: licenca }) });
+    } catch (e) {
+      // coluna tem_licenca ainda não criada no Supabase: salva sem ela para não perder o cadastro
+      if (!/tem_licenca/.test(e.message)) throw e;
+      await sb('praia_candidatos', { method: 'POST', body: JSON.stringify(corpo) });
+    }
     return res.status(201).json({ ok: true, lista_espera: lista });
   } catch (e) {
     console.error('praia/cadastro', e.message);
