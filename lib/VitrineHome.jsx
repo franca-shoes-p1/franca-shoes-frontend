@@ -275,7 +275,7 @@ export default function VitrineHome() {
           · <a href="mailto:ricardobelo1973@gmail.com">ricardobelo1973@gmail.com</a>
           <div>
             <Link href="/calcados/politicas">Trocas e entrega</Link> · <a href="https://www.instagram.com/ricardobelo1973">Instagram</a> ·{' '}
-            <a href="https://t.me/igrejaeco_ricardo">Telegram</a> · <a href="https://www.youtube.com/@RicardoBello-o6v">YouTube</a>
+            <a href="https://t.me/igrejaeco_ricardo">Falar no Telegram</a> · <a href="https://www.youtube.com/@RicardoBello-o6v">YouTube</a>
           </div>
         </div>
       </footer>
