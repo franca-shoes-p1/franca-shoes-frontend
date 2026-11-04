@@ -22,6 +22,7 @@ const COLUNAS = [
     ['🎁', 'Campanha de Inauguração', '/campanha'],
     ['🤝', 'Quero participar do Radar', '/radar/participar'],
     ['🔑', 'Sou operador', '/operador'],
+    ['📲', 'Receba as novidades', '/entrar'],
   ] },
   { t: 'Ferramentas', itens: [
     ['🗂️', 'Catálogo completo', '/catalogo'],
