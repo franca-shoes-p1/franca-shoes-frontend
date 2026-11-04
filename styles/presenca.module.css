@@ -1,0 +1,33 @@
+/* Máquina de Presença: páginas por segmento e cidade. Mesmas cores escuras do portal, feitas para o celular. */
+.pagina { min-height: 100vh; background: radial-gradient(900px 500px at 85% 0%, rgba(255, 212, 0, 0.16), transparent 60%), linear-gradient(160deg, #1b1450 0%, #2a1a78 55%, #3a1f8f 100%); color: #fff; }
+.pagina * { box-sizing: border-box; }
+.topo { max-width: 720px; margin: 0 auto; padding: 16px 18px 0; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.voltar { color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; opacity: 0.85; }
+.selo { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); }
+.miolo { max-width: 720px; margin: 0 auto; padding: 24px 18px 60px; }
+.h1 { font-size: clamp(26px, 6vw, 38px); line-height: 1.15; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+.lead { margin: 14px 0 6px; font-size: 17px; line-height: 1.55; color: rgba(255, 255, 255, 0.9); }
+.publico { margin: 0 0 20px; font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+.botao { display: inline-block; width: 100%; text-align: center; padding: 15px 20px; border: 0; border-radius: 999px; background: #ffd400; color: #1d1450; font-weight: 800; font-size: 17px; text-decoration: none; cursor: pointer; box-shadow: 0 12px 32px rgba(255, 212, 0, 0.3); }
+.botao:disabled { opacity: 0.6; cursor: wait; }
+.botao:focus-visible, .voltar:focus-visible, .links a:focus-visible, .outros a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.cards { list-style: none; margin: 26px 0; padding: 0; display: grid; gap: 12px; }
+.card { display: grid; gap: 4px; padding: 16px 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+.card a { color: #fff; text-decoration: none; display: grid; gap: 4px; }
+.card b { font-size: 16px; }
+.card small { font-size: 14px; line-height: 1.45; color: rgba(255, 255, 255, 0.82); }
+.ic { font-size: 26px; }
+.form { margin: 28px 0 0; padding: 20px 18px; border-radius: 22px; background: #fff; color: #1d1450; display: grid; gap: 12px; }
+.formTitulo { margin: 0; font-size: 20px; line-height: 1.25; }
+.formTexto { margin: 0; line-height: 1.5; }
+.campo { display: grid; gap: 5px; font-weight: 700; font-size: 14px; }
+.campo input, .campo select { padding: 12px 14px; border-radius: 12px; border: 2px solid #d9d4f2; font-size: 16px; color: #1d1450; background: #fff; }
+.campo input:focus, .campo select:focus { outline: 3px solid #ffd400; border-color: #1d1450; }
+.aceite { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.4; }
+.aceite input { margin-top: 3px; width: 18px; height: 18px; flex: none; }
+.erro { margin: 0; padding: 10px 12px; border-radius: 10px; background: #ffe3e3; color: #8a1111; font-weight: 700; font-size: 14px; }
+.armadilha { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.links { margin: 20px 0 0; text-align: center; font-size: 14px; }
+.links a { color: #ffd400; font-weight: 700; }
+.outros { margin: 18px 0 0; display: grid; gap: 8px; text-align: center; font-size: 14px; }
+.outros a { color: rgba(255, 255, 255, 0.85); }
