@@ -28,8 +28,24 @@
 .botaoVer:hover { background: #0a6a35; }
 .aviso { margin: 14px 2px 0; font-size: 12.5px; line-height: 1.5; color: #5b6f94; }
 
+/* Painel "Dentro da vitrine" (só no desktop): ocupa o espaço que sobrava no card da esquerda */
+.painel { display: flex; flex-direction: column; flex: 1; width: 100%; margin-top: 18px; background: #fff; border: 1px solid #dbe5f5; border-radius: 18px; padding: 16px 16px 8px; box-shadow: 0 6px 18px rgba(11, 42, 107, 0.07); }
+.painelTitulo { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #0B2A6B; }
+.painelResumo { margin: 4px 0 10px; padding-bottom: 10px; border-bottom: 2px dashed #cfdbf0; font-size: 13.5px; color: #35507d; }
+.painelLista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+.painelLista li + li { border-top: 1px dashed #dbe5f5; }
+.linha { display: flex; align-items: center; gap: 12px; padding: 9px 2px; text-decoration: none; color: #0B2A6B; }
+.linha:hover .seta { transform: translateX(3px); color: #0F7A3D; }
+.icone { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 14px; background: linear-gradient(135deg, #0B2A6B, #2f6fe0); box-shadow: 0 0 0 2px #FFD21F inset; }
+.linhaTexto { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.linhaTexto b { font-size: 14.5px; font-weight: 800; }
+.linhaTexto small { font-size: 12.5px; color: #5b6f94; }
+.seta { flex: none; font-weight: 800; color: #0B2A6B; transition: transform .15s, color .15s; }
+.linhaTodas { color: #0F7A3D; }
+
 @media (max-width: 860px) {
   .grade { grid-template-columns: 1fr; }
+  .painel { display: none; }
 }
 @media (max-width: 420px) {
   .dentro { padding: 32px 14px; }

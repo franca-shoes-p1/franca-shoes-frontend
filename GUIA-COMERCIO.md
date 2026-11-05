@@ -33,6 +33,24 @@ site (erro 404, página sem estilo e sem produtos). Se um dia a pasta mudar de n
   Para mudar quais aparecem, mude essa lista ou a ordem dos produtos no JSON.
 - O bloco não mostra preço de propósito: o preço muda no Mercado Livre e o texto avisa que vale o do anúncio.
 
+### Painel "Dentro da vitrine" (card da esquerda, só no computador)
+
+Fica abaixo do botão "Entrar na vitrine" e preenche a altura do card, para não sobrar espaço branco quando a coluna
+da direita é mais alta. No celular (largura até 860px) o painel fica escondido e o bloco é igual ao de antes.
+
+- **Arquivos:** `lib/ComercioVitrine.jsx` (função `resumir` e o JSX do painel) e
+  `styles/comercioVitrine.module.css` (classes `painel*`, `linha*`, `icone`, `seta`). Nenhum outro arquivo mudou.
+- **De onde vêm os números:** tudo é calculado do `public/comercio/products.json`, o mesmo arquivo da página `/comercio`,
+  sem copiar dados:
+  - total de produtos = quantidade de itens em `produtos`;
+  - categorias = as de `categorias` que têm pelo menos 1 produto;
+  - "Atualizado em DD/MM" = campo `atualizadoEm` (se faltar, usa a maior `consultadoEm` dos produtos);
+  - lista = as 5 categorias com mais produtos (empate segue a ordem de `categorias`), com "N produtos".
+- **Atualizar:** basta editar o `products.json` (produtos, categorias e `atualizadoEm`); o painel acompanha no próximo deploy.
+- **Links:** cada linha e "Ver todas as categorias →" levam para `/comercio`. A página ainda não abre uma categoria
+  pela URL; se um dia aceitar, troque o `href` nas linhas do painel em `lib/ComercioVitrine.jsx`.
+- **Honestidade:** sem desconto, avaliação ou urgência. Só mostra contagem e data que já estão no JSON.
+
 ## Como atualizar os produtos depois
 
 1. Edite só `public/comercio/products.json`. Cada produto tem:
