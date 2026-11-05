@@ -12,6 +12,7 @@ import VitrineFaixa from '../lib/VitrineFaixa';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
 import IgrejaHero from '../lib/IgrejaHero';
+import ComercioVitrine from '../lib/ComercioVitrine';
 import SitesVitrine from '../lib/SitesVitrine';
 import RadarBanner from '../lib/RadarBanner';
 import EntregaBanner from '../lib/EntregaBanner';
@@ -186,6 +187,7 @@ export default function Home() {
         <FestaBanner />
         <CampanhaBanner />
         <VitrineFaixa />
+        <ComercioVitrine />
         <IgrejaHero />
         <AtelieBanner />
         <LivrosBanner />
