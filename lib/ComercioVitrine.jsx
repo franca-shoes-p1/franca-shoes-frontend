@@ -27,8 +27,21 @@ function escolher(lista) {
   return achados.slice(0, 4);
 }
 
+// Resumo calculado do products.json: totais, data e as 5 categorias com mais produtos.
+function resumir(d) {
+  const lista = (d && d.produtos) || [];
+  const cats = ((d && d.categorias) || [])
+    .map((c) => ({ id: c.id, nome: c.nome, n: lista.filter((p) => p.categoria === c.id).length }))
+    .filter((c) => c.n > 0)
+    .sort((a, b) => b.n - a.n);
+  const data = (d && d.atualizadoEm) || lista.map((p) => p.consultadoEm).filter(Boolean).sort().pop() || '';
+  const m = String(data).match(/^\d{4}-(\d{2})-(\d{2})/);
+  return { total: lista.length, nCats: cats.length, dia: m ? `${m[2]}/${m[1]}` : '', top: cats.slice(0, 5) };
+}
+
 export default function ComercioVitrine() {
   const produtos = escolher(dados.produtos);
+  const r = resumir(dados);
 
   return (
     <section id="loja-igreja-eco" className={s.faixa} aria-label="Loja Igreja Eco, vitrine de achadinhos do Mercado Livre">
@@ -48,6 +61,35 @@ export default function ComercioVitrine() {
                 ao clicar, você vai para o Mercado Livre, e é lá que a compra, o pagamento e a entrega acontecem.
               </p>
               <a href="/comercio" className={s.botaoPrincipal}>Entrar na vitrine →</a>
+
+              {r.total > 0 && (
+                <div className={s.painel}>
+                  <p className={s.painelTitulo}>Dentro da vitrine</p>
+                  <p className={s.painelResumo}>
+                    {r.total} produtos em {r.nCats} categorias{r.dia ? ` · Atualizado em ${r.dia}` : ''}
+                  </p>
+                  <ul className={s.painelLista}>
+                    {r.top.map((c, i) => (
+                      <li key={c.id}>
+                        {/* /comercio ainda não abre uma categoria pela URL: o link leva à vitrine inteira */}
+                        <a href="/comercio" className={s.linha}>
+                          <span className={s.icone} aria-hidden="true">{i + 1}</span>
+                          <span className={s.linhaTexto}>
+                            <b>{c.nome}</b>
+                            <small>{c.n} produtos</small>
+                          </span>
+                          <span className={s.seta} aria-hidden="true">→</span>
+                        </a>
+                      </li>
+                    ))}
+                    <li>
+                      <a href="/comercio" className={s.linha + ' ' + s.linhaTodas}>
+                        <span className={s.linhaTexto}><b>Ver todas as categorias →</b></span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
