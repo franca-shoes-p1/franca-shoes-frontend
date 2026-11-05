@@ -7,6 +7,7 @@ const nextConfig = {
     return [
       // Página do Ateliê Sob Medida (arquivo estático em public/atelie/index.html)
       { source: '/atelie', destination: '/atelie/index.html' },
+      { source: '/comercio', destination: '/comercio/index.html' },
       // Assistente "Monte a sua loja" (botão Quero a minha loja da home)
       { source: '/monte-sua-loja', destination: '/monte-sua-loja/index.html' },
       { source: '/monte-sua-oficina', destination: '/monte-sua-oficina/index.html' },

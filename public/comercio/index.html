@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loja Igreja Eco | Mais vendidos do Mercado Livre por categoria</title>
+  <meta name="description" content="Vitrine com os produtos mais vendidos do Mercado Livre, separados por categoria. Veja o preço atual e compre direto no Mercado Livre.">
+  <meta name="theme-color" content="#0b2a5b">
+  <link rel="canonical" href="https://igreja.eco.br/comercio">
+
+  <!-- Open Graph (aparece quando o link é compartilhado no WhatsApp/Facebook) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Loja Igreja Eco">
+  <meta property="og:title" content="Loja Igreja Eco | Mais vendidos do Mercado Livre">
+  <meta property="og:description" content="Os produtos mais vendidos do Mercado Livre, separados por categoria. Compra feita direto no Mercado Livre.">
+  <meta property="og:url" content="https://igreja.eco.br/comercio">
+  <meta property="og:image" content="https://igreja.eco.br/comercio/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/comercio/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/comercio/assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://http2.mlstatic.com" crossorigin>
+  <link rel="stylesheet" href="/comercio/assets/css/style.css">
+
+  <!-- ===== Google Analytics =====
+       Para ativar: troque G-XXXXXXXXXX pelo seu ID (nos dois lugares), apague estas 3 primeiras
+       linhas do comentário e a linha "===== fim Google Analytics =====" lá embaixo.
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  ===== fim Google Analytics ===== -->
+</head>
+<body>
+  <a class="skip" href="#produtos">Pular para os produtos</a>
+
+  <!-- ===== CABEÇALHO ===== -->
+  <header class="topo">
+    <div class="topo__linha container">
+      <button class="btn-icone topo__menu" id="abrirMenu" aria-label="Abrir menu" aria-controls="gaveta" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+
+      <a class="logo" href="/comercio" aria-label="Loja Igreja Eco - início">
+        <img src="/comercio/assets/img/logo-mark.svg" alt="" width="64" height="56">
+        <span class="logo__texto">
+          <span class="logo__nome">Loja <b>Igreja</b> <em>Eco</em></span>
+          <span class="logo__slogan">Compras inteligentes, um futuro melhor!</span>
+        </span>
+      </a>
+
+      <form class="busca" role="search" onsubmit="return false">
+        <label for="busca" class="sr-only">Buscar produtos</label>
+        <input id="busca" type="search" placeholder="O que você está procurando?" autocomplete="off">
+        <span class="busca__icone" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        </span>
+      </form>
+
+      <ul class="selos-topo" aria-label="Como funciona">
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Compra feita no<br>Mercado Livre</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+          <span>Ranking oficial de<br>mais vendidos</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span>Atualizado em<br><b class="js-data-atualizacao">--/--</b></span>
+        </li>
+      </ul>
+    </div>
+
+    <nav class="barra" aria-label="Principal">
+      <div class="container barra__linha">
+        <button class="btn-categorias" id="abrirCategorias" aria-controls="gaveta" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          Todas as Categorias
+          <svg class="seta" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <ul class="barra__links">
+          <li><a href="#mais-vendidos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>
+            Mais vendidos</a></li>
+          <li><button type="button" class="link-favoritos" id="verFavoritos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+            Favoritos <span class="contador" id="contadorFav" hidden>0</span></button></li>
+          <li><a href="#sobre">Sobre</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== GAVETA (menu no celular / lista de categorias) ===== -->
+  <div class="veu" id="veu" hidden></div>
+  <aside class="gaveta" id="gaveta" aria-label="Menu" aria-hidden="true">
+    <div class="gaveta__topo">
+      <strong>Menu</strong>
+      <button class="btn-icone" id="fecharMenu" aria-label="Fechar menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <p class="gaveta__titulo">Categorias</p>
+    <ul class="gaveta__lista" id="gavetaCategorias"></ul>
+    <p class="gaveta__titulo">Site</p>
+    <ul class="gaveta__lista">
+      <li><a href="#mais-vendidos" data-fecha>Mais vendidos</a></li>
+      <li><button type="button" data-fecha data-favoritos>Meus favoritos</button></li>
+      <li><a href="#sobre" data-fecha>Sobre</a></li>
+      <li><a href="#privacidade" data-fecha>Política de privacidade</a></li>
+    </ul>
+  </aside>
+
+  <main id="conteudo">
+    <!-- ===== BANNER =====
+         Coloque a arte em assets/img/banner.jpg (desktop, 1600 x 420 px)
+         e assets/img/banner-mobile.jpg (celular, 800 x 400 px).
+         Enquanto a imagem não existir, aparece um espaço marcado.
+         Se a sua arte JÁ TEM o texto escrito nela, troque class="banner" por
+         class="banner banner--so-imagem" para esconder o texto do site. -->
+    <section class="container">
+      <div class="banner" id="banner">
+        <picture class="banner__arte">
+          <source media="(max-width: 700px)" srcset="/comercio/assets/img/banner-mobile.jpg">
+          <img src="/comercio/assets/img/banner.jpg" alt="" width="1600" height="420" fetchpriority="high"
+               onerror="this.closest('.banner').classList.add('banner--vazio')">
+        </picture>
+        <div class="banner__marcador" aria-hidden="true">
+          Espaço do banner: assets/img/banner.jpg (1600×420) · celular: banner-mobile.jpg (800×400)
+        </div>
+        <div class="banner__texto">
+          <h1>As Melhores Ofertas <span>e Produtos Mais Vendidos!</span></h1>
+          <p>Tecnologia, casa, beleza e muito mais, direto do ranking do Mercado Livre.</p>
+          <a class="btn-amarelo" href="#mais-vendidos">
+            Aproveite Agora!
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="banner__selo" aria-hidden="true">Qualidade, Confiança e as Melhores Ofertas!</div>
+      </div>
+    </section>
+
+    <!-- ===== CATEGORIAS ===== -->
+    <section class="container" aria-label="Categorias">
+      <ul class="categorias" id="categorias"></ul>
+    </section>
+
+    <!-- ===== CONTEÚDO COM FILTROS ===== -->
+    <div class="container layout">
+      <aside class="filtros" id="filtros" aria-label="Filtros">
+        <div class="filtros__topo">
+          <h2>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
+            Filtros
+          </h2>
+          <button class="btn-icone filtros__fechar" id="fecharFiltros" aria-label="Fechar filtros">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+
+        <label class="filtros__rotulo" for="filtroCategoria">Categoria</label>
+        <select id="filtroCategoria">
+          <option value="">Todas as Categorias</option>
+        </select>
+
+        <fieldset>
+          <legend class="filtros__rotulo">Faixa de Preço</legend>
+          <label><input type="checkbox" name="faixa" value="0-50"> Até R$ 50</label>
+          <label><input type="checkbox" name="faixa" value="50-100"> R$ 50 – R$ 100</label>
+          <label><input type="checkbox" name="faixa" value="100-200"> R$ 100 – R$ 200</label>
+          <label><input type="checkbox" name="faixa" value="200-500"> R$ 200 – R$ 500</label>
+          <label><input type="checkbox" name="faixa" value="500-"> Acima de R$ 500</label>
+        </fieldset>
+
+        <fieldset>
+          <legend class="filtros__rotulo">Favoritos</legend>
+          <label><input type="checkbox" id="soFavoritos"> Mostrar só meus favoritos</label>
+        </fieldset>
+
+        <button type="button" class="btn-limpar" id="limparFiltros">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          Limpar filtros
+        </button>
+        <button type="button" class="btn-verde filtros__aplicar" id="aplicarFiltros">Ver produtos</button>
+      </aside>
+
+      <div class="principal" id="produtos" tabindex="-1">
+        <div class="ferramentas">
+          <button type="button" class="btn-filtrar" id="abrirFiltros" aria-controls="filtros">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
+            Filtrar <span class="contador" id="contadorFiltros" hidden>0</span>
+          </button>
+          <p class="resultado" id="resultado" aria-live="polite"></p>
+        </div>
+
+        <!-- Visão padrão: destaque + seções por categoria -->
+        <div id="vitrine">
+          <section class="secao" id="mais-vendidos">
+            <div class="secao__cabeca">
+              <h2>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+                Mais vendidos no Mercado Livre
+              </h2>
+              <a class="secao__fonte" href="https://www.mercadolivre.com.br/mais-vendidos" target="_blank" rel="noopener">Fonte: ranking do Mercado Livre</a>
+            </div>
+            <p class="secao__nota">O produto mais bem colocado de cada categoria na página de mais vendidos do Mercado Livre, consultada em <span class="js-data-atualizacao">--/--</span>.</p>
+            <div class="grade grade--rolagem" id="gradeDestaque"></div>
+          </section>
+          <div id="secoesCategorias"></div>
+        </div>
+
+        <!-- Visão de busca/filtro -->
+        <section class="secao" id="resultados" hidden>
+          <div class="secao__cabeca">
+            <h2 id="tituloResultados">Resultados</h2>
+          </div>
+          <div class="grade" id="gradeResultados"></div>
+          <div class="vazio" id="vazio" hidden>
+            <p>Nenhum produto encontrado com esses filtros.</p>
+            <button type="button" class="btn-limpar" data-limpar>Limpar filtros</button>
+          </div>
+        </section>
+
+        <p class="carregando" id="carregando">Carregando produtos…</p>
+      </div>
+    </div>
+
+    <!-- ===== SOBRE / PRIVACIDADE ===== -->
+    <div class="container institucional">
+      <section class="caixa" id="sobre">
+        <h2>Sobre a Loja Igreja Eco</h2>
+        <p>A Loja Igreja Eco é uma vitrine de produtos do Mercado Livre. Selecionamos itens da página oficial de
+          <a href="https://www.mercadolivre.com.br/mais-vendidos" target="_blank" rel="noopener">mais vendidos do Mercado Livre</a>,
+          separados pelas mesmas categorias que o próprio Mercado Livre usa.</p>
+        <p>Não vendemos, não entregamos e não fazemos atendimento de pedidos. Ao clicar em um produto, você vai para o anúncio no
+          Mercado Livre, onde vê o preço atualizado, as condições, o prazo de entrega e faz a compra com a proteção do próprio Mercado Livre.</p>
+        <p>Os preços mostrados aqui foram consultados na data indicada em cada produto e podem ter mudado. Sempre confira o preço atual no anúncio.</p>
+      </section>
+
+      <section class="caixa" id="privacidade">
+        <h2>Política de privacidade</h2>
+        <p><strong>Dados que coletamos:</strong> este site não tem cadastro, login, carrinho nem formulário. Não pedimos nome, e-mail, telefone ou dados de pagamento.</p>
+        <p><strong>Favoritos:</strong> quando você toca no coração de um produto, a lista fica salva só no seu navegador (armazenamento local). Ela não é enviada para nós. Para apagar, desmarque os corações ou limpe os dados do navegador.</p>
+        <p><strong>Links de afiliado:</strong> os links levam ao Mercado Livre com o nosso código de afiliado. O Mercado Livre pode usar cookies para registrar que a visita veio daqui. O tratamento desses dados segue a política de privacidade do Mercado Livre.</p>
+        <p><strong>Estatísticas de visita:</strong> se ativarmos o Google Analytics, ele coleta dados anônimos de navegação (páginas vistas, tipo de aparelho, região aproximada) para entendermos o uso do site.</p>
+        <p><strong>Imagens:</strong> as fotos dos produtos são carregadas dos servidores do Mercado Livre.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="rodape">
+    <div class="container rodape__grade">
+      <div class="rodape__marca">
+        <a class="logo" href="/comercio" aria-label="Loja Igreja Eco - início">
+          <img src="/comercio/assets/img/logo-mark.svg" alt="" width="64" height="56" loading="lazy">
+          <span class="logo__texto">
+            <span class="logo__nome">Loja <b>Igreja</b> <em>Eco</em></span>
+            <span class="logo__slogan">Compras inteligentes, um futuro melhor!</span>
+          </span>
+        </a>
+      </div>
+      <div>
+        <h3>Institucional</h3>
+        <ul>
+          <li><a href="#sobre">Sobre a loja</a></li>
+          <li><a href="#privacidade">Política de privacidade</a></li>
+          <li><a href="https://www.mercadolivre.com.br/mais-vendidos" target="_blank" rel="noopener">Fonte: Mais vendidos do Mercado Livre</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Categorias</h3>
+        <ul class="rodape__categorias" id="rodapeCategorias"></ul>
+      </div>
+      <div>
+        <h3>Compartilhe</h3>
+        <a class="btn-whats" id="compartilharSite" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z"/></svg>
+          Enviar o site no WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <ul class="container selos" aria-label="Selos">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg> Compra e pagamento feitos no Mercado Livre</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1"/><path d="M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg> Links oficiais do Programa de Afiliados</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Sem cadastro e sem coleta de dados pessoais</li>
+    </ul>
+
+    <div class="rodape__aviso">
+      <div class="container">
+        <p><strong>Este site contém links de afiliado. Podemos receber comissão por compras feitas pelos links, sem custo extra pra você. As compras são feitas diretamente no Mercado Livre.</strong></p>
+        <p>Preços e disponibilidade consultados em <span class="js-data-atualizacao">--/--</span> e sujeitos a alteração. Mercado Livre é marca de seus respectivos donos; este site não é operado pelo Mercado Livre.</p>
+        <p>© <span id="ano">2026</span> Loja Igreja Eco · igreja.eco.br</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="topo-btn" id="voltarTopo" aria-label="Voltar ao topo" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
+
+  <script src="/comercio/assets/js/app.js" defer></script>
+</body>
+</html>
