@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import s from '../styles/igrejahero.module.css';
-import Redes from './Redes';
+import Redes from './Redes.jsx';
 
 const NEGOCIOS = [
   { e: '🧩', t: 'Ateliê Sob Medida', d: 'Sites e agentes de WhatsApp sob medida', href: '/atelie' },

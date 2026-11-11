@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import s from '../styles/livros.module.css';
 import LivroCapa from '../lib/LivroCapa';
-import MotorLivros from '../lib/MotorLivros';
+import MotorLivros from '../lib/MotorLivros.jsx';
 import { LIVROS, ETAPAS } from '../lib/livros';
 import { SETORES } from '../lib/motorLivros';
 

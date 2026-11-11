@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import s from '../styles/radar.module.css';
-import RadarAssistente from './RadarAssistente';
+import RadarAssistente from './RadarAssistente.jsx';
 
 /* Vitrine do Radar de Pontos na home: mesmo layout das outras vitrines, em tom marrom claro.
    Faixa com QR code de verdade (leva à página /radar), alfinetes de mapa e assistente. */

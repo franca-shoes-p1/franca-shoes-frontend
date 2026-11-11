@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import s from '../styles/rodapeSite.module.css';
-import Redes from './Redes';
+import Redes from './Redes.jsx';
 
 /* Rodapé da home: marca, todos os projetos do site em colunas e o acesso ao portal com os demais projetos.
    Para incluir um projeto novo, acrescente um item em COLUNAS. */

@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import s from '../styles/radar.module.css';
-import RadarAssistente from '../lib/RadarAssistente';
+import RadarAssistente from '../lib/RadarAssistente.jsx';
 import { WHATS_RADAR } from '../lib/radarAssistente';
 
 const PASSOS = [
