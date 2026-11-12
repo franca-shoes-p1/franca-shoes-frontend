@@ -27,6 +27,7 @@ export default async function handler(req, res) {
     }
     if (c.ativo !== undefined) d.ativo = !!c.ativo;
     if (c.pode_catalogo !== undefined) d.pode_catalogo = !!c.pode_catalogo;
+    if (c.pode_postagens !== undefined) d.pode_postagens = !!c.pode_postagens;
     let codigo = null;
     if (c.novo_codigo) {
       codigo = novoCodigo();

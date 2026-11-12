@@ -12,10 +12,15 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       let operadores;
       try {
-        operadores = await sb(`op_operarios?select=${CAMPOS},pode_catalogo&order=setor.asc,nome.asc&limit=500`);
+        operadores = await sb(`op_operarios?select=${CAMPOS},pode_catalogo,pode_postagens&order=setor.asc,nome.asc&limit=500`);
       } catch (e) {
-        // SQL do catálogo ainda não rodado: lista sem essa coluna.
-        operadores = await sb(`op_operarios?select=${CAMPOS}&order=setor.asc,nome.asc&limit=500`);
+        try {
+          // SQL de postagens ainda não rodado: lista sem essa coluna.
+          operadores = await sb(`op_operarios?select=${CAMPOS},pode_catalogo&order=setor.asc,nome.asc&limit=500`);
+        } catch (e2) {
+          // SQL do catálogo ainda não rodado: lista sem essa coluna.
+          operadores = await sb(`op_operarios?select=${CAMPOS}&order=setor.asc,nome.asc&limit=500`);
+        }
       }
       return res.json({ operadores });
     }
