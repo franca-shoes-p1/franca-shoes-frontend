@@ -57,7 +57,7 @@ export default function VitrineFaixa() {
           <h2 className={s.titulo}>Calçados e acessórios <em>direto das fábricas de Franca</em></h2>
           <p className={s.texto}>
             Escolha o modelo e o número, pague por PIX ou cartão e retire na rodoviária da sua cidade ou receba pelos Correios.
-            Modelos novos entram todo dia.
+            Novos modelos entram sempre que a loja cadastra.
           </p>
         </header>
 

@@ -128,3 +128,8 @@ Antes do primeiro pagamento, confirme com um contador como pagar e registrar val
 - Preco de assinante aparece na pagina do modelo (publico) e e aplicado no servidor em /api/varejo/pedido quando ha passe ativo (itens guardam preco e preco_geral; pedido guarda subtotal_geral). Checkout mostra "Desconto de assinante".
 - Painel /admin/pedidos, aba "Assinantes e descontos": preco do passe, taxa MP, criterio por ramo, lista de assinantes e liberar acesso a mao.
 - Limites atuais: o passe nao renova sozinho; reembolso de passe nao revoga o acesso sozinho; so a loja de calcados aplica desconto automatico; "liberar tudo" do portal (conteudos fechados) ainda nao existe: a area do cliente mostra descontos e pedidos.
+
+## Registro 02/11/2026 - catalogo inicial e correcao de prazos
+- Modelos cadastrados na loja (todos ligados a fabrica "Di Franca", lote minimo 12 pares): Sapato Social Preto 934 e Marrom 935 (custo 163,12, preco 192,90, numeros 37 ao 44); Mocassim Feminino Classico Whisky 004 e Marinho 004 (custo 171,92 promocional, preco 202,00, numeros 33 ao 40). Atencao: o custo dos mocassins vem de um preco promocional (20% de desconto); se a promocao acabar o custo sobe e o preco precisa ser recalculado: preco = (custo + 20) / 0,9502.
+- SQL da assinatura rodado por completo no Supabase (tabelas, colunas e as funcoes cal_pedido_mudou e vit_apurar).
+- Correcao de texto: /calcados, carrinho e faixa da home diziam que todo pedido e separado em 3 a 5 dias uteis; agora remetem ao prazo e ao lote minimo de cada modelo (regra por fabrica).
