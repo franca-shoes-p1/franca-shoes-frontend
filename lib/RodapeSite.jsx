@@ -34,6 +34,7 @@ const COLUNAS = [
   ] },
   { t: 'Conheça', itens: [
     ['⛪', 'Manual da Igreja', '/manual-da-igreja'],
+    ['🌿', 'Escola de Agropecuária Ecológica', '/escola'],
     ['🌱', 'Vigiar e Cultivar', '/vigiar-e-cultivar'],
     ['💛', 'Fidelidade', '/fidelidade'],
     ['📖', 'E-books práticos', '/ebooks'],
