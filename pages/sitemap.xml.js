@@ -2,7 +2,7 @@
 import { caminhos } from '../lib/presenca';
 
 const BASE = 'https://www.igreja.eco.br';
-const FIXAS = ['/', '/calcados', '/catalogo', '/sites', '/presenca'];
+const FIXAS = ['/', '/calcados', '/catalogo', '/sites', '/presenca', '/escola'];
 
 export async function getServerSideProps({ res }) {
   const urls = [...FIXAS, ...caminhos().map((c) => `/presenca/${c.params.segmento}/${c.params.cidade}`)];
