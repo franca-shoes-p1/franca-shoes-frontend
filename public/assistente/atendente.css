@@ -1,0 +1,30 @@
+/* Tema do Atendente WhatsApp: mesmas cores da vitrine da home (fundo creme, roxo escuro, amarelo e verde do WhatsApp). Carregado depois de motor.css. */
+:root{
+  --noite:#2a1457; --noite2:#4a2a8a; --azul:#2a1457; --azul2:#8b6fd0; --ciano:#ffd400; --gelo:#25d366;
+  --creme:#fdf8ee; --lilas:#f3eefb; --tinta:#2a1457; --cinza:#5b4a80; --borda:#e6dff3;
+  --grad:linear-gradient(135deg,#ffd400,#ffbf00);
+  --cor:#0a8f6a; --cor2:#43d6a4;
+}
+body{background:#fdf8ee}
+:focus-visible{outline:3px solid #2a1457}
+.fundo{background:radial-gradient(800px 420px at 92% 6%,rgba(255,212,0,.30),transparent 60%),radial-gradient(700px 380px at 0% 100%,rgba(37,211,102,.20),transparent 60%),#fdf8ee}
+.bolha{background:#ffd400;opacity:.16}
+.topo a,.topo .voltar{color:#2a1457}
+.pilula{border-color:rgba(42,20,87,.35);background:#fff;color:#2a1457}
+.pilula i{background:#25d366;animation-name:pingVerde}
+@keyframes pingVerde{0%{box-shadow:0 0 0 0 rgba(37,211,102,.7)}70%,100%{box-shadow:0 0 0 10px rgba(37,211,102,0)}}
+h1{color:#2a1457}
+h1 em{color:#2a1457;background:linear-gradient(transparent 58%,#ffd400 58%);padding:0 4px}
+.lead{color:#433463}
+.cartao{border:1px solid rgba(42,20,87,.14);box-shadow:0 22px 50px rgba(42,20,87,.16)}
+.progresso span.feito::after,.progresso span::after{background:#2a1457}
+.opcao:hover .caixa{border-color:#8b6fd0}
+.opcao input:focus-visible+.caixa{outline-color:#2a1457}
+.opcao input:checked+.caixa{border-color:#2a1457;box-shadow:0 8px 24px rgba(42,20,87,.18)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:#2a1457}
+.btn.principal{background:#ffd400;color:#2a1457;box-shadow:0 10px 26px rgba(255,212,0,.5)}
+.btn.contorno{border-color:#2a1457;color:#2a1457}
+.sucesso .selo{background:#25d366;color:#fff}
+.celular{background:#1d0e3f;border-color:rgba(42,20,87,.35);box-shadow:0 30px 70px rgba(42,20,87,.35)}
+.chip{background:#fff;border-color:rgba(42,20,87,.2);color:#2a1457;backdrop-filter:none;box-shadow:0 12px 30px rgba(42,20,87,.2)}
+.nota a,.erro{color:#2a1457}
