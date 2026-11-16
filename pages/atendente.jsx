@@ -42,7 +42,8 @@ export default function Atendente() {
         <h1 className={s.titulo}>Atendimento no WhatsApp <em>sem ficar preso ao celular</em></h1>
         <p className={s.texto}>Um assistente com IA que responde o cliente, mostra preços, marca horário e avisa você quando é hora de entrar na conversa.</p>
         <div className={s.acoes}>
-          <a href="#demonstracao" className={`${s.botao} ${s.principal}`}>Testar agora</a>
+          <a href="/monte-seu-atendente" className={`${s.botao} ${s.principal}`}>Montar o meu atendente</a>
+          <a href="#demonstracao" className={`${s.botao} ${s.contorno}`}>Ver a demonstração</a>
           <a href={WHATS_ATENDENTE} className={`${s.botao} ${s.contorno}`} target="_blank" rel="noopener noreferrer">Pedir orçamento no WhatsApp</a>
         </div>
       </header>

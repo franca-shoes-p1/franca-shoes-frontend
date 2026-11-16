@@ -16,6 +16,7 @@ const nextConfig = {
       { source: '/manual-afiliado', destination: '/manual-afiliado/index.html' },
       { source: '/monte-seu-site', destination: '/monte-seu-site/index.html' },
       { source: '/assistentes', destination: '/assistentes/index.html' },
+      { source: '/monte-seu-atendente', destination: '/monte-seu-atendente/index.html' },
     ];
   },
 };
