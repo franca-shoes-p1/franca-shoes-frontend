@@ -29,7 +29,7 @@ export default function AtendenteBanner() {
             ))}
           </div>
           <div className={s.acoes}>
-            <a href="#atendente-demo" className={`${s.botao} ${s.principal}`}>Testar o assistente agora</a>
+            <a href="/monte-seu-atendente" className={`${s.botao} ${s.principal}`}>Testar o assistente agora</a>
             <Link href="/atendente" className={`${s.botao} ${s.contorno}`}>Ver como funciona</Link>
           </div>
           <p className={s.nota}>Demonstração com dados de exemplo. Valores e prazos são combinados caso a caso. Não prometemos resultados.</p>
