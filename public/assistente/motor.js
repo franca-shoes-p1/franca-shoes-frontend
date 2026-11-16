@@ -122,6 +122,13 @@
   var info = $("passoInfo"), erro = $("erro"), btnV = $("voltar"), btnA = $("avancar");
   var atual = 0, enviando = false;
 
+  /* passos condicionais: um passo com "se(e)" só aparece quando a função devolve verdadeiro */
+  function visivel(i) { if (i >= total - 1) return true; var s = C.passos[i].se; return !s || !!s(estado()); }
+  function proximo(i) { var k = i + 1; while (k < total - 1 && !visivel(k)) k++; return k; }
+  function anterior(i) { var k = i - 1; while (k > 0 && !visivel(k)) k--; return k; }
+  function contagem(i) { var n = 0, pos = 0; for (var k = 0; k < total; k++) { if (visivel(k)) { n++; if (k <= i) pos = n; } } return [pos, n]; }
+
+  function mostrarBarras() { var c = contagem(atual); info.textContent = "Passo " + c[0] + " de " + c[1]; barras.forEach(function (x, k) { x.style.display = k < c[1] ? "" : "none"; x.classList.toggle("feito", k < c[0]); }); }
   function resumo() {
     var e = estado();
     $("resumo").innerHTML = C.resumo.map(function (l) {
@@ -132,8 +139,7 @@
   function mostrar(i) {
     atual = i;
     passos.forEach(function (p, k) { p.classList.toggle("ativo", k === i); });
-    barras.forEach(function (x, k) { x.classList.toggle("feito", k <= i); });
-    info.textContent = "Passo " + (i + 1) + " de " + total;
+    var ct = contagem(i); info.textContent = "Passo " + ct[0] + " de " + ct[1]; barras.forEach(function (x, k) { x.style.display = k < ct[1] ? "" : "none"; x.classList.toggle("feito", k < ct[0]); });
     btnV.hidden = i === 0;
     btnA.textContent = i === total - 1 ? "Enviar meu pedido" : "Continuar";
     erro.textContent = "";
@@ -153,7 +159,7 @@
     var s = $("sucesso"); s.hidden = false;
     $("sucessoTitulo").textContent = res.ok ? "Pedido nº " + res.numero + " registrado!" : "Quase pronto!";
     $("sucessoTexto").textContent = res.ok
-      ? "Recebemos o seu pedido. Para agilizar, envie também esta mensagem no WhatsApp da agência:"
+      ? "Recebemos o seu pedido." + (res.codigo ? " Guarde o código de acompanhamento: " + res.codigo + "." : "") + " Para agilizar, envie também esta mensagem no WhatsApp da agência:"
       : (res.erro || "Não conseguimos registrar agora.") + " Envie esta mensagem pelo WhatsApp da agência e cuidamos do resto:";
     $("msg").textContent = msg;
     $("zap").href = "https://wa.me/" + WHATS + "?text=" + encodeURIComponent(msg);
@@ -171,19 +177,21 @@
       servico: C.servico,
       descricao: ("[" + C.rotulo + "] " + C.descricao(e) + ($("obs").value.trim() ? " | Obs: " + $("obs").value.trim() : "")),
       prazo: $("prazo").value.trim(),
+      obs: $("obs").value.trim(),
       site: $("site").value
     };
+    if (C.dados) dados = C.dados(e, dados);
     var msg = C.mensagem(e, { nome: dados.nome, whatsapp: dados.whatsapp, prazo: dados.prazo, obs: $("obs").value.trim() });
-    fetch("/api/atelie", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dados) })
-      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok === true, numero: j.numero, erro: j.erro }; }); })
+    fetch(C.endpoint || "/api/atelie", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dados) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok === true, numero: j.numero, codigo: j.codigo, erro: j.erro }; }); })
       .catch(function () { return { ok: false }; })
       .then(function (res) { fim(res, msg); });
   }
   btnA.addEventListener("click", function () {
     if (!validar()) return;
-    if (atual < total - 1) mostrar(atual + 1); else enviar();
+    if (atual < total - 1) mostrar(proximo(atual)); else enviar();
   });
-  btnV.addEventListener("click", function () { if (atual > 0) mostrar(atual - 1); });
+  btnV.addEventListener("click", function () { if (atual > 0) mostrar(anterior(atual)); });
   form.addEventListener("submit", function (e) { e.preventDefault(); btnA.click(); });
   $("copiar").addEventListener("click", function () {
     var m = $("copiado"), t = $("msg").textContent;
@@ -191,4 +199,5 @@
     try { navigator.clipboard.writeText(t).then(function () { m.textContent = "Mensagem copiada."; }, sel); } catch (x) { sel(); }
   });
   barras[0].classList.add("feito");
+  mostrarBarras();
 })();

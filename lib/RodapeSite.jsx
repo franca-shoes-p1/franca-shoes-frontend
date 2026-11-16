@@ -32,6 +32,7 @@ const COLUNAS = [
     ['🏬', 'Monte a sua loja', '/monte-sua-loja'],
     ['🖥️', 'Monte o seu site', '/monte-seu-site'],
     ['💬', 'Monte o seu atendente', '/monte-seu-atendente'],
+    ['🧱', 'Monte o seu negócio', '/monte-seu-negocio'],
     ['🧮', 'Calculadora de margem', '/calculadora'],
   ] },
   { t: 'Conheça', itens: [
