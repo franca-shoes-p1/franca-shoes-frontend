@@ -14,7 +14,7 @@
     rotulo: "Monte o seu atendente",
     pilula: "Atendente WhatsApp",
     tituloPagina: "Monte o seu atendente de WhatsApp | Igreja Eco",
-    titulo: "Monte o seu atendente <em>em 4 passos</em> e veja a conversa ganhar forma",
+    titulo: "Monte o seu atendente <em>passo a passo</em> e veja a conversa ganhar forma",
     lead: "Diga o tipo de negócio, o que o assistente deve fazer e o nome dele. A conversa ao lado muda na hora. No fim, você manda o pedido e respondemos no WhatsApp, sem compromisso.",
     moldura: "celular",
     fichas: ["⚡ Prévia ao vivo", "Aviso no Telegram"],
@@ -35,7 +35,11 @@
         { id: "nomeAss", tipo: "texto", rotulo: "Nome do assistente", placeholder: "Ex.: Duda", max: 20 },
         { id: "cor", tipo: "cores", rotulo: "Cor principal", opcoes: [
           { v: "Verde", a: "#0a8f6a", b: "#43d6a4" }, { v: "Azul", a: "#1e6bff", b: "#12c6e8" }, { v: "Rosa", a: "#e5307a", b: "#ff8fb1" },
-          { v: "Laranja", a: "#f0600a", b: "#ffb347" }, { v: "Roxo", a: "#6a3de8", b: "#b18cff" }, { v: "Preto e dourado", a: "#14110f", b: "#c9a24a" }] }] }
+          { v: "Laranja", a: "#f0600a", b: "#ffb347" }, { v: "Roxo", a: "#6a3de8", b: "#b18cff" }, { v: "Preto e dourado", a: "#14110f", b: "#c9a24a" }] }] },
+      { titulo: "Como o WhatsApp funciona no Atendente", dica: "Leia com atenção. O Atendente usa o canal NÃO oficial do WhatsApp, ligado a um número comum (de preferência separado do seu principal). Não há taxa de API da Meta, mas existe o risco de a Meta limitar ou bloquear o número, às vezes sem aviso. A conexão pode cair e precisar ser refeita, e não garantimos funcionamento sem interrupção. Não fazemos disparo em massa. O canal oficial da Meta é opcional, exige CNPJ ou MEI e tem cobrança da Meta por mensagem.", campos: [
+        { id: "ciente", tipo: "opcoes", opcoes: [
+          { v: "Li e quero seguir com o canal não oficial", e: "✅", t: "Li e quero seguir assim", s: "Entendi o risco de bloqueio do número e a falta de garantia." },
+          { v: "Quero conversar sobre o canal oficial", e: "🏢", t: "Quero conversar sobre o canal oficial", s: "Tenho CNPJ ou MEI e prefiro mais segurança." }] }] }
     ],
     previa: function (e, esc) {
       var d = DADOS[e.negocio] || DADOS["Loja"];
@@ -52,14 +56,14 @@
         '<div style="flex:1;display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:#efeae2;overflow:hidden">' + m + "</div>" +
         '<div class="pagar">Responde 24 horas por dia</div>';
     },
-    resumo: [["Negócio", function (e) { return e.negocio; }], ["Faz", function (e) { return e.funcoes; }], ["Conversas por dia", function (e) { return e.volume; }], ["Nome do negócio", function (e) { return e.nomeNeg; }], ["Nome do assistente", function (e) { return e.nomeAss; }], ["Cor", function (e) { return e.cor; }]],
+    resumo: [["Negócio", function (e) { return e.negocio; }], ["Faz", function (e) { return e.funcoes; }], ["Conversas por dia", function (e) { return e.volume; }], ["Nome do negócio", function (e) { return e.nomeNeg; }], ["Nome do assistente", function (e) { return e.nomeAss; }], ["Canal WhatsApp", function (e) { return e.ciente; }], ["Cor", function (e) { return e.cor; }]],
     descricao: function (e) {
-      return "Negócio: " + e.negocio + " | Funções: " + ((e.funcoes || []).join(", ") || "a definir") + " | Conversas por dia: " + e.volume + " | Nome do negócio: " + (e.nomeNeg || "a definir") + " | Assistente: " + (e.nomeAss || "a definir") + " | Cor: " + e.cor;
+      return "Negócio: " + e.negocio + " | Funções: " + ((e.funcoes || []).join(", ") || "a definir") + " | Conversas por dia: " + e.volume + " | Nome do negócio: " + (e.nomeNeg || "a definir") + " | Canal: " + (e.ciente || "a confirmar") + " | Assistente: " + (e.nomeAss || "a definir") + " | Cor: " + e.cor;
     },
     mensagem: function (e, d) {
       return "Olá! Quero montar o meu Atendente WhatsApp.\n\nNome: " + d.nome + "\nWhatsApp: " + d.whatsapp + "\nNegócio: " + e.negocio +
         "\nFunções: " + ((e.funcoes || []).join(", ") || "a definir") + "\nConversas por dia: " + e.volume + "\nNome do negócio: " + (e.nomeNeg || "a definir") +
-        "\nNome do assistente: " + (e.nomeAss || "a definir") + "\nCor: " + e.cor + (d.prazo ? "\nPrazo: " + d.prazo : "") + (d.obs ? "\nObservação: " + d.obs : "");
+        "\nNome do assistente: " + (e.nomeAss || "a definir") + "\nCanal WhatsApp: " + (e.ciente || "a confirmar") + "\nCor: " + e.cor + (d.prazo ? "\nPrazo: " + d.prazo : "") + (d.obs ? "\nObservação: " + d.obs : "");
     }
   };
 })();
