@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import s from '../../styles/atendente.module.css';
 import AtendenteMotor from '../../lib/AtendenteMotor';
-import { Barra, Duvidas, Final } from '../../lib/AtendenteSecoes';
+import { Barra, AvisoCanal, Duvidas, Final } from '../../lib/AtendenteSecoes';
 import { WHATS_ATENDENTE } from '../../lib/atendente';
 
 const DORES = [
@@ -43,6 +43,7 @@ export default function AtendenteComercio() {
           {DORES.map((c) => (<div key={c.t} className={s.cartao}><span className={s.icone} aria-hidden="true">{c.e}</span><h3>{c.t}</h3><p>{c.p}</p></div>))}
         </div>
       </section>
+      <AvisoCanal />
       <Duvidas />
       <Final />
     </div>

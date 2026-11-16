@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import s from '../styles/atendente.module.css';
 import AtendenteMotor from '../lib/AtendenteMotor';
-import { Barra, Duvidas, Final } from '../lib/AtendenteSecoes';
+import { Barra, AvisoCanal, Duvidas, Final } from '../lib/AtendenteSecoes';
 import { PLANOS, WHATS_ATENDENTE } from '../lib/atendente';
 
 const PARA_QUEM = [
@@ -94,14 +94,7 @@ export default function Atendente() {
         </div>
       </section>
 
-      <section className={s.bloco}>
-        <p className={s.rotulo}>Canal</p>
-        <h2 className={s.h2}>WhatsApp: <em>o que muda</em> entre piloto e oficial</h2>
-        <div className={s.canal}>
-          <p><b>Piloto:</b> usamos um número separado, sem disparo em massa, só para testar com você.</p>
-          <p><b>Cliente pagante:</b> usamos o canal oficial da Meta, com a conta e o número em nome do próprio negócio. Isso protege o seu número.</p>
-        </div>
-      </section>
+      <AvisoCanal />
 
       <Duvidas />
       <Final />
