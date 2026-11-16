@@ -8,6 +8,7 @@ import PraiaHomeBanner from '../lib/PraiaHomeBanner';
 import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
+import AtendenteBanner from '../lib/AtendenteBanner';
 import VitrineFaixa from '../lib/VitrineFaixa';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
@@ -63,6 +64,7 @@ const PROJETOS = [
   { e: '🛠️', t: 'Oficina Digital', d: 'Tarefas curtas pelo celular, com Pontos Oficina', href: '/oficina' },
   { e: '🏖️', t: 'Parceiros da Praia', d: 'Venda comida na praia em parceria, vagas limitadas', href: '/praia' },
   { e: '👟', t: 'Loja de Calçados Pronta', d: 'Sua loja online de calçados, entregue funcionando', href: '#calcados' },
+  { e: '💬', t: 'Atendente WhatsApp', d: 'Assistente com IA que atende, agenda e avisa você', href: '#atendente' },
   { e: '🏠', t: 'Entrega em Casa', d: 'Peça o que quiser, prove em casa e só pague se gostar', href: '/entrega-em-casa' },
 ];
 
@@ -185,6 +187,7 @@ export default function Home() {
 
       <main id="topo">
         <FestaBanner />
+        <AtendenteBanner />
         <CampanhaBanner />
         <VitrineFaixa />
         <ComercioVitrine />

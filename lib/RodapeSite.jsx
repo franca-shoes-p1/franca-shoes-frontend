@@ -12,6 +12,7 @@ const COLUNAS = [
     ['🏪', 'Fábricas de Franca', '/fabricas'],
     ['💼', 'Soluções para o comércio', '/presenca'],
     ['📍', 'Radar de Pontos', '/radar'],
+    ['💬', 'Atendente WhatsApp', '/atendente'],
     ['🧩', 'Ateliê Sob Medida', '/atelie'],
     ['🌐', 'Fábrica de Sites', '/sites'],
     ['📚', 'Livros e e-books', '/livros'],
