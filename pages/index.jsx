@@ -10,6 +10,7 @@ import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
 import AtendenteBanner from '../lib/AtendenteBanner';
 import ConstrucaoBanner from '../lib/ConstrucaoBanner';
+import MembroVitrine from '../lib/MembroVitrine';
 import VitrineFaixa from '../lib/VitrineFaixa';
 import AfiliadosBanner from '../lib/AfiliadosBanner';
 import FestaBanner from '../lib/FestaBanner';
@@ -123,7 +124,8 @@ const FAQ = [
 export default function Home() {
   const raiz = useRef(null);
   const [menu, setMenu] = useState(false);
-  const fechar = () => setMenu(false);
+  const [mais, setMais] = useState(false);
+  const fechar = () => { setMenu(false); setMais(false); };
   const [fala, setFala] = useState(0);
   const video = embedVideo(VIDEO_URL);
 
@@ -173,7 +175,7 @@ export default function Home() {
             <span /><span /><span />
           </button>
           <nav className={`${styles.topoMenu} ${menu ? styles.topoMenuAberto : ''}`} aria-label="Projetos">
-            {PROJETOS.map((p) => (
+            {PROJETOS.slice(0, 5).map((p) => (
               <Link key={p.t} href={p.href} className={styles.projeto} onClick={fechar}>
                 <span className={styles.projIcone} aria-hidden="true">{p.e}</span>
                 <span className={styles.projTexto}><b>{p.t}</b><small>{p.d}</small></span>
@@ -182,7 +184,33 @@ export default function Home() {
             <a href="#campanha" className={styles.projCampanha} onClick={fechar}>🎁 Campanha</a>
             <Link href="/catalogo" className={styles.projCampanha} onClick={fechar}>📚 Catálogo</Link>
             <Link href="/sites" className={styles.projCampanha} onClick={fechar}>🌐 Fábrica de Sites</Link>
-            <Link href="/radar" className={styles.projCampanha} onClick={fechar}>📍 Radar de Pontos</Link>
+            <div className={`${styles.maisBox} ${mais ? styles.maisAberto : ''}`}>
+              <button type="button" className={styles.maisBtn} aria-expanded={mais} onClick={() => setMais(!mais)}>Mais ▾</button>
+              <div className={styles.maisLista}>
+                {PROJETOS.slice(5).map((p) => (
+                  <Link key={p.t} href={p.href} className={styles.projeto} onClick={fechar}>
+                    <span className={styles.projIcone} aria-hidden="true">{p.e}</span>
+                    <span className={styles.projTexto}><b>{p.t}</b><small>{p.d}</small></span>
+                  </Link>
+                ))}
+                <Link href="/seja-membro" className={styles.projeto} onClick={fechar}>
+                  <span className={styles.projIcone} aria-hidden="true">🙏</span>
+                  <span className={styles.projTexto}><b>Seja membro</b><small>Cadastro gratuito na igreja</small></span>
+                </Link>
+                <Link href="/construcao" className={styles.projeto} onClick={fechar}>
+                  <span className={styles.projIcone} aria-hidden="true">🏗️</span>
+                  <span className={styles.projTexto}><b>Pedido de Construção</b><small>Peça o projeto do seu negócio</small></span>
+                </Link>
+                <Link href="/livros" className={styles.projeto} onClick={fechar}>
+                  <span className={styles.projIcone} aria-hidden="true">📘</span>
+                  <span className={styles.projTexto}><b>Livros e manuais</b><small>Capítulo grátis e tarefas</small></span>
+                </Link>
+                <Link href="/radar" className={styles.projeto} onClick={fechar}>
+                  <span className={styles.projIcone} aria-hidden="true">📍</span>
+                  <span className={styles.projTexto}><b>Radar de Pontos</b><small>Pontos de venda e parceiros</small></span>
+                </Link>
+              </div>
+            </div>
           </nav>
         </div>
       </header>
@@ -195,6 +223,7 @@ export default function Home() {
         <VitrineFaixa />
         <ComercioVitrine />
         <IgrejaHero />
+        <MembroVitrine />
         <AtelieBanner />
         <LivrosBanner />
         <OficinaHomeBanner />

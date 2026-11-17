@@ -1,0 +1,66 @@
+/* Vitrine "Comunidade da Igreja" (home): verde da horta com dourado, carteirinha de membro e portas para as páginas da igreja. */
+.banner { position: relative; overflow: hidden; color: #fff;
+  background:
+    radial-gradient(900px 420px at 92% 8%, rgba(255, 214, 120, 0.22), transparent 60%),
+    radial-gradient(700px 380px at 0% 110%, rgba(60, 210, 140, 0.30), transparent 60%),
+    linear-gradient(115deg, #06291f 0%, #0b4a35 50%, #12724f 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10); }
+.banner * { box-sizing: border-box; }
+.brilho1, .brilho2 { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+.brilho1 { width: 260px; height: 260px; right: 8%; top: -60px; background: rgba(255, 214, 120, 0.25); animation: deriva 14s ease-in-out infinite; }
+.brilho2 { width: 220px; height: 220px; left: 4%; bottom: -80px; background: rgba(60, 220, 150, 0.30); animation: deriva 18s ease-in-out -6s infinite; }
+.dentro { position: relative; max-width: 1140px; margin: 0 auto; padding: 56px 20px; }
+.topo { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+.pilula { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 999px; padding: 9px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(255, 255, 255, 0.06); }
+.pilula i { width: 8px; height: 8px; border-radius: 50%; background: #ffd98a; animation: ping 2s infinite; }
+.titulo { font-size: clamp(32px, 5vw, 56px); line-height: 1.06; font-weight: 800; letter-spacing: -0.02em; margin: 22px 0 0; text-wrap: balance; }
+.titulo em { font-style: normal; color: #ffd98a; }
+.texto { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: rgba(255, 255, 255, 0.88); margin: 20px 0 0; max-width: 36em; }
+.acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+.botao { display: inline-block; font-weight: 700; font-size: 16px; border-radius: 999px; padding: 16px 30px; color: #fff; transition: transform 0.15s, box-shadow 0.15s; }
+.principal { background: linear-gradient(135deg, #ffcf6b, #e08a1f); color: #2a1a00; box-shadow: 0 10px 30px rgba(224, 138, 31, 0.45); }
+.contorno { border: 2px solid rgba(255, 255, 255, 0.55); background: transparent; }
+.botao:hover { transform: translateY(-2px); }
+.botao:focus-visible, .porta:focus-visible { outline: 3px solid #ffd98a; outline-offset: 3px; }
+.selos { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+.selos li { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 999px; padding: 8px 14px; font-weight: 600; font-size: 14px; }
+
+.palco { position: relative; min-width: 0; padding: 18px 0; min-height: 330px; display: grid; place-items: center; }
+.carteira { width: min(340px, 92%); background: linear-gradient(150deg, #1d63b8, #0f3f86); border-radius: 22px; padding: 20px; box-shadow: 0 28px 60px rgba(0, 20, 12, 0.55); transform: rotate(-3deg); animation: flutua 7s ease-in-out infinite; border: 1px solid rgba(255, 255, 255, 0.25); }
+.carteiraTopo { display: flex; flex-direction: column; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); font-weight: 700; }
+.carteiraNome { font-size: 30px; font-weight: 800; margin: 12px 0 8px; }
+.carteiraLinha { display: flex; flex-direction: column; margin-top: 10px; }
+.carteiraLinha small { font-size: 12px; opacity: 0.8; }
+.carteiraLinha b { font-size: 18px; }
+.carteiraChips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.carteiraChips span { background: rgba(255, 255, 255, 0.16); border-radius: 999px; padding: 4px 10px; font-size: 12px; }
+.carteiraSelo { margin-top: 16px; background: #25d366; color: #06361b; border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 700; }
+.chip { position: absolute; background: #fff; color: #0b3d2e; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 8px 14px; box-shadow: 0 12px 28px rgba(0, 20, 12, 0.4); }
+.c1 { right: 0; top: 10px; animation: flutua 6s ease-in-out -2s infinite; }
+.c2 { left: 0; bottom: 8px; animation: flutua 6s ease-in-out -4s infinite; }
+
+.portas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 44px 0 0; padding: 0; list-style: none; }
+.porta { display: flex; align-items: center; gap: 14px; height: 100%; padding: 16px 18px; border-radius: 18px; color: #fff; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); transition: transform 0.18s, background 0.18s, border-color 0.18s; }
+.porta:hover { transform: translateY(-4px); background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 217, 138, 0.7); }
+.portaDestaque { background: linear-gradient(135deg, #ffcf6b, #e08a1f); color: #2a1a00; border-color: transparent; box-shadow: 0 12px 30px rgba(224, 138, 31, 0.4); }
+.portaDestaque:hover { background: linear-gradient(135deg, #ffd98a, #eb9a2f); }
+.portaIcone { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; background: rgba(255, 255, 255, 0.14); }
+.portaDestaque .portaIcone { background: rgba(255, 255, 255, 0.4); }
+.portaTexto { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; flex: 1; }
+.portaTexto b { font-size: 16px; }
+.portaTexto small { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+.seta { flex: none; font-size: 20px; font-weight: 800; transition: transform 0.18s; }
+.porta:hover .seta { transform: translateX(4px); }
+
+.grupos { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 26px; font-size: 14px; }
+.grupos span { border: 1px dashed rgba(255, 255, 255, 0.5); border-radius: 999px; padding: 5px 12px; }
+.grupos small { flex-basis: 100%; opacity: 0.75; margin-top: 2px; }
+
+@keyframes deriva { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(24px, 18px); } }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255, 217, 138, 0.6); } 70%, 100% { box-shadow: 0 0 0 10px rgba(255, 217, 138, 0); } }
+@keyframes flutua { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+
+@media (max-width: 900px) { .topo { grid-template-columns: 1fr; gap: 28px; } .portas { grid-template-columns: repeat(2, 1fr); } .palco { min-height: 300px; } }
+@media (max-width: 560px) { .dentro { padding: 40px 16px; } .portas { grid-template-columns: 1fr; } .botao { width: 100%; text-align: center; } .c1 { right: -4px; } .c2 { left: -4px; } }
+@media (prefers-reduced-motion: reduce) { .brilho1, .brilho2, .carteira, .c1, .c2, .pilula i { animation: none; } .porta, .botao, .seta { transition: none; } }
+.portaDestaque .portaTexto small { opacity: 1; color: #4a2f00; }
