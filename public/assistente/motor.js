@@ -18,7 +18,7 @@
     var h = "";
     if (c.tipo === "opcoes") {
       h += '<div class="niveis">' + c.opcoes.map(function (o, i) {
-        return '<label class="opcao"><input type="radio" name="' + c.id + '" value="' + esc(o.v) + '"' + ((c.padrao ? c.padrao === o.v : i === 0) ? " checked" : "") + '><span class="caixa"><strong>' + (o.e ? o.e + " " : "") + esc(o.t || o.v) + "</strong>" + (o.s ? "<small>" + esc(o.s) + "</small>" : "") + "</span></label>";
+        return '<label class="opcao"><input type="radio" name="' + c.id + '" value="' + esc(o.v) + '"' + ((c.semPadrao ? false : (c.padrao ? c.padrao === o.v : i === 0)) ? " checked" : "") + '><span class="caixa"><strong>' + (o.e ? o.e + " " : "") + esc(o.t || o.v) + "</strong>" + (o.s ? "<small>" + esc(o.s) + "</small>" : "") + "</span></label>";
       }).join("") + "</div>";
     } else if (c.tipo === "chips") {
       h += '<div class="chips">' + c.opcoes.map(function (o) {
@@ -64,14 +64,14 @@
     '<div class="progresso" id="progresso" aria-hidden="true">' + barrasHtml + "</div>" +
     '<p class="passo-info" id="passoInfo" aria-live="polite">Passo 1 de ' + total + "</p>" +
     passosHtml +
-    '<section class="passo" data-passo="' + total + '"><h2>Quase lá! Seus dados</h2><p class="dica">Respondemos pelo WhatsApp com a indicação e o orçamento.</p>' +
+    '<section class="passo" data-passo="' + total + '"><h2>Quase lá! Seus dados</h2><p class="dica">' + esc(C.finalDica || "Respondemos pelo WhatsApp com a indicação e o orçamento.") + '</p>' +
     '<dl class="resumo" id="resumo"></dl>' +
     '<label class="campo">Seu nome<input type="text" id="nome" maxlength="120" autocomplete="name" required></label>' +
     '<label class="campo">WhatsApp com DDD<input type="tel" id="whatsapp" maxlength="30" autocomplete="tel" inputmode="tel" placeholder="(16) 99999-9999" required></label>' +
-    '<label class="campo">Prazo desejado (opcional)<input type="text" id="prazo" maxlength="80" placeholder="Ex.: o mais rápido possível"></label>' +
+    '<label class="campo">' + esc(C.prazoRotulo || "Prazo desejado (opcional)") + '<input type="text" id="prazo" maxlength="80" placeholder="Ex.: o mais rápido possível"></label>' +
     '<label class="campo">Quer contar mais alguma coisa? (opcional)<textarea id="obs" maxlength="500"></textarea></label>' +
     '<div class="hp" aria-hidden="true"><label>Não preencha <input type="text" id="site" tabindex="-1" autocomplete="off"></label></div>' +
-    '<p class="nota">Guardamos só os dados necessários para responder o seu pedido, e apenas para isso. Não prometemos vendas nem lucro: entregamos o que foi combinado.</p></section>' +
+    '<p class="nota">' + esc(C.finalNota || "Guardamos só os dados necessários para responder o seu pedido, e apenas para isso. Não prometemos vendas nem lucro: entregamos o que foi combinado.") + '</p></section>' +
     '<p class="erro" id="erro" role="alert"></p>' +
     '<div class="acoes" id="botoes"><button type="button" class="btn contorno" id="voltar" hidden>Voltar</button><button type="button" class="btn principal" id="avancar">Continuar</button></div>' +
     '<section class="sucesso" id="sucesso" hidden><div class="selo" aria-hidden="true">✓</div><h2 id="sucessoTitulo"></h2><p id="sucessoTexto" style="color:var(--cinza);margin-top:6px"></p><pre id="msg"></pre>' +
@@ -141,7 +141,7 @@
     passos.forEach(function (p, k) { p.classList.toggle("ativo", k === i); });
     var ct = contagem(i); info.textContent = "Passo " + ct[0] + " de " + ct[1]; barras.forEach(function (x, k) { x.style.display = k < ct[1] ? "" : "none"; x.classList.toggle("feito", k < ct[0]); });
     btnV.hidden = i === 0;
-    btnA.textContent = i === total - 1 ? "Enviar meu pedido" : "Continuar";
+    btnA.textContent = i === total - 1 ? (C.botaoEnviar || "Enviar meu pedido") : "Continuar";
     erro.textContent = "";
     if (i === total - 1) resumo();
     var h = passos[i].querySelector("h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
@@ -152,14 +152,22 @@
       if ($("nome").value.trim().length < 2) { erro.textContent = "Informe o seu nome."; $("nome").focus(); return false; }
       if ($("whatsapp").value.replace(/\D/g, "").length < 10) { erro.textContent = "Informe o WhatsApp com DDD."; $("whatsapp").focus(); return false; }
     }
+    var ob = C.passos[atual] && C.passos[atual].obrigatorio;
+    if (ob) {
+      var est = estado();
+      for (var q = 0; q < ob.length; q++) {
+        var val = est[ob[q]];
+        if (!val || (Array.isArray(val) && !val.length)) { erro.textContent = "Responda esta pergunta para continuar."; return false; }
+      }
+    }
     return true;
   }
   function fim(res, msg) {
     [].slice.call(form.querySelectorAll(".passo,.progresso,.passo-info,#botoes,#erro")).forEach(function (n) { n.hidden = true; n.style.display = "none"; });
     var s = $("sucesso"); s.hidden = false;
-    $("sucessoTitulo").textContent = res.ok ? "Pedido nº " + res.numero + " registrado!" : "Quase pronto!";
+    $("sucessoTitulo").textContent = res.ok ? (C.sucessoTitulo ? C.sucessoTitulo(res) : "Pedido nº " + res.numero + " registrado!") : "Quase pronto!";
     $("sucessoTexto").textContent = res.ok
-      ? "Recebemos o seu pedido." + (res.codigo ? " Guarde o código de acompanhamento: " + res.codigo + "." : "") + " Para agilizar, envie também esta mensagem no WhatsApp da agência:"
+      ? (C.sucessoTexto ? C.sucessoTexto(res) : "Recebemos o seu pedido." + (res.codigo ? " Guarde o código de acompanhamento: " + res.codigo + "." : "") + " Para agilizar, envie também esta mensagem no WhatsApp da agência:")
       : (res.erro || "Não conseguimos registrar agora.") + " Envie esta mensagem pelo WhatsApp da agência e cuidamos do resto:";
     $("msg").textContent = msg;
     $("zap").href = "https://wa.me/" + WHATS + "?text=" + encodeURIComponent(msg);
