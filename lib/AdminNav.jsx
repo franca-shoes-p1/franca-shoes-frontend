@@ -24,6 +24,7 @@ const ITENS = [
   { href: '/admin/ebooks', t: '📚 E-books' },
   { href: '/admin/escola', t: '🌿 Escola' },
   { href: '/admin/central', t: '🗂️ Central de Projetos' },
+  { href: '/admin/membros', t: '🙏 Membros' },
 ];
 const CSS = `
 .an{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px;padding:8px;background:var(--cd);border:1px solid var(--bd);border-radius:14px}
