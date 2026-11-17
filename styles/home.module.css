@@ -221,6 +221,21 @@
 @media (min-width: 2200px) { .topoMenu .projTexto small { display: block; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
 @media (max-width: 1559px) { .barra .botaoMenu { display: flex; } .topoMenuAberto { max-height: calc(100vh - 64px); overflow-y: auto; } }
 
+.maisBox { display: contents; }
+.maisBtn { display: none; }
+.maisLista { display: contents; }
+@media (min-width: 1560px) {
+  .maisBox { display: block; position: relative; }
+  .maisBtn { display: block; font: inherit; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.08); color: #fff; font-weight: 700; padding: 7px 12px; border-radius: 999px; font-size: 0.8rem; white-space: nowrap; }
+  .maisBtn:hover { background: rgba(255, 255, 255, 0.16); }
+  .maisLista { display: none; position: absolute; right: 0; top: calc(100% + 10px); min-width: 290px; flex-direction: column; gap: 2px; background: var(--noite); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 18px; padding: 10px; box-shadow: 0 20px 50px rgba(0, 0, 20, 0.5); z-index: 60; }
+  .maisAberto .maisLista, .maisBox:focus-within .maisLista, .maisBox:hover .maisLista { display: flex; }
+  .maisLista .projTexto small { display: block; max-width: none; }
+  .maisLista .projTexto b { font-size: 0.9rem; }
+  .maisLista .projeto { padding: 8px 12px 8px 8px; border-radius: 14px; }
+  .maisLista .projIcone { width: 34px; height: 34px; font-size: 17px; }
+}
+
 /* menu da Loja de Calçados, logo abaixo da vitrine dela */
 .subMenu { background: #fff; border-bottom: 1px solid var(--borda); position: sticky; top: 64px; z-index: 40; }
 .subGrade { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 4px; padding-top: 10px; padding-bottom: 10px; }

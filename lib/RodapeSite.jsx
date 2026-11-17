@@ -34,10 +34,11 @@ const COLUNAS = [
     ['💬', 'Monte o seu atendente', '/monte-seu-atendente'],
     ['🧱', 'Monte o seu negócio', '/monte-seu-negocio'],
     ['🏗️', 'Pedido de Construção', '/construcao'],
-    ['🙏', 'Seja membro da igreja', '/seja-membro'],
     ['🧮', 'Calculadora de margem', '/calculadora'],
   ] },
   { t: 'Conheça', itens: [
+    ['🙏', 'Seja membro da igreja', '/seja-membro'],
+    ['🕊️', 'Comunidade da Igreja', '/#comunidade'],
     ['⛪', 'Manual da Igreja', '/manual-da-igreja'],
     ['🌿', 'Escola de Agropecuária Ecológica', '/escola'],
     ['🌱', 'Vigiar e Cultivar', '/vigiar-e-cultivar'],
