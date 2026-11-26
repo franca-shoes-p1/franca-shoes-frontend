@@ -40,8 +40,8 @@
 .chip { position: absolute; display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 14px; padding: 9px 14px; font-size: 14px; font-weight: 700; color: #fff; box-shadow: 0 12px 30px rgba(0, 10, 40, 0.35); }
 .chip svg { width: 20px; height: 20px; flex: none; }
 .c1 { top: -6px; right: 2%; animation: sobe 5s ease-in-out infinite; }
-.c2 { bottom: 46px; left: -14px; animation: sobe 6s ease-in-out -2s infinite; }
-.c3 { bottom: -8px; right: 8%; animation: sobe 5.5s ease-in-out -1s infinite; }
+.c2 { bottom: 0; left: 0; animation: sobe 6s ease-in-out -2s infinite; }
+.c3 { bottom: 0; right: 0; animation: sobe 5.5s ease-in-out -1s infinite; }
 
 .dentro > div:first-child > * { opacity: 0; transform: translateY(16px); animation: entra 0.7s ease forwards; }
 .dentro > div:first-child > *:nth-child(2) { animation-delay: 0.1s; }
@@ -59,7 +59,7 @@
 
 @media (max-width: 860px) {
   .dentro { grid-template-columns: 1fr; gap: 34px; padding-top: 40px; padding-bottom: 40px; }
-  .c2 { left: 0; }
+  .c3 { right: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .banner *, .banner *::before, .banner *::after { animation: none !important; }
@@ -67,3 +67,7 @@
   .barra span { width: 100%; }
   .ok { opacity: 1; }
 }
+
+/* as etiquetas ficam fora do cartão, sem cobrir o texto */
+.palco { padding-bottom: 66px; padding-top: 30px; }
+.c1 { top: -8px; }
