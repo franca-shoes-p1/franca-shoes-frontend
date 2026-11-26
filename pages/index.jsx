@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
-import PraiaHomeBanner from '../lib/PraiaHomeBanner';
+import CarrosselVitrines from '../lib/CarrosselVitrines';
 import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
@@ -216,6 +216,7 @@ export default function Home() {
       </header>
 
       <main id="topo">
+        <CarrosselVitrines />
         <FestaBanner />
         <AtendenteBanner />
         <ConstrucaoBanner />
@@ -227,7 +228,6 @@ export default function Home() {
         <AtelieBanner />
         <LivrosBanner />
         <OficinaHomeBanner />
-        <PraiaHomeBanner />
         <AfiliadosBanner />
         <SitesVitrine />
         <section id="calcados" className={styles.hero}>
