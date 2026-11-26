@@ -225,7 +225,7 @@ export default function Home() {
         <IgrejaHero />
         <MembroVitrine />
         <AtelieBanner />
-        <LivrosBanner />
+        <div id="livros"><LivrosBanner /></div>
         <OficinaHomeBanner />
         <div id="praia"><PraiaHomeBanner /></div>
         <AfiliadosBanner />

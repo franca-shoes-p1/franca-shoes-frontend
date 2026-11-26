@@ -45,7 +45,7 @@
 .linha:nth-of-type(5) .barra span, .linha:nth-of-type(5) .ok { animation-delay: 6s; }
 .chip { position: absolute; z-index: 4; display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 14px; padding: 9px 14px; font-size: 14px; font-weight: 700; color: #fff; box-shadow: 0 12px 30px rgba(10, 0, 40, 0.35); }
 .c1 { top: 0; left: 2%; animation: sobe 5s ease-in-out infinite; }
-.c2 { top: 36%; right: 0; animation: sobe 6s ease-in-out -2s infinite; }
+.c2 { top: 0; right: 2%; animation: sobe 6s ease-in-out -2s infinite; }
 
 .dentro > div:first-child > * { opacity: 0; transform: translateY(16px); animation: entra 0.7s ease forwards; }
 .dentro > div:first-child > *:nth-child(2) { animation-delay: 0.1s; }
@@ -86,3 +86,9 @@
 .faixaItem:hover { background: #e6dcfa; }
 .faixaItem:focus-visible { outline: 3px solid #7a45d6; outline-offset: 2px; }
 .faixaItem span { font-size: 1.5rem; }
+
+/* no celular o cartão fica abaixo dos livros, sem cobrir as capas */
+@media (max-width: 860px) {
+  .palco { min-height: 0; padding-top: 56px; }
+  .cartao { position: relative; right: auto; bottom: auto; width: 100%; margin-top: 22px; }
+}

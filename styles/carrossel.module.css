@@ -4,7 +4,7 @@
 .topo h2 { margin: 0; font-size: 20px; color: #0f1b33; }
 .setas { display: flex; gap: 8px; }
 .setas button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #c9d6ee; background: #fff; color: #0f1b33; font-size: 22px; cursor: pointer; }
-.trilho { display: grid; grid-auto-flow: column; grid-auto-columns: min(340px, 84%); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.trilho { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(min(340px, 84%), 1fr); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
 .unico { grid-auto-columns: 100%; }
 .cartao { scroll-snap-align: start; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border-radius: 20px; padding: 22px; color: #fff; text-decoration: none; }
 .cartao:focus-visible { outline: 3px solid #ffb23e; outline-offset: -3px; }

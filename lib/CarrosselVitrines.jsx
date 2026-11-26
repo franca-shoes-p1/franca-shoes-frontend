@@ -12,6 +12,13 @@ const VITRINES = [
     texto: 'Você entra com o trabalho, eu entro com o kit e o estoque do dia. Sem promessa de ganho.',
     fundo: 'linear-gradient(115deg, #06566e 0%, #0a7ea4 52%, #13b5c8 100%)',
   },
+  {
+    id: 'livros',
+    emoji: '📚',
+    titulo: 'Livros para estudar, plantar e servir juntos',
+    texto: 'Manuais e programas em linguagem simples, com capítulo grátis e tarefas práticas.',
+    fundo: 'linear-gradient(115deg, #1b1650 0%, #2e2285 50%, #5a35b8 100%)',
+  },
 ];
 
 export default function CarrosselVitrines() {
@@ -25,7 +32,7 @@ export default function CarrosselVitrines() {
       <div className={s.dentro}>
         <div className={s.topo}>
           <h2>Vitrines</h2>
-          {VITRINES.length > 1 && (
+          {VITRINES.length > 3 && (
             <div className={s.setas}>
               <button type="button" onClick={() => rolar(-1)} aria-label="Vitrine anterior">‹</button>
               <button type="button" onClick={() => rolar(1)} aria-label="Próxima vitrine">›</button>

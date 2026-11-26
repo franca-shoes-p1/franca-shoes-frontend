@@ -5,7 +5,6 @@ import styles from '../styles/home.module.css';
 import AtelieBanner from '../lib/AtelieBanner';
 import OficinaHomeBanner from '../lib/OficinaHomeBanner';
 import CarrosselVitrines from '../lib/CarrosselVitrines';
-import LivrosBanner from '../lib/LivrosBanner';
 import AssistentesBanner from '../lib/AssistentesBanner';
 import CampanhaBanner from '../lib/CampanhaBanner';
 import AtendenteBanner from '../lib/AtendenteBanner';
@@ -226,7 +225,6 @@ export default function Home() {
         <IgrejaHero />
         <MembroVitrine />
         <AtelieBanner />
-        <LivrosBanner />
         <OficinaHomeBanner />
         <AfiliadosBanner />
         <SitesVitrine />
