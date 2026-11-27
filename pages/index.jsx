@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import SiteLayout, { EMAIL } from '../lib/SiteLayout';
 import { proximos } from '../lib/agenda';
+import SimuladorModa from '../lib/SimuladorModa';
 import s from '../styles/site.module.css';
 
 const CANAL = 'https://www.youtube.com/@RicardoBello-o6v/streams';
@@ -47,7 +48,8 @@ export default function Home() {
   return (
     <SiteLayout descricao="Roupas, calçados, acessórios e suvenires escolhidos ao vivo, direto dos fornecedores.">
       <section className={s.hero}>
-        <div className={s.contido}>
+        <div className={`${s.contido} ${s.heroGrade}`}>
+          <div>
           <span className={s.selinho}>Pré-lançamento</span>
           <h1>Loja de Moda e Lembranças</h1>
           <p>Compre no Brás e nos principais comércios do Brasil sem sair de casa, para revender onde quiser.</p>
@@ -55,6 +57,8 @@ export default function Home() {
             <Link href="/moda/participar" className={s.botao}>Quero participar</Link>
             <Link href="/moda" className={s.contorno}>Conhecer o projeto</Link>
           </div>
+          </div>
+          <SimuladorModa />
         </div>
       </section>
 

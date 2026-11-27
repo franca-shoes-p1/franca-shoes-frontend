@@ -51,3 +51,5 @@
   .menu { display: none; width: 100%; flex-direction: column; }
   .menuAberto { display: flex; }
 }
+.heroGrade { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: center; }
+@media (min-width: 920px) { .heroGrade { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 48px; } }
