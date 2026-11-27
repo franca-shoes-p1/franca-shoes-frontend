@@ -3,6 +3,7 @@ import Link from 'next/link';
 import SiteLayout, { EMAIL } from '../lib/SiteLayout';
 import { proximos } from '../lib/agenda';
 import SimuladorModa from '../lib/SimuladorModa';
+import IconeProduto from '../lib/IconeProduto';
 import s from '../styles/site.module.css';
 
 const CANAL = 'https://www.youtube.com/@RicardoBello-o6v/streams';
@@ -46,7 +47,7 @@ export default function Home() {
   }, []);
 
   return (
-    <SiteLayout descricao="Roupas, calçados, acessórios e suvenires escolhidos ao vivo, direto dos fornecedores.">
+    <SiteLayout descricao="Roupas, calçados, bolsas, cintos, carteiras e suvenires escolhidos ao vivo, direto dos fornecedores.">
       <section className={s.hero}>
         <div className={`${s.contido} ${s.heroGrade}`}>
           <div>
@@ -112,8 +113,8 @@ export default function Home() {
         <div className={s.contido}>
           <h2>O que vamos oferecer</h2>
           <div className={s.categorias}>
-            {[['👕', 'Roupas'], ['👟', 'Calçados'], ['👜', 'Acessórios'], ['🎁', 'Suvenires']].map(([e, t]) => (
-              <div key={t}><span aria-hidden="true">{e}</span>{t}</div>
+            {[['roupas', 'Roupas'], ['calcados', 'Calçados'], ['acessorios', 'Acessórios', 'Bolsas, cintos e carteiras'], ['suvenires', 'Suvenires']].map(([id, t, d]) => (
+              <div key={t}><span aria-hidden="true"><IconeProduto id={id} tamanho={56} /></span>{t}{d && <small style={{ display: 'block', fontWeight: 400, fontSize: 13 }}>{d}</small>}</div>
             ))}
           </div>
         </div>

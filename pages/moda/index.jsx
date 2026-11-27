@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import ModaLayout from '../../lib/ModaLayout';
+import IconeProduto from '../../lib/IconeProduto';
 import s from '../../styles/moda.module.css';
 
 const PLANOS = [
@@ -18,10 +19,10 @@ const PASSOS = [
 
 export default function Moda() {
   return (
-    <ModaLayout titulo="Início" descricao="Roupas, calçados, acessórios e suvenires escolhidos ao vivo, direto dos fornecedores.">
+    <ModaLayout titulo="Início" descricao="Roupas, calçados, bolsas, cintos, carteiras e suvenires escolhidos ao vivo, direto dos fornecedores.">
       <section className={s.hero}>
         <div className={s.contido}>
-          <h1>Roupas, calçados, acessórios e suvenires para a sua loja ou para você</h1>
+          <h1>Roupas, calçados, bolsas, cintos, carteiras e suvenires para a sua loja ou para você</h1>
           <p>Eu mostro os produtos ao vivo direto dos fornecedores, você escolhe, e eu cuido da compra. Participo de tudo com você, da hospedagem da loja até a entrega.</p>
           <div className={s.acoes}>
             <Link href="/moda/participar" className={s.botao}>Quero participar</Link>
@@ -57,8 +58,8 @@ export default function Moda() {
         <div className={s.contido}>
           <h2>O que vamos oferecer</h2>
           <div className={s.categorias}>
-            {[['👕', 'Roupas'], ['👟', 'Calçados'], ['👜', 'Acessórios'], ['🎁', 'Suvenires']].map(([e, t]) => (
-              <div key={t}><span aria-hidden="true">{e}</span>{t}</div>
+            {[['roupas', 'Roupas'], ['calcados', 'Calçados'], ['acessorios', 'Acessórios', 'Bolsas, cintos e carteiras'], ['suvenires', 'Suvenires']].map(([id, t, d]) => (
+              <div key={t}><span aria-hidden="true"><IconeProduto id={id} tamanho={56} /></span>{t}{d && <small style={{ display: 'block', fontWeight: 400, fontSize: 13 }}>{d}</small>}</div>
             ))}
           </div>
           <p>Começamos com poucos modelos de cada categoria, comprados em polos como o Brás, Goiânia e Belo Horizonte.</p>
