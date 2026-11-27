@@ -5,7 +5,7 @@ import s from '../styles/campanha.module.css';
 import { CAMPANHA as C } from './campanha';
 
 // Faixa fina no topo das páginas públicas. Fica de fora do painel, do login do operador e do pagamento.
-const SEM_FAIXA = [/^\/$/, /^\/inicio-2$/, /^\/campanha/, /^\/admin/, /^\/operador/, /^\/carrinho/, /^\/checkout/, /^\/confirmacao/, /^\/api/];
+const SEM_FAIXA = [/^\/$/, /^\/inicio-2$/, /^\/moda/, /^\/projetos/, /^\/loja-de-calcados-pronta/, /^\/campanha/, /^\/admin/, /^\/operador/, /^\/carrinho/, /^\/checkout/, /^\/confirmacao/, /^\/api/];
 
 export default function CampanhaFaixa() {
   const { pathname } = useRouter();
