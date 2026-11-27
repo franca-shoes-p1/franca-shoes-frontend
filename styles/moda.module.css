@@ -1,0 +1,49 @@
+/* Loja de Moda e Lembranças: mesmas cores da home. */
+.pagina, .destaque { font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif; line-height: 1.6; }
+.pagina { color: #0f1b33; background: #fff; min-height: 100vh; }
+.contido { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+.cabecalho { background: #061a3a; padding: 12px 0 10px; }
+.barra { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.cabecalho .marca { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; text-decoration: none; }
+.selo { width: 34px; height: 34px; border-radius: 11px; background: linear-gradient(135deg, #12c6e8, #1e6bff); display: grid; place-items: center; font-weight: 900; }
+.cabecalho .voltar { color: #cfe0ff; font-size: 14px; text-decoration: none; padding: 8px 0; }
+.menu { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cabecalho .menu a { color: #cfe0ff; text-decoration: none; padding: 8px 14px; border-radius: 999px; font-size: 15px; }
+.cabecalho .menu a.ativo { background: linear-gradient(135deg, #12c6e8, #1e6bff); color: #fff; font-weight: 700; }
+.aviso { background: #eaf3ff; border-bottom: 1px solid #dbe6f7; text-align: center; padding: 10px 20px; font-size: 14px; }
+.hero, .destaque { color: #fff; background: linear-gradient(160deg, #061a3a 0%, #0b2f66 55%, #0f4fb8 100%); }
+.hero { padding: 64px 0 72px; }
+.destaque { padding: 48px 0 52px; }
+.hero h1, .destaque h2 { font-size: clamp(2rem, 5.5vw, 3.2rem); line-height: 1.12; font-weight: 800; margin: 0 0 16px; max-width: 760px; color: #fff; }
+.hero p, .destaque p { color: #cfe0ff; font-size: 18px; max-width: 640px; margin: 0 0 24px; }
+.selinho { display: inline-block; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 5px 14px; margin-bottom: 16px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #cfeeff; }
+.acoes { display: flex; flex-wrap: wrap; gap: 12px; }
+.pagina main a.botao, .destaque a.botao { display: inline-block; background: linear-gradient(135deg, #12c6e8, #1e6bff); color: #fff; font-weight: 800; padding: 13px 26px; border-radius: 999px; text-decoration: none; }
+.pagina main a.contorno, .destaque a.contorno { display: inline-block; border: 2px solid rgba(255,255,255,0.5); color: #fff; font-weight: 800; padding: 11px 24px; border-radius: 999px; text-decoration: none; }
+.secao { padding: 48px 0; }
+.clara { background: #f5f9ff; }
+.secao h1, .secao h2 { margin: 0 0 20px; line-height: 1.2; }
+.secao > div > p { margin: 16px 0; }
+.pagina main a { color: #1e6bff; }
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.cartao { border: 1px solid #dbe6f7; border-radius: 20px; padding: 22px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
+.secao .cartao h2 { margin: 0; font-size: 22px; }
+.cartao ul { padding-left: 20px; }
+.cartao > a { margin-top: auto; font-weight: 700; }
+.emoji { font-size: 32px; }
+.preco { color: #55607a; font-weight: 600; font-size: 15px; }
+.passos { list-style: none; counter-reset: p; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.passos li { counter-increment: p; background: #fff; border: 1px solid #dbe6f7; border-radius: 16px; padding: 16px; }
+.passos li b { display: block; }
+.passos li b::before { content: counter(p) '. '; color: #1e6bff; }
+.link { font-weight: 700; }
+.categorias { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.categorias div { background: #eaf3ff; border-radius: 16px; padding: 20px; text-align: center; font-weight: 700; }
+.categorias span { display: block; font-size: 32px; }
+.texto { max-width: 800px; margin: 0 auto; padding: 40px 20px 56px; }
+.texto h2 { margin: 28px 0 10px; font-size: 22px; }
+.texto ul, .texto ol { padding-left: 22px; }
+.texto p { margin: 8px 0; }
+.texto > a.botao { margin-top: 24px; }
+.rodape { background: #061a3a; color: #cfe0ff; padding: 24px 0; font-size: 14px; }
+.rodape a { color: #fff !important; }
