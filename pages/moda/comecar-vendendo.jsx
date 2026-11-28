@@ -8,9 +8,9 @@ const PASSOS = [
   ['Cadastro', 'Você chama no WhatsApp e conhece as regras.'],
   ['Aprovação', 'Se aprovado, assina o contrato antes de qualquer compra.'],
   ['Live', 'Escolhe os produtos até o seu limite.'],
-  ['Compra', 'Eu adianto o valor e compro.'],
-  ['Venda', 'Você oferece aos seus compradores dentro do prazo.'],
-  ['Acerto', 'O valor adiantado volta para mim e o lucro é seu.'],
+  ['Compra', 'Eu adianto o valor, compro e guardo a mercadoria.'],
+  ['Venda', 'Você divulga dentro do prazo. O comprador paga na minha conta.'],
+  ['Acerto', 'Envio ao comprador. Depois da entrega e de 7 dias, o lucro vai para você.'],
 ];
 
 export default function ComecarVendendo() {
@@ -55,9 +55,10 @@ export default function ComecarVendendo() {
             <li>Valor da mensalidade e o que ela inclui, e como cancelar.</li>
             <li>Limite de compra adiantada.</li>
             <li>Prazo para vender e quanto tempo dura o plano.</li>
-            <li>Onde fica a mercadoria e como o comprador paga.</li>
+            <li>Como o comprador paga, quem paga o frete e as taxas.</li>
             <li>O que acontece se o produto não for vendido, for perdido ou voltar com defeito.</li>
           </ul>
+          <p><b>A mercadoria fica comigo até o comprador pagar.</b></p>
           <p>Depois do período do plano, você passa a pagar na hora da compra.</p>
           <p><small>{CONDICOES}</small></p>
           <div className={s.acoes}>

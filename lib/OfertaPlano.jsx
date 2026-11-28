@@ -5,9 +5,9 @@ import { PAGINA, TITULO, LUCRO, CONDICOES, WHATS } from './plano4';
 
 const ETAPAS = [
   ['1. Escolha na live', 'Você escolhe os produtos, até o limite do seu cadastro.'],
-  ['2. Eu faço a compra', 'O valor é adiantado por mim.'],
-  ['3. Você vende', 'Dentro do prazo combinado.'],
-  ['4. Acerto', 'O valor adiantado volta para mim e o lucro fica com você.'],
+  ['2. Eu faço a compra', 'Adianto o valor e a mercadoria fica comigo.'],
+  ['3. Você vende', 'Você divulga; o comprador paga na minha conta.'],
+  ['4. Acerto', 'Envio ao comprador. O adiantado fica comigo e o lucro vai para você.'],
 ];
 
 export default function OfertaPlano() {

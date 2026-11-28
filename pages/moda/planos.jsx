@@ -7,6 +7,7 @@ const PLANOS = [
   { t: 'Começar Vendendo', link: '/moda/comecar-vendendo', itens: [
     'Você escolhe os produtos nas lives, até um limite.',
     'Eu adianto a compra.',
+    'A mercadoria fica comigo até o comprador pagar.',
     'Na venda, o valor adiantado volta para mim e o lucro é seu.',
     'Vale por um período; depois você passa a pagar na hora da compra.',
     'Cadastro sujeito a aprovação e contrato.',
@@ -24,7 +25,8 @@ const PLANOS = [
   { t: 'Revenda', itens: [
     'Você compra de mim e revende.',
     'Paga no momento do pedido.',
-    'Os produtos passam a ser seus para vender do seu jeito.',
+    'A mercadoria só sai depois do pagamento.',
+    'Depois de pagos, os produtos são seus para vender do seu jeito.',
   ] },
   { t: 'Membro', itens: [
     'Plano individual para o grupo específico da igreja.',
@@ -52,6 +54,7 @@ export default function Planos() {
               </article>
             ))}
           </div>
+          <p><b>Em todos os planos, a mercadoria fica comigo até o pagamento.</b></p>
           <p>Não há taxa de adesão. O custo da visita é diluído na mensalidade, com permanência mínima de 12 meses. Veja as <Link href="/moda/condicoes">condições</Link>.</p>
           <Link href="/moda/participar" className={s.botao}>Quero participar</Link>
         </div>
