@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 /* Barra única para navegar entre os painéis. Para incluir um painel novo, acrescente um item em ITENS. */
 const ITENS = [
+  { href: '/admin/live', t: '🎥 Painel da live' },
   { href: '/admin/radar', t: '🧭 Painel do dia' },
   { href: '/admin/pontos', t: '📍 Mapa e pontos' },
   { href: '/admin/captacao', t: '🚀 Captação' },

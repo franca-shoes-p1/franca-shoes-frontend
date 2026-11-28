@@ -6,6 +6,7 @@ import s from '../styles/moda.module.css';
 
 const MENU = [
   ['/moda', 'Início'],
+  ['/moda/vitrine', 'Vitrine'],
   ['/moda/como-funciona', 'Como funciona'],
   ['/moda/planos', 'Planos'],
   ['/moda/condicoes', 'Condições'],
