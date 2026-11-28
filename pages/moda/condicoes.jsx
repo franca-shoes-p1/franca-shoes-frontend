@@ -14,6 +14,7 @@ export default function Condicoes() {
         <ul>
           <li>Loja Abastecida: paga na escolha; recebe a sua parte por PIX depois da entrega e de 7 dias.</li>
           <li>Revenda: paga no pedido.</li>
+          <li>Em todos os planos, a mercadoria só sai depois do pagamento.</li>
           <li>Membro: mensalidade mais as compras, ao preço do fornecedor.</li>
         </ul>
         <h2>Compras ao vivo e calendário</h2>

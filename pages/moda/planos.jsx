@@ -4,6 +4,14 @@ import ModaLayout from '../../lib/ModaLayout';
 import s from '../../styles/moda.module.css';
 
 const PLANOS = [
+  { t: 'Começar Vendendo', link: '/moda/comecar-vendendo', itens: [
+    'Você escolhe os produtos nas lives, até um limite.',
+    'Eu adianto a compra.',
+    'A mercadoria fica comigo até o comprador pagar.',
+    'Na venda, o valor adiantado volta para mim e o lucro é seu.',
+    'Vale por um período; depois você passa a pagar na hora da compra.',
+    'Cadastro sujeito a aprovação e contrato.',
+  ] },
   { t: 'Loja Abastecida', itens: [
     'Você tem a sua loja e escolhe produtos do meu catálogo.',
     'Paga os produtos na escolha.',
@@ -17,7 +25,8 @@ const PLANOS = [
   { t: 'Revenda', itens: [
     'Você compra de mim e revende.',
     'Paga no momento do pedido.',
-    'Os produtos passam a ser seus para vender do seu jeito.',
+    'A mercadoria só sai depois do pagamento.',
+    'Depois de pagos, os produtos são seus para vender do seu jeito.',
   ] },
   { t: 'Membro', itens: [
     'Plano individual para o grupo específico da igreja.',
@@ -31,19 +40,21 @@ const PLANOS = [
 
 export default function Planos() {
   return (
-    <ModaLayout titulo="Planos" descricao="Loja Abastecida, Revenda e Membro: veja como participar.">
+    <ModaLayout titulo="Planos" descricao="Começar Vendendo, Loja Abastecida, Revenda e Membro: veja como participar.">
       <section className={s.secao}>
         <div className={s.contido}>
-          <h1>Os três planos</h1>
+          <h1>Os planos</h1>
           <div className={s.grade}>
             {PLANOS.map((p) => (
               <article key={p.t} className={s.cartao}>
                 <h2>{p.t}</h2>
                 <p className={s.preco}>Mensalidade: será informada antes da adesão</p>
                 <ul>{p.itens.map((i) => <li key={i}>{i}</li>)}</ul>
+                {p.link && <Link href={p.link}>Ver como funciona →</Link>}
               </article>
             ))}
           </div>
+          <p><b>Em todos os planos, a mercadoria fica comigo até o pagamento.</b></p>
           <p>Não há taxa de adesão. O custo da visita é diluído na mensalidade, com permanência mínima de 12 meses. Veja as <Link href="/moda/condicoes">condições</Link>.</p>
           <Link href="/moda/participar" className={s.botao}>Quero participar</Link>
         </div>

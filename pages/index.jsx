@@ -5,6 +5,7 @@ import { proximos } from '../lib/agenda';
 import SimuladorModa from '../lib/SimuladorModa';
 import IconeProduto from '../lib/IconeProduto';
 import s from '../styles/site.module.css';
+import OfertaPlano from '../lib/OfertaPlano';
 
 const CANAL = 'https://www.youtube.com/@RicardoBello-o6v/streams';
 
@@ -23,6 +24,7 @@ const ANTIGOS = {
 };
 
 const PLANOS = [
+  ['🚀', 'Começar Vendendo', 'Você escolhe na live, eu adianto a compra e o valor volta para mim na venda. Com limite, prazo e mensalidade.'],
   ['🏬', 'Loja Abastecida', 'Você tem a sua loja, escolhe os produtos e eu guardo o estoque e entrego ao seu cliente.'],
   ['🔁', 'Revenda', 'Você compra de mim e revende do seu jeito.'],
   ['🙏', 'Membro', 'Para uso próprio, no grupo da igreja, com produto pelo preço do fornecedor.'],
@@ -47,7 +49,7 @@ export default function Home() {
   }, []);
 
   return (
-    <SiteLayout descricao="Roupas, calçados, bolsas, cintos, carteiras e suvenires escolhidos ao vivo, direto dos fornecedores.">
+    <SiteLayout faixa descricao="Roupas, calçados, bolsas, cintos, carteiras e suvenires escolhidos ao vivo, direto dos fornecedores.">
       <section className={s.hero}>
         <div className={`${s.contido} ${s.heroGrade}`}>
           <div>
@@ -62,6 +64,8 @@ export default function Home() {
           <SimuladorModa />
         </div>
       </section>
+
+      <OfertaPlano />
 
       <section id="agenda" className={s.secao}>
         <div className={s.contido}>
@@ -85,7 +89,7 @@ export default function Home() {
 
       <section className={`${s.secao} ${s.clara}`}>
         <div className={s.contido}>
-          <h2>Três formas de participar</h2>
+          <h2>Formas de participar</h2>
           <div className={s.grade}>
             {PLANOS.map(([e, t, p]) => (
               <article key={t} className={s.cartao}>
